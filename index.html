@@ -86,10 +86,10 @@
 
   <section class="block" id="now">
     <h2>Where are we now?</h2>
-    <p class="growth-note" id="rainbow-note">It is a growth chart. The lines show how tall Bitcoin should be.</p>
+    <p class="growth-note" id="rainbow-note">It is a growth chart. One line is Bitcoin's own growth, fit to every price so far.</p>
     <div class="chartbox">
       <svg id="chart" viewBox="0 0 1000 540" role="img"
-        aria-label="Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
+        aria-label="Bitcoin growth chart. Colored bands wrap one line: bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
     </div>
     <div class="bands" id="bands"></div>
     <div class="today-panel">
@@ -338,7 +338,7 @@ function fill(data, savedCopy){
   if (data.today.bandIndex >= 0 && data.today.bandIndex < 9) highlight(data.today.bandIndex, false);
   const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
   $("chart").setAttribute("aria-label",
-    "Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits " +
+    "Bitcoin growth chart. Colored bands wrap one line: bitcoin's own growth, fit to every price so far. Today it sits " +
     (data.today.band ? "in the " + bandName + " band" : bandName) + ". Bitcoin is short for its age.");
 }
 
