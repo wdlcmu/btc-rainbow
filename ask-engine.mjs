@@ -131,6 +131,7 @@ function explainAnswer(data, topic) {
   const text = data.texts && data.texts[topic];
   if (!text) return { intent: "none", text: NONE_TEXT };
   let out = text;
+  if (out.endsWith(CLOSER)) return { intent: "explain", text: out, structured: { topic } };
   if (topic === "price") out += ` Right now, it costs ${fmtUSD(data.spot.price)}.`;
   return { intent: "explain", text: out + " " + CLOSER, structured: { topic } };
 }
