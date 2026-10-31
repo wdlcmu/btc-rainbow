@@ -52,6 +52,19 @@
     padding:10px 6px 6px;margin:0 0 12px}
   svg{display:block;width:100%;height:auto}
   #chart polygon.band-poly{cursor:pointer}
+  #chart{touch-action:pan-y;cursor:crosshair}
+  .read-panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;margin:0 0 12px}
+  .read-panel h3{margin:0 0 6px;font-size:20px;display:flex;align-items:center;gap:8px}
+  .read-panel p{margin:0 0 6px;font-size:17.5px}
+  .read-panel p:last-child{margin-bottom:0}
+  .read-panel .fine{color:var(--soft);font-size:15.5px}
+  .buybox{background:var(--panel);border:1px solid var(--gold);border-radius:14px;
+    padding:14px 16px;margin:14px 0 6px}
+  .buybox h3{margin:0 0 6px;font-size:21px}
+  .buybox p{margin:0 0 6px;font-size:17.5px}
+  .buybox p:last-child{margin-bottom:0}
+  .buybox a{color:var(--gold);font-weight:700}
   .bands{display:flex;flex-direction:column;gap:8px;margin:0 0 6px}
   .band-row{display:grid;grid-template-columns:16px 1fr auto;column-gap:10px;row-gap:5px;
     align-items:center;background:var(--panel);border:1px solid var(--line);
@@ -159,7 +172,21 @@
       <svg id="chart" viewBox="0 0 1000 540" role="img"
         aria-label="Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
     </div>
+    <div class="read-panel" id="scrub-panel">
+      <h3 id="scrub-title">Touch the chart.</h3>
+      <p id="scrub-body">Drag across the rainbow. Any day since 2010: its price, its band, how far from the line it sat, and the year that came next.</p>
+    </div>
     <div class="bands" id="bands"></div>
+    <div class="read-panel" id="band-panel" aria-live="polite">
+      <h3 id="band-title">What the colors mean.</h3>
+      <p id="band-body">Tap a color on the chart, or a band in the list. Each band tells you three things: how far from the line it sits, how many days the price has lived there, and what the year after past visits did.</p>
+    </div>
+    <div class="buybox" id="buy">
+      <h3>So, does this mean buy?</h3>
+      <p>No. The chart shows where the price sits inside its own past pattern. It cannot say buy, and it cannot say skip. No chart can.</p>
+      <p>What it can do is show what happened the other times the price sat where it sits now. That is the band panel above, and the day scrubber under the chart.</p>
+      <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is learning, not financial advice.</p>
+    </div>
     <h3 class="lab-h3">Every day, on one chart.</h3>
     <p class="growth-note">Drag on the chart, or use the slider. Pick any day. See its price and its band. See the year that came next.</p>
     <div class="lab-card">
@@ -413,12 +440,28 @@ function draw(data){
   const lx = anchor==="end" ? dx-12 : dx+12;
   s+=`<text x="${lx}" y="${dy-12}" fill="#ffd94d" font-size="16" font-weight="700" text-anchor="${anchor}" pointer-events="none" style="paint-order:stroke;stroke:#0d1330;stroke-width:3.5px">Today</text>`;
   svg.innerHTML=s;
+  window.RB_MAP = { t0, t1, L, R, W, H, T, B, yMin, yMax };
   svg.querySelectorAll("polygon.band-poly").forEach((poly) => {
     const k = Number(poly.getAttribute("data-band"));
-    poly.addEventListener("click", () => highlight(k, true));
+    poly.addEventListener("click", () => { highlight(k, true); if (window.RB_showBand) window.RB_showBand(k); });
     poly.addEventListener("mouseenter", () => highlight(k, false));
   });
 }
+
+// What each band means, in one line: how far from the line it sits.
+// (Site copy. The worker's band data still carries the short labels;
+// these lines are computed from the band edges themselves.)
+const BAND_LINES = [
+  "36% to 53% under the line.",
+  "14% to 36% under the line.",
+  "Hugs the line, 14% under to 16% over.",
+  "16% to 57% over the line.",
+  "57% over, up to about double.",
+  "About 2 to 3 times the line.",
+  "About 3 to 4 times the line.",
+  "About 4 to 5 times the line.",
+  "About 5 to 7 times the line."
+];
 
 function buildRows(data){
   const box = $("bands");
@@ -432,20 +475,20 @@ function buildRows(data){
     }
     const per100 = Math.round(st.pct);
     const aria = `${b.name} band. ${fmtShort(st.lo)} to ${fmtShort(st.hi)} today. ` +
-      `About ${per100} of 100 days sat here. ${b.kid}`;
+      `About ${per100} of 100 days sat here. ${BAND_LINES[k]}`;
     return `<div class="band-row" data-band="${k}" tabindex="0" role="button" aria-label="${aria}">` +
       `<i class="sw" style="background:${b.color}"></i>` +
       `<span class="bname">${k === todayK ? '<i class="todaydot"></i>' : ""}${b.name}</span>` +
       `<span class="brange">${fmtShort(st.lo)}-${fmtShort(st.hi)}</span>` +
       `<span class="bsub"><span class="dots" aria-hidden="true">${dots}</span>` +
-      `<span class="bkid">${b.kid}</span></span></div>`;
+      `<span class="bkid">${BAND_LINES[k]}</span></span></div>`;
   }).join("");
   box.querySelectorAll(".band-row").forEach((row) => {
     const k = Number(row.getAttribute("data-band"));
-    row.addEventListener("click", () => highlight(k, false));
+    row.addEventListener("click", () => { highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); });
     row.addEventListener("mouseenter", () => highlight(k, false));
     row.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); highlight(k, false); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); }
     });
   });
 }
@@ -455,7 +498,22 @@ function fill(data, savedCopy){
   draw(data);
   buildRows(data);
   renderSim();
-  $("today-text").textContent = data.todayText;
+  // Today panel, composed on the site from the engine's own fields:
+  // distance from the line + how rare this band is. (The MCP tool
+  // keeps todayText's growth-chart wording; the panel speaks bands.)
+  const t = data.today;
+  if (t.band && t.bandIndex >= 0 && t.bandIndex < 9 && data.bandStats && data.bandStats[t.bandIndex]) {
+    const st = data.bandStats[t.bandIndex];
+    const mid = t.pct === 0 ? "right on its long-run line"
+      : `${Math.abs(t.pct)}% ${t.pct < 0 ? "below" : "above"} its long-run line`;
+    $("today-text").textContent =
+      `One bitcoin costs ${fmtUSD(t.price)} today. ` +
+      `It sits in the ${t.band.name} band, ${mid}. ` +
+      `The price has spent ${st.days.toLocaleString("en-US")} days in this band — ` +
+      `about ${Math.round(st.pct)} of every 100 days on record.`;
+  } else {
+    $("today-text").textContent = data.todayText;
+  }
   $("price-big").textContent = fmtUSD(data.spot.price);
   $("price-text").textContent = data.strip.price;
   $("technical-text").textContent = data.strip.technical;
@@ -466,7 +524,8 @@ function fill(data, savedCopy){
   const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
   $("chart").setAttribute("aria-label",
     "Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits " +
-    (data.today.band ? "in the " + bandName + " band" : bandName) + ". Bitcoin is short for its age.");
+    (data.today.band ? "in the " + bandName + " band, " + Math.abs(data.today.pct) + "% " +
+      (data.today.pct < 0 ? "below" : "above") + " the line" : bandName) + ".");
 }
 
 async function load(){
@@ -654,6 +713,149 @@ load();
         "% below the " + open.peakDate + " top of " + fmt$(open.peakPrice) +
         " \u2014 the current fall is not over on this chart's own terms."
       : "");
+})();
+</script>
+<script>
+(function(){
+  const D = window.BTC_LAB;
+  if (!D) return;
+  const pts = D.points;
+  const fit = D.fit, GEN = D.genesisTs;
+  const trendAt = (ts) => Math.exp(fit.a + fit.b * Math.log((ts - GEN) / 86400));
+  const bandIdxAt = (p, ts) => Math.floor((Math.log(p) - Math.log(trendAt(ts)) - D.bandBottom) / D.bandWidth);
+  const fmt$ = (x) => x >= 1000 ? "$" + Math.round(x).toLocaleString("en-US")
+               : x >= 1 ? "$" + x.toFixed(2) : "$" + x.toFixed(2);
+  const fmtDate = (ts) => new Date(ts * 1000).toLocaleDateString("en-US",
+    { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
+  const pctFmt = (v) => (v < 0 ? "\u2212" : "+") + Math.abs(Math.round(v)).toLocaleString("en-US") + "%";
+  function nearestIdx(ts) {
+    let lo = 0, hi = pts.length - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; (pts[m][0] < ts) ? lo = m : hi = m; }
+    return (ts - pts[lo][0] <= pts[hi][0] - ts) ? lo : hi;
+  }
+  // ---- band facts, computed from the same daily closes the lab chart draws
+  const idx = pts.map(([t, p]) => bandIdxAt(p, t));
+  const YEAR = 365.25 * 86400, lastTs = pts[pts.length - 1][0];
+  const DIST = [
+    "between 36% and 53% under the line",
+    "between 14% and 36% under the line",
+    "hugging the line, from 14% under it to 16% over it",
+    "between 16% and 57% over the line",
+    "between 57% over the line and about double the line",
+    "between about 2 and 3 times the line",
+    "between about 3 and 4 times the line",
+    "between about 4 and 5 times the line",
+    "between about 5 and 7 times the line"
+  ];
+  function bandFacts(k) {
+    let days = 0, below = 0, above = 0;
+    const entries = [];
+    for (let i = 0; i < pts.length; i++) {
+      if (idx[i] < 0) below++;
+      else if (idx[i] > 8) above++;
+      if (idx[i] === k) { days++; if (i === 0 || idx[i - 1] !== k) entries.push(i); }
+    }
+    const outs = [];
+    for (const i of entries) {
+      const target = pts[i][0] + YEAR;
+      if (target > lastTs) continue;
+      const j = nearestIdx(target);
+      outs.push({ pct: (pts[j][1] / pts[i][1] - 1) * 100, ts: pts[i][0], price: pts[i][1] });
+    }
+    outs.sort((x, y) => x.pct - y.pct);
+    const n = outs.length;
+    return { days, below, above, visits: entries.length, n,
+      up: outs.filter((o) => o.pct > 0).length,
+      worst: n ? outs[0] : null, best: n ? outs[n - 1] : null,
+      median: n ? outs[Math.floor(n / 2)].pct : null };
+  }
+  const titleEl = document.getElementById("band-title");
+  const bodyEl = document.getElementById("band-body");
+  window.RB_showBand = function(k) {
+    if (!titleEl || !bodyEl || k < 0 || k > 8) return;
+    const band = D.bands[k], f = bandFacts(k);
+    titleEl.innerHTML = "";
+    const chip = document.createElement("span");
+    chip.className = "bandchip";
+    chip.style.background = band.color;
+    chip.style.width = "16px"; chip.style.height = "16px"; chip.style.borderRadius = "5px";
+    titleEl.appendChild(chip);
+    titleEl.appendChild(document.createTextNode(band.name + " \u2014 what this color means"));
+    const per100 = Math.round(f.days / pts.length * 100);
+    let html = `<p>Prices in this band sit ${DIST[k]}.</p>`;
+    html += `<p>Bitcoin has spent ${f.days.toLocaleString("en-US")} days here \u2014 about ${per100} of every 100 days since 2010.</p>`;
+    if (f.n > 0) {
+      html += `<p>The price has come into this band ${f.visits} times. One year after each visit began, it had moved between ${pctFmt(f.worst.pct)} and ${pctFmt(f.best.pct)}. It ended that year higher ${f.up} of ${f.n} times. The middle visit ended at ${pctFmt(f.median)}.</p>`;
+      const pend = f.visits - f.n;
+      html += `<p class="fine">The best year began ${fmtDate(f.best.ts)}, when one bitcoin cost ${fmt$(f.best.price)}. The worst began ${fmtDate(f.worst.ts)}.` +
+        (pend > 0 ? ` ${pend} more visit${pend === 1 ? "" : "s"} began in the last year; that year is not over, so ${pend === 1 ? "it is" : "they are"} not counted.` : "") +
+        ` What happened after past visits is the past. It does not promise the next one.</p>`;
+    }
+    if (k === 0 && f.below > 0) html += `<p class="fine">In the earliest years, the price sat under even this band, on ${f.below.toLocaleString("en-US")} days.</p>`;
+    if (k === 8 && f.above > 0) html += `<p class="fine">On ${f.above} days, the price sat above even this band.</p>`;
+    bodyEl.innerHTML = html;
+  };
+  // Open on the band of the last daily close, the chart's own latest day.
+  const lastK = bandIdxAt(pts[pts.length - 1][1], lastTs);
+  if (lastK >= 0 && lastK <= 8) window.RB_showBand(lastK);
+
+  // ---- scrub on the main chart: any day, its price, band, distance, next year
+  const svg = document.getElementById("chart");
+  const sTitle = document.getElementById("scrub-title");
+  const sBody = document.getElementById("scrub-body");
+  if (svg && sTitle && sBody) {
+    const NS = "http://www.w3.org/2000/svg";
+    let layer = null, line = null, dot = null, map = null, tries = 0;
+    function select(ts) {
+      const i = nearestIdx(ts);
+      const dts = pts[i][0], p = pts[i][1];
+      const X = (t) => map.L + (t - map.t0) / (map.t1 - map.t0) * (map.W - map.L - map.R);
+      const Y = (v) => map.T + (map.yMax - Math.log(v)) / (map.yMax - map.yMin) * (map.H - map.T - map.B);
+      line.setAttribute("x1", X(dts)); line.setAttribute("x2", X(dts)); line.setAttribute("opacity", "1");
+      dot.setAttribute("cx", X(dts)); dot.setAttribute("cy", Y(p)); dot.setAttribute("opacity", "1");
+      const bi = bandIdxAt(p, dts);
+      const pct = Math.round((p / trendAt(dts) - 1) * 100);
+      const where = bi < 0 ? "below every band" : bi > 8 ? "above every band" : `in the ${D.bands[bi].name} band`;
+      const dist = pct === 0 ? "right on the line" : `${Math.abs(pct)}% ${pct < 0 ? "below" : "above"} the line`;
+      sTitle.textContent = fmtDate(dts);
+      let txt = `Price: ${fmt$(p)}. It sat ${where}, ${dist}. `;
+      const target = dts + YEAR;
+      if (target > lastTs) txt += "A full year has not passed since this day.";
+      else {
+        const j = nearestIdx(target);
+        const chg = (pts[j][1] / p - 1) * 100;
+        txt += `One year later: ${fmt$(pts[j][1])} \u2014 ${chg >= 0 ? "up" : "down"} ${Math.abs(chg).toFixed(1)}% in that year.`;
+      }
+      sBody.textContent = txt;
+    }
+    function init() {
+      map = window.RB_MAP;
+      if (!map || !svg.querySelector("polygon.band-poly")) {
+        if (++tries < 60) setTimeout(init, 300);
+        return;
+      }
+      layer = document.createElementNS(NS, "g");
+      layer.setAttribute("pointer-events", "none");
+      line = document.createElementNS(NS, "line");
+      line.setAttribute("stroke", "#ffd94d"); line.setAttribute("stroke-width", "1.6");
+      line.setAttribute("y1", map.T); line.setAttribute("y2", map.H - map.B); line.setAttribute("opacity", "0");
+      dot = document.createElementNS(NS, "circle");
+      dot.setAttribute("r", "6.5"); dot.setAttribute("fill", "#ffd94d");
+      dot.setAttribute("stroke", "#0d1330"); dot.setAttribute("stroke-width", "2"); dot.setAttribute("opacity", "0");
+      layer.appendChild(line); layer.appendChild(dot); svg.appendChild(layer);
+      new MutationObserver(() => { if (!svg.contains(layer)) svg.appendChild(layer); })
+        .observe(svg, { childList: true });
+      const fromEvent = (e) => {
+        const r = svg.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width * map.W;
+        const ts = map.t0 + (x - map.L) / (map.W - map.L - map.R) * (map.t1 - map.t0);
+        select(Math.max(pts[0][0], Math.min(lastTs, ts)));
+      };
+      svg.addEventListener("pointerdown", fromEvent);
+      svg.addEventListener("pointermove", (e) => { if (e.pointerType === "mouse" || e.buttons) fromEvent(e); });
+    }
+    init();
+  }
 })();
 </script>
 </body>

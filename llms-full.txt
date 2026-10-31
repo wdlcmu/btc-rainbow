@@ -40,15 +40,15 @@ On Oct 31, 2026: Bitcoin is short for its age. One bitcoin costs $77,471 today. 
 
 Each row shows the price range for that band on Oct 31, 2026, and the share of all past days that sat in that band.
 
-- Deep Blue: $67,007 to $90,449. 23.2% of days. Way under the line.
-- Blue: $90,449 to $122,094. 16.3% of days. Under the line, lots.
-- Sky: $122,094 to $164,810. 13.4% of days. Right on track.
-- Green: $164,810 to $222,470. 14.0% of days. Just over the line.
-- Lime: $222,470 to $300,303. 7.3% of days. Over the line.
-- Yellow: $300,303 to $405,366. 6.8% of days. Far over the line.
-- Orange: $405,366 to $547,187. 4.5% of days. Way over the line.
-- Dark Orange: $547,187 to $738,625. 1.8% of days. Near the top.
-- Red: $738,625 to $997,040. 1.6% of days. At the top. Rare.
+- Deep Blue: $67,007 to $90,449. 23.2% of days. 36% to 53% under the line.
+- Blue: $90,449 to $122,094. 16.3% of days. 14% to 36% under the line.
+- Sky: $122,094 to $164,810. 13.4% of days. Hugs the line, 14% under to 16% over.
+- Green: $164,810 to $222,470. 14.0% of days. 16% to 57% over the line.
+- Lime: $222,470 to $300,303. 7.3% of days. 57% over, up to about double.
+- Yellow: $300,303 to $405,366. 6.8% of days. About 2 to 3 times the line.
+- Orange: $405,366 to $547,187. 4.5% of days. About 3 to 4 times the line.
+- Dark Orange: $547,187 to $738,625. 1.8% of days. About 4 to 5 times the line.
+- Red: $738,625 to $997,040. 1.6% of days. About 5 to 7 times the line.
 - 597 days sat below all bands. 57 days sat above all bands.
 
 ### Two points marked on the chart
