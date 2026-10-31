@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitcoin Rainbow Chart Explained — In Plain Words</title>
+<meta name="description" content="The Bitcoin rainbow chart in plain words: one growth line, 9 color bands, and where the price sits today. Real data, no advice. That is the past. Not a promise.">
+<link rel="canonical" href="https://btc-rainbow-site.pages.dev/bitcoin-rainbow-chart-explained">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bitcoin Rainbow Chart Explained — In Plain Words">
+<meta property="og:description" content="One growth line. Nine color bands. Where the price sits now, in plain words.">
+<meta property="og:url" content="https://btc-rainbow-site.pages.dev/bitcoin-rainbow-chart-explained">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0d1330">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the Bitcoin rainbow chart?","acceptedAnswer":{"@type":"Answer","text":"It is a growth chart for the price. One line is fit to all past prices. Nine color bands sit above and below the line. The band the price sits in shows if it is low or high next to its own past growth."}},
+{"@type":"Question","name":"What is the rainbow chart formula?","acceptedAnswer":{"@type":"Answer","text":"ln(price) = -37.283 + 5.597 x ln(days since Jan 3, 2009), fit to 5,917 days of prices from blockchain.info, Aug 18, 2010 to Oct 29, 2026."}},
+{"@type":"Question","name":"Which band is Bitcoin in today?","acceptedAnswer":{"@type":"Answer","text":"On Oct 31, 2026 the price was $77,471 and sat in Deep Blue, the lowest band. The growth line said $141,853 that day. Check the live chart for today."}}]}
+</script>
+<style>
+body{margin:0;background:#0d1330;color:#f4f6ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:19px;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px}
+h1{font-size:32px;line-height:1.15} h2{font-size:24px;margin-top:28px}
+a{color:#ffd94d} .note{color:#b9c2e8} table{border-collapse:collapse;width:100%}
+td,th{border:1px solid #2c3a75;padding:8px 10px;text-align:left;font-size:17px}
+.btn{display:inline-block;background:#ffd94d;color:#221a00;font-weight:700;padding:13px 22px;border-radius:999px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>The rainbow chart, in plain words.</h1>
+<p>Think of marks on a wall. A child stands by the wall each year. A line shows the growth path. This chart does that for price.</p>
+<p>One line is fit to each past price. Nine bands of color wrap the line. Low bands are blue. High bands are red.</p>
+<h2>How the line is made</h2>
+<p>The line uses all past days at once. It is fit by least squares. The form is:</p>
+<p><code>ln(price) = -37.283 + 5.597 x ln(days since Jan 3, 2009)</code></p>
+<p>It uses 5,917 days of prices. They run from Aug 18, 2010 to Oct 29, 2026. Past prices are from blockchain.info.</p>
+<h2>What the bands mean</h2>
+<p>Each band is the same width in log space. The width is 0.3. Deep Blue is the base band. Red is the top band.</p>
+<table>
+<tr><th>Band</th><th>Share of past days</th></tr>
+<tr><td>Deep Blue</td><td>23 of 100 days</td></tr>
+<tr><td>Sky</td><td>13 of 100 days</td></tr>
+<tr><td>Red</td><td>2 of 100 days</td></tr>
+</table>
+<p>Blue days are far more common than red days. That is a fact of the past data. It is not a tip.</p>
+<h2>Where the price sits now</h2>
+<p>On Oct 31, 2026, one coin cost $77,471. The line said $141,853. So the price sat in Deep Blue. It was 45% below the line.</p>
+<p><a class="btn" href="/">See the live chart</a></p>
+<p class="note">Facts as of Oct 31, 2026. The live chart moves each day. Not advice. That is the past. Not a promise.</p>
+<p><a href="/">Home</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+<p>Built with Muse.</p>
+</div>
+</body>
+</html>

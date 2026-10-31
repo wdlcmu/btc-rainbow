@@ -3,8 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bitcoin Rainbow</title>
+<title>Bitcoin Rainbow Chart — Bitcoin, in Plain Words</title>
 <meta name="description" content="Why we think bitcoin stands higher in ten years. What bitcoin is, the rainbow chart of every climb and crash since 2010, what going wrong would look like, and the two ways people hold it. In plain words.">
+<link rel="canonical" href="https://btc-rainbow-site.pages.dev/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bitcoin Rainbow Chart — Bitcoin, in Plain Words">
+<meta property="og:description" content="Why we think bitcoin stands higher in ten years. What bitcoin is, the rainbow chart of every climb and crash since 2010, what going wrong would look like, and the two ways people hold it. In plain words.">
+<meta property="og:url" content="https://btc-rainbow-site.pages.dev/">
+<meta property="og:image" content="https://btc-rainbow-site.pages.dev/postcard.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bitcoin Rainbow Chart — Bitcoin, in Plain Words">
+<meta name="twitter:description" content="Why we think bitcoin stands higher in ten years. What bitcoin is, the rainbow chart of every climb and crash since 2010, what going wrong would look like, and the two ways people hold it. In plain words.">
+<meta name="twitter:image" content="https://btc-rainbow-site.pages.dev/postcard.png">
+<meta name="theme-color" content="#0d1330">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌈</text></svg>">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Bitcoin Rainbow","url":"https://btc-rainbow-site.pages.dev/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Why we think bitcoin stands higher in ten years. What bitcoin is, the rainbow chart of every climb and crash since 2010, what going wrong would look like, and the two ways people hold it. In plain words."}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the Bitcoin rainbow chart?","acceptedAnswer":{"@type":"Answer","text":"It is a growth chart. One line is Bitcoin's own growth, fit to every price so far."}},
+{"@type":"Question","name":"What does DCA mean on this site?","acceptedAnswer":{"@type":"Answer","text":"You buy a set sum on a set day, week by week. Like an allowance, in reverse."}},
+{"@type":"Question","name":"Does this site give financial advice?","acceptedAnswer":{"@type":"Answer","text":"No. This is learning, not financial advice. That is the past. Not a promise."}}]}
+</script>
 <style>
   :root{
     --bg:#0d1330; --panel:#16204a; --panel2:#1b2757; --ink:#f4f6ff; --soft:#b9c2e8;
@@ -75,6 +96,36 @@
   .scard h3{margin:0 0 4px;font-size:19px}
   .scard p{margin:0;font-size:17px}
   .scard .big{font-size:24px;font-weight:800;color:var(--gold);margin:0 0 2px}
+
+  .asklink{font-size:18px;color:var(--soft);margin:14px 0 0}
+  .asklink a{color:var(--gold);font-weight:700}
+  .lab-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0 0}
+  #lab-chart{width:100%;height:auto;display:block;touch-action:pan-y;cursor:crosshair}
+  .lab-readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+  .lab-stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .lab-stat .k{font-size:13px;color:var(--soft);text-transform:uppercase;letter-spacing:.06em}
+  .lab-stat .v{font-size:19px;font-weight:700;margin-top:3px}
+  .lab-stat .n{font-size:14px;color:var(--soft);margin-top:2px}
+  .bandchip{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .lab-card input[type=range]{width:100%;margin:14px 0 2px;accent-color:var(--gold);min-height:32px}
+  .lab-hint{font-size:14px;color:var(--soft);margin:4px 0 0}
+  .lab-dd{margin-top:10px;background:#3a1630;border:1px solid #7a2d52;border-radius:10px;padding:10px 12px;font-size:15px;display:none}
+  .lab-h3{font-size:21px;margin:22px 0 8px}
+  .lab-tablewrap{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px;overflow-x:auto}
+  .lab-tablewrap table{width:100%;border-collapse:collapse;font-size:15px}
+  .lab-tablewrap th,.lab-tablewrap td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  .lab-tablewrap th{color:var(--soft);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+  .lab-honest{background:var(--panel);border:1px solid var(--gold);border-radius:14px;padding:14px 16px;margin-top:18px}
+  .lab-honest p{margin:6px 0;font-size:15px;color:var(--soft)}
+  .lab-honest p strong{color:var(--ink)}
+  .lab-ddlabel{font-size:11px;fill:#ffb3c8;font-weight:700}
+  .lab-axislab{font-size:11px;fill:#b9c2e8}
+  .sharecard{margin:18px 0 0;text-align:center}
+  .sharecard img{max-width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+  .sharecard p{font-size:19px;font-weight:700;margin:10px 0 0}
+  .learnlinks{margin:14px 0 0;display:flex;flex-direction:column;gap:8px}
+  .learnlinks a{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);text-decoration:none;font-weight:700;min-height:48px}
+  .learnlinks a span{color:var(--soft);font-weight:400}
   footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:17px}
   footer p{margin:4px 0}
   footer a{color:var(--soft)}
@@ -86,6 +137,7 @@
     <h1>Bitcoin, in plain words.</h1>
     <p class="sub">Why we think bitcoin stands higher in ten years.</p>
     <a class="btn" href="#what">Start here</a>
+    <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
   <section class="block" id="what">
@@ -106,6 +158,40 @@
     <div class="today-panel">
       <p id="today-text">One moment. We are reading the chart.</p>
       <p class="asof" id="asof"></p>
+    </div>
+    <h3 class="lab-h3">Every day, on one chart.</h3>
+    <p class="growth-note">Drag on the chart, or use the slider. Pick any day. See its price and its band. See the year that came next.</p>
+    <div class="lab-card">
+      <svg id="lab-chart" role="img" aria-label="Bitcoin rainbow chart, full history, every day since 2010"></svg>
+      <input type="range" id="lab-scrub" min="0" max="100" value="100" step="0.01"
+        aria-label="Scrub through Bitcoin price history by date">
+      <p class="lab-hint">Every number below comes from real daily closes.</p>
+      <div class="lab-readout">
+        <div class="lab-stat"><div class="k">Date</div><div class="v" id="r-date">&hellip;</div><div class="n" id="r-age"></div></div>
+        <div class="lab-stat"><div class="k">Price that day</div><div class="v" id="r-price">&hellip;</div><div class="n">Daily close</div></div>
+        <div class="lab-stat"><div class="k">Band</div><div class="v" id="r-band">&hellip;</div><div class="n" id="r-bandnote"></div></div>
+        <div class="lab-stat"><div class="k">One year later</div><div class="v" id="r-next">&hellip;</div><div class="n" id="r-nextnote"></div></div>
+      </div>
+      <div class="lab-dd" id="r-dd"></div>
+    </div>
+    <h3 class="lab-h3">The big falls.</h3>
+    <p class="growth-note">Each fall is measured from the data.</p>
+    <div class="lab-tablewrap">
+      <table id="lab-dd-table">
+        <thead><tr><th>Fall</th><th>Top</th><th>Bottom</th><th>Drop</th><th>Back to the top</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="lab-honest">
+      <p><strong>How to read this chart.</strong></p>
+      <p id="h-method"></p>
+      <p>The bands are a ruler, not a road. Bitcoin has sat in every band. It fell hard from high bands. It fell hard from mid bands too.</p>
+      <p><strong>A model, not prophecy.</strong> This line shows the past. It does not know the future. No one does. Past prices never promise future ones.</p>
+      <p id="h-source"></p>
+    </div>
+    <div class="sharecard">
+      <img src="postcard.png" alt="Postcard of ten-year windows. Worst, middle, and best paths, side by side." width="1200" height="630" loading="lazy">
+      <p>That is the past. Not a promise.</p>
     </div>
   </section>
 
@@ -190,10 +276,17 @@
         <p id="fundamental-text">Fundamental is a health check.</p>
       </div>
     </div>
+    <div class="learnlinks">
+      <a href="/bitcoin-rainbow-chart-explained">The rainbow chart, in plain words. <span>One line. Nine bands.</span></a>
+      <a href="/what-is-bitcoin-in-plain-english">What is bitcoin? <span>Cash for the web.</span></a>
+      <a href="/bitcoin-dca-calculator">DCA, in plain words. <span>Small buys, each week.</span></a>
+      <a href="/bitcoin-halving-in-plain-english">The halving, in plain words. <span>New coins, cut in half.</span></a>
+    </div>
   </section>
 
   <footer>
     <p>This is learning, not financial advice.</p>
+    <p><a href="/bitcoin-rainbow-chart-explained">Rainbow chart</a> &middot; <a href="/what-is-bitcoin-in-plain-english">What is bitcoin</a> &middot; <a href="/bitcoin-dca-calculator">DCA</a> &middot; <a href="/bitcoin-halving-in-plain-english">Halving</a> &middot; <a href="/ask">Ask</a></p>
     <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
     <p>Built with Muse.</p>
   </footer>
@@ -387,6 +480,178 @@ async function load(){
   }
 }
 load();
+</script>
+<script src="data-daily.js"></script>
+<script>
+(function(){
+  const D = window.BTC_LAB;
+  const pts = D.points; // [ts, price] daily closes
+  const { a, b } = D.fit;
+  const GEN = D.genesisTs;
+  const trendAt = ts => Math.exp(a + b * Math.log((ts - GEN) / 86400));
+  const edgeAt = (ts, k) => trendAt(ts) * Math.exp(D.bandBottom + D.bandWidth * k);
+  const bandIdxAt = (p, ts) => Math.floor((Math.log(p) - Math.log(trendAt(ts)) - D.bandBottom) / D.bandWidth);
+  const fmt$ = x => x >= 1000 ? "$" + Math.round(x).toLocaleString("en-US")
+              : x >= 1 ? "$" + x.toFixed(2) : "$" + x.toFixed(2);
+  const fmtDate = ts => new Date(ts * 1000).toLocaleDateString("en-US",
+    { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
+
+  // ---- geometry: x = time (linear), y = log price
+  const W = 1000, H = 520, PL = 64, PR = 14, PT = 16, PB = 30;
+  const t0 = pts[0][0], t1 = pts[pts.length - 1][0];
+  const yLo = Math.log(0.03), yHi = Math.log(400000);
+  const X = ts => PL + (ts - t0) / (t1 - t0) * (W - PL - PR);
+  const Y = p => PT + (yHi - Math.log(p)) / (yHi - yLo) * (H - PT - PB);
+  const svg = document.getElementById("lab-chart");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(n); return n;
+  };
+
+  // ---- bands: sample edges every ~30 days
+  const sampleTs = [];
+  for (let ts = t0; ts <= t1; ts += 30 * 86400) sampleTs.push(ts);
+  sampleTs.push(t1);
+  for (let k = 0; k < 9; k++) {
+    let d = "";
+    sampleTs.forEach((ts, i) => { d += (i ? "L" : "M") + X(ts).toFixed(1) + "," + Y(edgeAt(ts, k + 1)).toFixed(1) + " "; });
+    for (let i = sampleTs.length - 1; i >= 0; i--) d += "L" + X(sampleTs[i]).toFixed(1) + "," + Y(edgeAt(sampleTs[i], k)).toFixed(1) + " ";
+    el("path", { d: d + "Z", fill: D.bands[k].color, opacity: 0.85 });
+  }
+  // fit line
+  el("polyline", { fill: "none", stroke: "#ffffff", "stroke-width": 1, "stroke-dasharray": "5 4", opacity: .55,
+    points: sampleTs.map(ts => X(ts).toFixed(1) + "," + Y(trendAt(ts)).toFixed(1)).join(" ") });
+  // price line (daily)
+  el("polyline", { fill: "none", stroke: "#0d1330", "stroke-width": 1.6,
+    points: pts.map(p => X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join(" ") });
+
+  // ---- axes: years + price gridlines
+  for (let yr = 2011; yr <= 2026; yr++) {
+    const ts = Date.UTC(yr, 0, 1) / 1000;
+    if (ts < t0 || ts > t1) continue;
+    el("line", { x1: X(ts), y1: PT, x2: X(ts), y2: H - PB, stroke: "#ffffff", opacity: .07 });
+    const t = el("text", { x: X(ts) + 3, y: H - 10, class: "lab-axislab" }); t.textContent = yr;
+  }
+  [0.1, 1, 10, 100, 1000, 10000, 100000].forEach(v => {
+    el("line", { x1: PL, y1: Y(v), x2: W - PR, y2: Y(v), stroke: "#ffffff", opacity: .10 });
+    const t = el("text", { x: 6, y: Y(v) + 4, class: "lab-axislab" });
+    t.textContent = v >= 1000 ? "$" + (v / 1000) + "k" : "$" + v;
+  });
+
+  // ---- drawdown labels on chart (the falls >= 70%, plus the open one)
+  const LABEL = { "2011-06-11": "2011 crash", "2013-12-05": "2013\u201315 fall",
+    "2017-12-17": "2018 fall", "2021-11-09": "2021\u201322 fall", "2025-10-07": "2025\u2013now" };
+  D.drawdowns.filter(d => LABEL[d.peakDate]).forEach(d => {
+    const cx = X(d.troughTs), cy = Y(d.troughPrice);
+    el("circle", { cx, cy, r: 4.5, fill: "#ff5d8f", stroke: "#0d1330", "stroke-width": 1.5 });
+    const t = el("text", { x: Math.min(cx + 8, W - 150), y: cy + 16, class: "lab-ddlabel" });
+    t.textContent = `${LABEL[d.peakDate]}: \u2212${d.depthPct}%`;
+  });
+
+  // ---- crosshair + selection
+  const cross = el("line", { y1: PT, y2: H - PB, stroke: "#ffd94d", "stroke-width": 1.4, opacity: 0 });
+  const dot = el("circle", { r: 6, fill: "#ffd94d", stroke: "#0d1330", "stroke-width": 2, opacity: 0 });
+  const scrub = document.getElementById("lab-scrub");
+  function nearestIdx(ts) {
+    let lo = 0, hi = pts.length - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; (pts[m][0] < ts) ? lo = m : hi = m; }
+    return (ts - pts[lo][0] <= pts[hi][0] - ts) ? lo : hi;
+  }
+  function select(i) {
+    const [ts, p] = pts[i];
+    cross.setAttribute("x1", X(ts)); cross.setAttribute("x2", X(ts)); cross.setAttribute("opacity", 1);
+    dot.setAttribute("cx", X(ts)); dot.setAttribute("cy", Y(p)); dot.setAttribute("opacity", 1);
+    scrub.value = (i / (pts.length - 1) * 100).toFixed(2);
+    document.getElementById("r-date").textContent = fmtDate(ts);
+    document.getElementById("r-age").textContent =
+      "Bitcoin was " + ((ts - GEN) / (365.25 * 86400)).toFixed(1) + " years old";
+    document.getElementById("r-price").textContent = fmt$(p);
+    const bi = bandIdxAt(p, ts);
+    const bandEl = document.getElementById("r-band"), noteEl = document.getElementById("r-bandnote");
+    if (bi < 0) { bandEl.textContent = "Below every band"; noteEl.textContent = "Under the whole ladder."; }
+    else if (bi > 8) { bandEl.textContent = "Above every band"; noteEl.textContent = "Over the whole ladder."; }
+    else {
+      bandEl.innerHTML = "";
+      const chip = document.createElement("span"); chip.className = "bandchip";
+      chip.style.background = D.bands[bi].color; bandEl.appendChild(chip);
+      bandEl.appendChild(document.createTextNode(D.bands[bi].name));
+      const pct = Math.round((p / trendAt(ts) - 1) * 100);
+      noteEl.textContent = D.bands[bi].plain + " (" + (pct >= 0 ? "+" : "") + pct + "% vs the line)";
+    }
+    // what happened next: close nearest +1 year
+    const nx = document.getElementById("r-next"), nn = document.getElementById("r-nextnote");
+    const target = ts + 365.25 * 86400;
+    if (target > t1) { nx.textContent = "Not yet"; nn.textContent = "A full year has not passed since this day."; }
+    else {
+      let j = nearestIdx(target);
+      const chg = (pts[j][1] / p - 1) * 100;
+      nx.textContent = fmt$(pts[j][1]);
+      nn.textContent = "On " + fmtDate(pts[j][0]) + " \u2014 " +
+        (chg >= 0 ? "up " : "down ") + Math.abs(chg).toFixed(1) + "% in that year";
+    }
+    // drawdown context
+    const ddEl = document.getElementById("r-dd");
+    const inside = D.drawdowns.find(d => ts >= d.peakTs && (!d.recoveredDate ||
+      ts <= Date.parse(d.recoveredDate + "T00:00:00Z") / 1000));
+    if (inside && inside.depthPct >= 50) {
+      ddEl.style.display = "block";
+      ddEl.textContent = "This day sat inside a big fall. " +
+        "Top: " + fmt$(inside.peakPrice) + ", on " + inside.peakDate + ". " +
+        "Bottom: " + fmt$(inside.troughPrice) + ", on " + inside.troughDate + ". " +
+        "Drop: " + inside.depthPct + "%." +
+        (inside.recoveredDate ? " The price passed that top again on " + inside.recoveredDate + "."
+                               : " It has not passed that top again yet.");
+    } else ddEl.style.display = "none";
+  }
+  function fromEvent(e) {
+    const r = svg.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width * W;
+    const ts = t0 + (x - PL) / (W - PL - PR) * (t1 - t0);
+    select(nearestIdx(Math.max(t0, Math.min(t1, ts))));
+  }
+  svg.addEventListener("pointermove", fromEvent);
+  svg.addEventListener("pointerdown", fromEvent);
+  scrub.addEventListener("input", () => select(Math.round(scrub.value / 100 * (pts.length - 1))));
+  select(pts.length - 1);
+
+  // ---- drawdown table (every episode >= 40%)
+  const NAMES = { "2010-09-16": "2010 (early days)", "2010-11-08": "2010 (early days)",
+    "2011-06-11": "2011 crash", "2013-04-10": "Apr 2013 flash fall", "2013-12-05": "2013\u201315 fall",
+    "2017-12-17": "2018 fall", "2021-04-14": "Spring 2021 fall", "2021-11-09": "2021\u201322 fall",
+    "2025-10-07": "2025\u2013now (open)" };
+  const tb = document.querySelector("#lab-dd-table tbody");
+  D.drawdowns.forEach(d => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td></td><td></td><td></td><td></td><td></td>";
+    const c = tr.children;
+    c[0].textContent = NAMES[d.peakDate] || d.peakDate;
+    c[1].textContent = d.peakDate + " \u00b7 " + fmt$(d.peakPrice);
+    c[2].textContent = d.troughDate + " \u00b7 " + fmt$(d.troughPrice);
+    c[3].textContent = "\u2212" + d.depthPct + "%";
+    c[4].textContent = d.recoveredDate ? d.recoveredDate + " (" + d.daysPeakToRecovery + " days)" : "Not yet";
+    tb.appendChild(tr);
+  });
+
+  // ---- honesty text, numbers filled from the data itself
+  const last = D.last, first = D.first;
+  const open = D.drawdowns[D.drawdowns.length - 1];
+  document.getElementById("h-method").innerHTML =
+    "<strong>The model:</strong> one line, fit to every daily close. " +
+    "It uses " + D.fit.n.toLocaleString("en-US") + " closes in all. " +
+    "Nine bands sit on that line. Each band is 0.3 wide, in log space. " +
+    "Each step up is about 1.35 times the price below.";
+  document.getElementById("h-source").innerHTML =
+    "<strong>The data:</strong> daily closes from blockchain.info, " + first.date + " to " +
+    last.date + ". Last close: " + fmt$(last.price) + " (" + last.date + ")." +
+    (open.recoveredDate === null
+      ? " That is still " + Math.abs(Math.round((last.price / open.peakPrice - 1) * 100)) +
+        "% below the " + open.peakDate + " top of " + fmt$(open.peakPrice) +
+        " \u2014 the current fall is not over on this chart's own terms."
+      : "");
+})();
 </script>
 </body>
 </html>

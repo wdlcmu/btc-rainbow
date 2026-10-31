@@ -1,0 +1,188 @@
+<!doctype html>
+<!-- BTC Rainbow — Ask page (STAGING, built 2026-10-31 in ask-staging/).
+     Integration (later lane, see README.md): copy ask.html + ask-engine.mjs
+     into site/, change the fallback script src below from
+     "fallback-data.js" to "fallback-data.js", and add ONE link
+     to /ask on index.html. Nothing else on the site changes.
+     Answers are deterministic: ask-engine.mjs routes the words to the
+     same chart data the site and the MCP tools use. No LLM is called.
+     The only network writes are count pings: one intent word, no text. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask — Bitcoin Rainbow</title>
+<meta name="description" content="Ask in your own words. Plain facts from the chart. No advice. Nothing you type is saved.">
+<style>
+  :root{
+    --bg:#0d1330; --panel:#16204a; --panel2:#1b2757; --ink:#f4f6ff; --soft:#b9c2e8;
+    --gold:#ffd94d; --line:#2c3a75;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:19px;line-height:1.45}
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 8px}
+  header{padding:26px 0 4px}
+  .kicker{color:var(--gold);font-weight:800;letter-spacing:2px;font-size:14px;
+    text-transform:uppercase;margin:0 0 6px}
+  h1{font-size:36px;line-height:1.1;margin:0 0 10px;font-weight:800;letter-spacing:-.5px}
+  .sub{font-size:20px;margin:0 0 6px}
+  .askbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px;margin:18px 0 0}
+  .askbox label{font-weight:700;font-size:18px;display:block;margin:0 0 8px}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  #q{flex:1 1 220px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);
+    border-radius:12px;padding:13px 14px;font-size:19px;min-height:52px;font-family:inherit}
+  #q::placeholder{color:var(--soft)}
+  #go{background:var(--gold);color:#221a00;font-weight:700;border:0;border-radius:999px;
+    padding:13px 26px;font-size:19px;min-height:52px;cursor:pointer;font-family:inherit}
+  .try{margin:20px 0 0}
+  .try p{color:var(--soft);font-size:16.5px;margin:0 0 8px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+    padding:10px 16px;font-size:17px;font-weight:600;min-height:48px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;font-family:inherit;text-align:left}
+  .chip:active{border-color:var(--gold)}
+  .answer{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px;margin:18px 0 0;display:none}
+  .answer.show{display:block}
+  .answer .kind{color:var(--gold);font-weight:800;letter-spacing:2px;font-size:13px;
+    text-transform:uppercase;margin:0 0 8px}
+  .answer p.text{font-size:21px;margin:0 0 8px}
+  .answer .asof{color:var(--soft);font-size:16px;margin:0}
+  .privacy{color:var(--soft);font-size:16.5px;margin:16px 2px 0}
+  .back{display:inline-block;margin:18px 0 0;color:var(--ink);font-size:17px}
+  footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:17px}
+  footer p{margin:4px 0}
+  footer a{color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="kicker">Bitcoin Rainbow</p>
+    <h1>Ask in your own words.</h1>
+    <p class="sub">Plain facts. No advice.</p>
+  </header>
+
+  <div class="askbox">
+    <form id="ask-form">
+      <label for="q">Your question</label>
+      <div class="row">
+        <input id="q" type="text" autocomplete="off" maxlength="300"
+          placeholder="Type your question here.">
+        <button id="go" type="submit">Ask</button>
+      </div>
+    </form>
+    <div class="try">
+      <p>Tap one to try:</p>
+      <div class="chips" id="examples">
+        <button type="button" class="chip">Where does bitcoin stand today?</button>
+        <button type="button" class="chip">What if I put in $25 a week?</button>
+        <button type="button" class="chip">What is bitcoin, in plain words?</button>
+        <button type="button" class="chip">How do people buy it?</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="answer" id="answer" aria-live="polite">
+    <p class="kind" id="answer-kind"></p>
+    <p class="text" id="answer-text"></p>
+    <p class="asof" id="answer-asof"></p>
+  </div>
+
+  <p class="privacy">Nothing you type is saved. We count asks by kind. Just a number. No words. No names.</p>
+  <a class="back" href="index.html" id="back-link">Back to the chart</a>
+
+  <footer>
+    <p>Not advice. Just a picture of the past.</p>
+    <p>Built with Muse.</p>
+  </footer>
+</div>
+
+<script src="fallback-data.js"></script>
+<script type="module">
+import { routeAsk } from "./ask-engine.mjs";
+
+const WORKER_BASE = "https://btc-rainbow-mcp.wdlcmu.workers.dev";
+const COUNTS_BASE = "https://btc-rainbow-ask-staging.wdlcmu.workers.dev";
+const $ = (id) => document.getElementById(id);
+
+const KIND_LABELS = {
+  today: "Where it stands",
+  dca: "A weekly buy, in the past",
+  explain: "In plain words",
+  buy_ways: "How people buy it",
+  advice: "Facts, not advice",
+  none: "Not yet",
+};
+
+let chartData = null;
+
+function fmtDate(ts){
+  return new Date(ts*1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
+}
+
+function pingCount(intent){
+  // Counts only: one intent word leaves the page. The question text
+  // never does. Fire and forget; a failed ping changes nothing.
+  try {
+    fetch(COUNTS_BASE + "/api/count", {
+      method: "POST",
+      headers: { "content-type": "text/plain" },
+      body: JSON.stringify({ kind: intent }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch (e) { /* counting must never break the door */ }
+}
+
+function showAnswer(ans, savedCopy){
+  $("answer-kind").textContent = KIND_LABELS[ans.intent] || "Answer";
+  $("answer-text").textContent = ans.text;
+  $("answer-asof").textContent = chartData
+    ? (savedCopy ? "Saved copy, " : "As of ") + fmtDate(chartData.spot.ts) + "."
+    : "";
+  $("answer").classList.add("show");
+}
+
+let usedSavedCopy = false;
+function ask(question){
+  const q = (question || "").trim();
+  if (!q) {
+    showAnswer({ intent: "none", text: "Type a question first. Or tap one below." }, usedSavedCopy);
+    return;
+  }
+  if (!chartData) {
+    showAnswer({ intent: "none", text: "The chart is still loading. Try again in a moment." }, false);
+    return;
+  }
+  const ans = routeAsk(chartData, q);
+  showAnswer(ans, usedSavedCopy);
+  pingCount(ans.intent);
+}
+
+$("ask-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  ask($("q").value);
+});
+document.querySelectorAll("#examples .chip").forEach((c) =>
+  c.addEventListener("click", () => { $("q").value = c.textContent.trim(); ask(c.textContent); }));
+
+async function load(){
+  try{
+    const ctl = new AbortController();
+    const timer = setTimeout(()=>ctl.abort(), 6000);
+    const resp = await fetch(WORKER_BASE + "/api/chart", {signal: ctl.signal});
+    clearTimeout(timer);
+    if(!resp.ok) throw new Error("bad status");
+    chartData = await resp.json();
+  }catch(e){
+    if(window.FALLBACK_CHART){ chartData = window.FALLBACK_CHART; usedSavedCopy = true; }
+    else $("answer-text").textContent = "The chart is resting. Please come back soon.";
+  }
+}
+load();
+</script>
+</body>
+</html>

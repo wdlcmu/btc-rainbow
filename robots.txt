@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://btc-rainbow-site.pages.dev/sitemap.xml

@@ -34,6 +34,11 @@
 ## Start here
 
 - [Home and chart](https://btc-rainbow-site.pages.dev/): see the chart, tap a band, and run the weekly buy tool.
+- [Ask in your own words](https://btc-rainbow-site.pages.dev/ask): plain facts from the chart. No advice. Nothing you type is saved.
+- [The rainbow chart, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-rainbow-chart-explained): one line, nine bands, and where the price sits.
+- [What is bitcoin, in plain words](https://btc-rainbow-site.pages.dev/what-is-bitcoin-in-plain-english): cash for the web, a hard cap, a shared list.
+- [DCA, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-dca-calculator): small buys, each week, on real past prices.
+- [The halving, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-halving-in-plain-english): new coins, cut in half, each 210,000 blocks.
 - [Full page text](https://btc-rainbow-site.pages.dev/llms-full.txt): the full text of this site in one file, with band facts and past weekly buy results.
 
 ## The weekly buy tool
