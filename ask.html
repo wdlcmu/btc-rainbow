@@ -78,6 +78,7 @@
     <div class="try">
       <p>Tap one to try:</p>
       <div class="chips" id="examples">
+        <button type="button" class="chip">Should I buy bitcoin now?</button>
         <button type="button" class="chip">Where does bitcoin stand today?</button>
         <button type="button" class="chip">What if I put in $25 a week?</button>
         <button type="button" class="chip">What is bitcoin, in plain words?</button>
@@ -97,6 +98,7 @@
 
   <footer>
     <p>Not advice. Just a picture of the past.</p>
+    <p>The rainbow chart: first drawn by azop in 2014. The growth line is by trolololo. Blockchain Center made the chart famous.</p>
     <p>Built with Muse.</p>
   </footer>
 </div>
@@ -144,6 +146,8 @@ function showAnswer(ans, savedCopy){
     ? (savedCopy ? "Saved copy, " : "As of ") + fmtDate(chartData.spot.ts) + "."
     : "";
   $("answer").classList.add("show");
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $("answer").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
 }
 
 let usedSavedCopy = false;

@@ -33,6 +33,7 @@
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
   body{margin:0;background:var(--bg);color:var(--ink);
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     font-size:19px;line-height:1.45}
@@ -151,15 +152,15 @@
     <p class="kicker">Step 2</p>
     <h2>Where are we now?</h2>
     <p class="growth-note" id="rainbow-note">It is a growth chart. One line is Bitcoin's own growth, fit to every price so far.</p>
+    <div class="today-panel">
+      <p id="today-text">One moment. We are reading the chart.</p>
+      <p class="asof" id="asof"></p>
+    </div>
     <div class="chartbox">
       <svg id="chart" viewBox="0 0 1000 540" role="img"
         aria-label="Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
     </div>
     <div class="bands" id="bands"></div>
-    <div class="today-panel">
-      <p id="today-text">One moment. We are reading the chart.</p>
-      <p class="asof" id="asof"></p>
-    </div>
     <h3 class="lab-h3">Every day, on one chart.</h3>
     <p class="growth-note">Drag on the chart, or use the slider. Pick any day. See its price and its band. See the year that came next.</p>
     <div class="lab-card">
