@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bitcoin Rainbow</title>
-<meta name="description" content="The bitcoin rainbow chart as a growth chart, in plain words. Tap a color to learn what it means. Not advice.">
+<meta name="description" content="Where bitcoin stands, and how people buy. The rainbow growth chart, a weekly-buy simulator on real prices, and the two ways to buy. In plain words. Not advice.">
 <style>
   :root{
     --bg:#0d1330; --panel:#16204a; --panel2:#1b2757; --ink:#f4f6ff; --soft:#b9c2e8;
@@ -20,9 +20,11 @@
   h1{font-size:40px;line-height:1.1;margin:0 0 14px;font-weight:800;letter-spacing:-.5px}
   .btn{display:inline-block;background:var(--gold);color:#221a00;font-weight:700;
     padding:13px 22px;border-radius:999px;text-decoration:none;font-size:19px;min-height:48px}
-  .growth-note{text-align:center;font-size:21px;margin:20px 6px 2px}
+  section.block{margin:30px 0 0}
+  h2{font-size:27px;margin:0 0 10px}
+  .growth-note{font-size:21px;margin:2px 0 10px}
   .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;
-    padding:10px 6px 6px;margin:10px 0 12px}
+    padding:10px 6px 6px;margin:0 0 12px}
   svg{display:block;width:100%;height:auto}
   #chart polygon.band-poly{cursor:pointer}
   .bands{display:flex;flex-direction:column;gap:8px;margin:0 0 6px}
@@ -39,23 +41,38 @@
   .dots i{width:8px;height:8px;border-radius:50%;background:var(--dot-off);display:block}
   .bkid{font-size:16.5px}
   .band-row.active{border-color:var(--gold);background:var(--panel2)}
-  section.today{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
-    padding:20px 20px 14px;margin:20px 0}
-  h2{font-size:26px;margin:0 0 10px}
-  .today p{font-size:22px;margin:0 0 8px}
-  .asof{color:var(--soft);font-size:16px;margin:0}
-  .cards{display:grid;grid-template-columns:1fr;gap:14px;margin:20px 0}
-  @media (min-width:760px){.cards{grid-template-columns:1fr 1fr 1fr}}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
-  .card .icon{width:54px;height:54px;margin:0 0 6px}
-  .card h3{margin:0 0 8px;font-size:22px}
-  .card p{margin:0;color:var(--ink)}
-  .card .big{font-size:30px;font-weight:800;color:var(--gold);margin:0 0 6px}
-  .howto{background:var(--panel);border:1px solid var(--line);border-radius:18px;
-    padding:18px 20px;margin:20px 0}
-  .howto p{margin:0 0 6px;color:var(--soft)}
-  .howto p:last-child{margin:0}
-  footer{text-align:center;color:var(--soft);padding:14px 0 30px;font-size:17px}
+  .today-panel{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px 12px;margin:14px 0 0}
+  .today-panel p{font-size:22px;margin:0 0 8px}
+  .today-panel .asof{color:var(--soft);font-size:16px;margin:0}
+  .dca-line{font-size:21px;margin:2px 0 12px}
+  .sim{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+  .sim .tag{display:inline-block;font-weight:800;letter-spacing:2px;font-size:14px;color:var(--gold);
+    border:1px solid var(--gold);border-radius:999px;padding:3px 10px;margin:0 0 12px}
+  .sim .lab{color:var(--soft);font-size:16.5px;margin:10px 0 7px}
+  .sim .lab:first-of-type{margin-top:0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+    padding:10px 18px;font-size:17.5px;font-weight:700;min-height:46px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent}
+  .chip.on{background:var(--gold);color:#221a00;border-color:var(--gold)}
+  .sim .result{margin:16px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .sim .result p{margin:0 0 6px;font-size:20px}
+  .sim .result .worth{font-size:23px;font-weight:800;color:var(--gold)}
+  .sim .note{color:var(--soft);font-size:16.5px;margin:8px 0 0}
+  .source{color:var(--soft);font-size:16px;margin:10px 2px 0}
+  .wrow{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:14px 18px;margin:0 0 10px}
+  .wrow h3{margin:0 0 4px;font-size:20px}
+  .wrow p{margin:0}
+  .strip{display:grid;grid-template-columns:1fr;gap:10px}
+  @media (min-width:760px){.strip{grid-template-columns:1fr 1fr 1fr}}
+  .scard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .scard .icon{width:36px;height:36px;margin:0 0 4px}
+  .scard h3{margin:0 0 4px;font-size:19px}
+  .scard p{margin:0;font-size:17px}
+  .scard .big{font-size:24px;font-weight:800;color:var(--gold);margin:0 0 2px}
+  footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:17px}
   footer p{margin:4px 0}
   footer a{color:var(--soft)}
 </style>
@@ -64,48 +81,85 @@
 <div class="wrap">
   <header>
     <h1>Bitcoin, in plain words.</h1>
-    <a class="btn" href="#today">See today</a>
+    <a class="btn" href="#now">See today</a>
   </header>
 
-  <p class="growth-note" id="rainbow-note">It is a growth chart. The lines show how tall Bitcoin should be.</p>
-
-  <div class="chartbox">
-    <svg id="chart" viewBox="0 0 1000 540" role="img"
-      aria-label="Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
-  </div>
-
-  <div class="bands" id="bands"></div>
-
-  <section class="today" id="today">
-    <h2>Where are we today?</h2>
-    <p id="today-text">One moment. We are reading the chart.</p>
-    <p class="asof" id="asof"></p>
+  <section class="block" id="now">
+    <h2>Where are we now?</h2>
+    <p class="growth-note" id="rainbow-note">It is a growth chart. The lines show how tall Bitcoin should be.</p>
+    <div class="chartbox">
+      <svg id="chart" viewBox="0 0 1000 540" role="img"
+        aria-label="Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
+    </div>
+    <div class="bands" id="bands"></div>
+    <div class="today-panel">
+      <p id="today-text">One moment. We are reading the chart.</p>
+      <p class="asof" id="asof"></p>
+    </div>
   </section>
 
-  <div class="cards">
-    <div class="card">
-      <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 9h13l17 17-13 13L9 22z" fill="#ffd94d"/><circle cx="16" cy="16" r="3.5" fill="#16204a"/></svg>
-      <h3>Price</h3>
-      <p class="big" id="price-big">&hellip;</p>
-      <p id="price-text">Price is the tag at the store. It changes every day.</p>
+  <section class="block" id="how">
+    <h2>How do people buy?</h2>
+    <p class="dca-line">Like an allowance, in reverse. A little bit, every week. No matter the price.</p>
+    <div class="sim">
+      <span class="tag">DCA</span>
+      <p class="lab">Each week:</p>
+      <div class="chips" id="amt-chips">
+        <button type="button" class="chip" data-amt="10">$10</button>
+        <button type="button" class="chip" data-amt="25">$25</button>
+        <button type="button" class="chip" data-amt="50">$50</button>
+        <button type="button" class="chip" data-amt="100">$100</button>
+      </div>
+      <div class="chips" id="yrs-chips">
+        <button type="button" class="chip" data-yrs="1">1 year</button>
+        <button type="button" class="chip" data-yrs="3">3 years</button>
+        <button type="button" class="chip" data-yrs="5">5 years</button>
+      </div>
+      <div class="result">
+        <p id="dca-put">You would have put in &hellip;</p>
+        <p class="worth" id="dca-worth">It would be worth &hellip; today.</p>
+        <p class="note">That is the past. Not a promise.</p>
+      </div>
     </div>
-    <div class="card">
-      <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><polyline points="5,34 16,22 24,28 42,11" fill="none" stroke="#35b6c9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="42" cy="11" r="3.5" fill="#35b6c9"/></svg>
-      <h3>Technical</h3>
-      <p id="technical-text">Technical means watching the line. Up, down, or flat?</p>
-    </div>
-    <div class="card">
-      <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="13" r="9" fill="#3fae5a"/><circle cx="15" cy="18" r="6" fill="#3fae5a"/><circle cx="33" cy="18" r="6" fill="#3fae5a"/><path d="M24 21v8" stroke="#b07a3f" stroke-width="4" stroke-linecap="round"/><path d="M24 29c-2 4-5 6-9 8M24 29c0 4-1 7-2 10M24 29c2 4 5 6 9 8" stroke="#b07a3f" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
-      <h3>Fundamental</h3>
-      <p id="fundamental-text">Fundamental is a health check. Strong? Rare? Used a lot?</p>
-    </div>
-  </div>
+    <p class="source">Past prices: blockchain.info. Live price: Coinbase.</p>
+  </section>
 
-  <div class="howto">
-    <h2>How we made this</h2>
-    <p>Past prices: blockchain.info. Live price: Coinbase.</p>
-    <p>A picture of the past. Not a promise.</p>
-  </div>
+  <section class="block" id="where">
+    <h2>Where do you buy it?</h2>
+    <div class="wrow">
+      <h3>IBIT</h3>
+      <p>In a stock account, like a stock. You do not hold the coins.</p>
+    </div>
+    <div class="wrow">
+      <h3>Exchange app</h3>
+      <p>You hold real bitcoin. You keep the keys.</p>
+    </div>
+    <div class="wrow">
+      <h3>Fees</h3>
+      <p>Both charge fees. IBIT: yearly. Apps: per buy.</p>
+    </div>
+  </section>
+
+  <section class="block" id="learn">
+    <div class="strip">
+      <div class="scard">
+        <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 9h13l17 17-13 13L9 22z" fill="#ffd94d"/><circle cx="16" cy="16" r="3.5" fill="#16204a"/></svg>
+        <h3>Price</h3>
+        <p class="big" id="price-big">&hellip;</p>
+        <p id="price-text">Price is the tag at the store.</p>
+      </div>
+      <div class="scard">
+        <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><polyline points="5,34 16,22 24,28 42,11" fill="none" stroke="#35b6c9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="42" cy="11" r="3.5" fill="#35b6c9"/></svg>
+        <h3>Technical</h3>
+        <p id="technical-text">Watching the line.</p>
+      </div>
+      <div class="scard">
+        <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="13" r="9" fill="#3fae5a"/><circle cx="15" cy="18" r="6" fill="#3fae5a"/><circle cx="33" cy="18" r="6" fill="#3fae5a"/><path d="M24 21v8" stroke="#b07a3f" stroke-width="4" stroke-linecap="round"/><path d="M24 29c-2 4-5 6-9 8M24 29c0 4-1 7-2 10M24 29c2 4 5 6 9 8" stroke="#b07a3f" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <h3>Fundamental</h3>
+        <p id="fundamental-text">Fundamental is a health check.</p>
+      </div>
+    </div>
+  </section>
 
   <footer>
     <p>Not advice. Just a picture of the past.</p>
@@ -129,6 +183,27 @@ function fmtShort(v){
 function fmtDate(ts){
   return new Date(ts*1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
 }
+
+let chartData = null;
+let simAmt = 25, simYrs = 3;
+
+function renderSim(){
+  if (!chartData) return;
+  const u = (chartData.dca || []).find((x) => x.years === simYrs);
+  if (!u) return;
+  const put = simAmt * u.buys;
+  const worth = simAmt * u.btcPerDollar * chartData.spot.price;
+  $("dca-put").textContent = `You would have put in ${fmtUSD(put)}.`;
+  $("dca-worth").textContent = `It would be worth ${fmtUSD(worth)} today.`;
+  document.querySelectorAll("#amt-chips .chip").forEach((c) =>
+    c.classList.toggle("on", Number(c.getAttribute("data-amt")) === simAmt));
+  document.querySelectorAll("#yrs-chips .chip").forEach((c) =>
+    c.classList.toggle("on", Number(c.getAttribute("data-yrs")) === simYrs));
+}
+document.querySelectorAll("#amt-chips .chip").forEach((c) =>
+  c.addEventListener("click", () => { simAmt = Number(c.getAttribute("data-amt")); renderSim(); }));
+document.querySelectorAll("#yrs-chips .chip").forEach((c) =>
+  c.addEventListener("click", () => { simYrs = Number(c.getAttribute("data-yrs")); renderSim(); }));
 
 let activeBand = -2; // -2 = nothing picked yet
 function highlight(k, scroll){
@@ -249,13 +324,15 @@ function buildRows(data){
 }
 
 function fill(data, savedCopy){
+  chartData = data;
   draw(data);
   buildRows(data);
+  renderSim();
   $("today-text").textContent = data.todayText;
   $("price-big").textContent = fmtUSD(data.spot.price);
-  $("price-text").textContent = data.texts.price;
-  $("technical-text").textContent = data.texts.technical;
-  $("fundamental-text").textContent = data.texts.fundamental;
+  $("price-text").textContent = data.strip.price;
+  $("technical-text").textContent = data.strip.technical;
+  $("fundamental-text").textContent = data.strip.fundamental;
   $("rainbow-note").textContent = data.texts.rainbow;
   $("asof").textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtDate(data.spot.ts) + ".";
   if (data.today.bandIndex >= 0 && data.today.bandIndex < 9) highlight(data.today.bandIndex, false);
