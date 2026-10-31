@@ -24,6 +24,9 @@
   .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;
     padding:10px 6px 2px;margin:18px 0 8px}
   svg{display:block;width:100%;height:auto}
+  .legend{display:flex;flex-wrap:wrap;gap:5px 14px;justify-content:center;padding:8px 10px 7px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;font-size:14.5px;color:var(--soft)}
+  .legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
   .rainbow-note{text-align:center;color:var(--soft);font-size:18px;margin:10px 6px 4px}
   section.today{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
     padding:20px 20px 14px;margin:20px 0}
@@ -55,6 +58,7 @@
   <div class="chartbox">
     <svg id="chart" viewBox="0 0 1000 540" role="img"
       aria-label="Bitcoin rainbow chart. Past prices wind through nine colored bands. Today the price sits in the Deep Blue band, the lowest band."></svg>
+    <div class="legend" id="legend" aria-hidden="true"></div>
   </div>
   <p class="rainbow-note" id="rainbow-note">The rainbow is a line that shows the normal path. Blue means the price is far below it. Red means far above it.</p>
 
@@ -106,13 +110,9 @@ function fmtDate(ts){
   return new Date(ts*1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
 }
 
-// Light label colors for band names on the dark panel.
-const LABEL = {"Deep Blue":"#8d9bf0","Blue":"#6fa8e8","Sky":"#5fd3e6","Green":"#6fce85",
-  "Lime":"#c4dd6a","Yellow":"#ffd94d","Orange":"#ffb066","Dark Orange":"#ff8a5c","Red":"#ff7a6e"};
-
 function draw(data){
   const svg = $("chart");
-  const W=1000,H=540, L=64, R=118, T=14, B=36;
+  const W=1000,H=540, L=64, R=16, T=14, B=36;
   const iw=W-L-R, ih=H-T-B;
   const t0=data.historyFirst.ts, t1=data.spot.ts + 45*86400;
   const yMin=Math.log(0.05), yMax=Math.log(2000000);
@@ -152,19 +152,16 @@ function draw(data){
   // price line (weekly closes)
   const pricePts=data.points.map(p=>X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)).join(" ");
   s+=`<polyline points="${pricePts}" fill="none" stroke="#ffffff" stroke-width="2.2"/>`;
-  // band names at right edge
-  for(let k=0;k<9;k++){
-    const mid=trend(t1-45*86400)*Math.exp(data.bandBottom + data.bandWidth*(k+0.5));
-    s+=`<circle cx="${W-R+10}" cy="${Y(mid)}" r="4.5" fill="${data.bands[k].color}"/>`;
-    s+=`<text x="${W-R+20}" y="${Y(mid)+4.5}" fill="${LABEL[data.bands[k].name]||'#fff'}" font-size="13.5">${data.bands[k].name}</text>`;
-  }
-  // today dot + label
+  // today dot + label (halo keeps it readable over the bands)
   const dx=X(data.spot.ts), dy=Y(data.spot.price);
   s+=`<circle cx="${dx}" cy="${dy}" r="7" fill="#ffd94d" stroke="#0d1330" stroke-width="2.5"/>`;
   const anchor = dx > W-R-230 ? "end" : "start";
   const lx = anchor==="end" ? dx-12 : dx+12;
-  s+=`<text x="${lx}" y="${dy-12}" fill="#ffd94d" font-size="16" font-weight="700" text-anchor="${anchor}">${fmtUSD(data.spot.price)} today</text>`;
+  s+=`<text x="${lx}" y="${dy-12}" fill="#ffd94d" font-size="16" font-weight="700" text-anchor="${anchor}" style="paint-order:stroke;stroke:#0d1330;stroke-width:3.5px">${fmtUSD(data.spot.price)} today</text>`;
   svg.innerHTML=s;
+  // legend under the chart (band names collide at the chart's edge)
+  $("legend").innerHTML = data.bands.map(b =>
+    `<span><i style="background:${b.color}"></i>${b.name}</span>`).join("");
 }
 
 function fill(data, savedCopy){
