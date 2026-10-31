@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitcoin Rainbow — Bitcoin, in plain words</title>
+<meta name="description" content="The bitcoin rainbow chart, the price, and what moves it. All in plain words. Not advice.">
+<style>
+  :root{
+    --bg:#0d1330; --panel:#16204a; --panel2:#1b2757; --ink:#f4f6ff; --soft:#b9c2e8;
+    --gold:#ffd94d; --line:#2c3a75;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:19px;line-height:1.45}
+  .wrap{max-width:960px;margin:0 auto;padding:20px 16px 8px}
+  header{text-align:center;padding:26px 0 6px}
+  h1{font-size:40px;line-height:1.1;margin:0 0 10px;font-weight:800;letter-spacing:-.5px}
+  .sub{color:var(--soft);font-size:20px;margin:0 0 18px}
+  .btn{display:inline-block;background:var(--gold);color:#221a00;font-weight:700;
+    padding:13px 22px;border-radius:999px;text-decoration:none;font-size:19px;min-height:48px}
+  .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:10px 6px 2px;margin:18px 0 8px}
+  svg{display:block;width:100%;height:auto}
+  .rainbow-note{text-align:center;color:var(--soft);font-size:18px;margin:10px 6px 4px}
+  section.today{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
+    padding:20px 20px 14px;margin:20px 0}
+  h2{font-size:26px;margin:0 0 10px}
+  .today p{font-size:22px;margin:0 0 8px}
+  .asof{color:var(--soft);font-size:16px;margin:0}
+  .cards{display:grid;grid-template-columns:1fr;gap:14px;margin:20px 0}
+  @media (min-width:760px){.cards{grid-template-columns:1fr 1fr 1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
+  .card h3{margin:0 0 8px;font-size:22px}
+  .card p{margin:0;color:var(--ink)}
+  .card .big{font-size:30px;font-weight:800;color:var(--gold);margin:0 0 6px}
+  .howto{background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px;margin:20px 0}
+  .howto p{margin:0 0 6px;color:var(--soft)}
+  footer{text-align:center;color:var(--soft);padding:14px 0 30px;font-size:17px}
+  footer p{margin:4px 0}
+  footer a{color:var(--soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Bitcoin, in plain words.</h1>
+    <p class="sub">The rainbow chart shows where the price sits today.</p>
+    <a class="btn" href="#today">See today&rsquo;s place</a>
+  </header>
+
+  <div class="chartbox">
+    <svg id="chart" viewBox="0 0 1000 540" role="img"
+      aria-label="Bitcoin rainbow chart. Past prices wind through nine colored bands. Today the price sits in the Deep Blue band, the lowest band."></svg>
+  </div>
+  <p class="rainbow-note" id="rainbow-note">The rainbow is a line that shows the normal path. Blue means the price is far below it. Red means far above it.</p>
+
+  <section class="today" id="today">
+    <h2>Where are we today?</h2>
+    <p id="today-text">One moment. We are reading the chart.</p>
+    <p class="asof" id="asof"></p>
+  </section>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Price</h3>
+      <p class="big" id="price-big">&hellip;</p>
+      <p id="price-text">Price is what one bitcoin costs right now.</p>
+    </div>
+    <div class="card">
+      <h3>Technical</h3>
+      <p id="technical-text">Technical means looking at the chart. Is the price going up or down?</p>
+    </div>
+    <div class="card">
+      <h3>Fundamental</h3>
+      <p id="fundamental-text">Fundamental means looking at the thing itself. Is it strong? Do people use it? Is it rare?</p>
+    </div>
+  </div>
+
+  <div class="howto">
+    <h2>How we made this</h2>
+    <p>Past prices come from blockchain.info. The price now comes from Coinbase.</p>
+    <p>The line is a best-fit curve through past prices. The bands are steps of one set size from the line.</p>
+    <p>In the first years, few shops sold it. Old prices jump a lot.</p>
+    <p>This chart shows the past. It does not tell the future.</p>
+  </div>
+
+  <footer>
+    <p>Not advice. Just a picture of the past.</p>
+    <p><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a></p>
+    <p>Built with Muse.</p>
+  </footer>
+</div>
+
+<script src="fallback-data.js"></script>
+<script>
+"use strict";
+const WORKER_BASE = "https://btc-rainbow-mcp.wdlcmu.workers.dev";
+const $ = (id) => document.getElementById(id);
+
+function fmtUSD(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+function fmtDate(ts){
+  return new Date(ts*1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
+}
+
+// Light label colors for band names on the dark panel.
+const LABEL = {"Deep Blue":"#8d9bf0","Blue":"#6fa8e8","Sky":"#5fd3e6","Green":"#6fce85",
+  "Lime":"#c4dd6a","Yellow":"#ffd94d","Orange":"#ffb066","Dark Orange":"#ff8a5c","Red":"#ff7a6e"};
+
+function draw(data){
+  const svg = $("chart");
+  const W=1000,H=540, L=64, R=118, T=14, B=36;
+  const iw=W-L-R, ih=H-T-B;
+  const t0=data.historyFirst.ts, t1=data.spot.ts + 45*86400;
+  const yMin=Math.log(0.05), yMax=Math.log(2000000);
+  const X=(ts)=> L + (ts-t0)/(t1-t0)*iw;
+  const Y=(p)=> T + (yMax-Math.log(p))/(yMax-yMin)*ih;
+  const fit=data.fit, genesis=data.genesisTs;
+  const trend=(ts)=> Math.exp(fit.a + fit.b*Math.log((ts-genesis)/86400));
+  let s="";
+  // band polygons
+  const steps=90;
+  for(let k=0;k<9;k++){
+    const top=[], bot=[];
+    for(let i=0;i<=steps;i++){
+      const ts=t0+(t1-t0)*i/steps;
+      top.push([X(ts), Y(trend(ts)*Math.exp(data.bandBottom + data.bandWidth*(k+1)))]);
+      bot.push([X(ts), Y(trend(ts)*Math.exp(data.bandBottom + data.bandWidth*k))]);
+    }
+    const pts=top.concat(bot.reverse()).map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+    s+=`<polygon points="${pts}" fill="${data.bands[k].color}" opacity="0.88"/>`;
+  }
+  // grid + y labels
+  for(const v of [1,10,100,1000,10000,100000,1000000]){
+    const y=Y(v);
+    const lab = v>=1000000 ? "$1M" : v>=1000 ? "$"+(v/1000)+"K" : "$"+v;
+    s+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#ffffff" opacity="0.10"/>`;
+    s+=`<text x="${L-8}" y="${y+4}" fill="#b9c2e8" font-size="13" text-anchor="end">${lab}</text>`;
+  }
+  // x labels
+  for(const yr of [2012,2016,2020,2024]){
+    const ts=Date.UTC(yr,0,1)/1000, x=X(ts);
+    s+=`<text x="${x}" y="${H-12}" fill="#b9c2e8" font-size="13" text-anchor="middle">${yr}</text>`;
+  }
+  // fit line (dashed)
+  const fitPts=[];
+  for(let i=0;i<=steps;i++){ const ts=t0+(t1-t0)*i/steps; fitPts.push(X(ts).toFixed(1)+","+Y(trend(ts)).toFixed(1)); }
+  s+=`<polyline points="${fitPts.join(" ")}" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-dasharray="6 5" opacity="0.75"/>`;
+  // price line (weekly closes)
+  const pricePts=data.points.map(p=>X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)).join(" ");
+  s+=`<polyline points="${pricePts}" fill="none" stroke="#ffffff" stroke-width="2.2"/>`;
+  // band names at right edge
+  for(let k=0;k<9;k++){
+    const mid=trend(t1-45*86400)*Math.exp(data.bandBottom + data.bandWidth*(k+0.5));
+    s+=`<circle cx="${W-R+10}" cy="${Y(mid)}" r="4.5" fill="${data.bands[k].color}"/>`;
+    s+=`<text x="${W-R+20}" y="${Y(mid)+4.5}" fill="${LABEL[data.bands[k].name]||'#fff'}" font-size="13.5">${data.bands[k].name}</text>`;
+  }
+  // today dot + label
+  const dx=X(data.spot.ts), dy=Y(data.spot.price);
+  s+=`<circle cx="${dx}" cy="${dy}" r="7" fill="#ffd94d" stroke="#0d1330" stroke-width="2.5"/>`;
+  const anchor = dx > W-R-230 ? "end" : "start";
+  const lx = anchor==="end" ? dx-12 : dx+12;
+  s+=`<text x="${lx}" y="${dy-12}" fill="#ffd94d" font-size="16" font-weight="700" text-anchor="${anchor}">${fmtUSD(data.spot.price)} today</text>`;
+  svg.innerHTML=s;
+}
+
+function fill(data, savedCopy){
+  draw(data);
+  $("today-text").textContent = data.todayText;
+  $("price-big").textContent = fmtUSD(data.spot.price);
+  $("price-text").textContent = data.texts.price;
+  $("technical-text").textContent = data.texts.technical;
+  $("fundamental-text").textContent = data.texts.fundamental;
+  $("rainbow-note").textContent = data.texts.rainbow;
+  $("asof").textContent =
+    (savedCopy ? "Saved copy from " : "Prices as of ") + fmtDate(data.spot.ts) +
+    ". Past prices run through " + fmtDate(data.historyLast.ts) + ".";
+  const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
+  $("chart").setAttribute("aria-label",
+    "Bitcoin rainbow chart. Past prices wind through nine colored bands. Today the price sits " +
+    (data.today.band ? "in the " + bandName + " band" : bandName) + ", " +
+    Math.abs(data.today.pct) + "% " + (data.today.pct < 0 ? "below" : "above") + " the line.");
+}
+
+async function load(){
+  try{
+    const ctl = new AbortController();
+    const timer = setTimeout(()=>ctl.abort(), 6000);
+    const resp = await fetch(WORKER_BASE + "/api/chart", {signal: ctl.signal});
+    clearTimeout(timer);
+    if(!resp.ok) throw new Error("bad status");
+    fill(await resp.json(), false);
+  }catch(e){
+    if(window.FALLBACK_CHART) fill(window.FALLBACK_CHART, true);
+    else $("today-text").textContent = "The chart is resting. Please come back soon.";
+  }
+}
+load();
+</script>
+</body>
+</html>
