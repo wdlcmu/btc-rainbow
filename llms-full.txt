@@ -9,7 +9,7 @@
 
 ## Home (https://btc-rainbow-site.pages.dev/)
 
-Bitcoin, in plain words.
+The Bitcoin Rainbow in plain words.
 Sixteen years of climbs and crashes, in words anyone can read.
 
 ### Step 1: What bitcoin is
@@ -63,7 +63,7 @@ Each row shows the price range for that band on Oct 31, 2026, and the share of a
 - The fall from the Oct 7, 2025 top ($124,777) is still open in that set. Its low so far there: $58,534 on Jul 1, 2026, down 53.1%.
 - A share card on the home page shows the worst, middle, and best ten-year paths. Its line: "That is the past. Not a promise."
 
-### Step 3: Why we think it climbs on
+### Step 3: Why we think it climbs on. A belief, not a fact
 
 Its line climbs for 16 years. It fell hard, many times. It climbed back each time. Pick any start day. Four years on, the price stood higher. Every time, so far.
 
