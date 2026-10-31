@@ -21,6 +21,8 @@
   .btn{display:inline-block;background:var(--gold);color:#221a00;font-weight:700;
     padding:13px 22px;border-radius:999px;text-decoration:none;font-size:19px;min-height:48px}
   section.block{margin:30px 0 0}
+  .kicker{color:var(--gold);font-weight:800;letter-spacing:2px;font-size:14px;
+    text-transform:uppercase;margin:0 0 6px}
   h2{font-size:27px;margin:0 0 10px}
   .growth-note{font-size:21px;margin:2px 0 10px}
   .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;
@@ -85,11 +87,12 @@
   </header>
 
   <section class="block" id="now">
+    <p class="kicker">Step 1</p>
     <h2>Where are we now?</h2>
-    <p class="growth-note" id="rainbow-note">It is a growth chart. One line is Bitcoin's own growth, fit to every price so far.</p>
+    <p class="growth-note" id="rainbow-note">It is a growth chart. The lines show how tall Bitcoin should be.</p>
     <div class="chartbox">
       <svg id="chart" viewBox="0 0 1000 540" role="img"
-        aria-label="Bitcoin growth chart. Colored bands wrap one line: bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
+        aria-label="Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
     </div>
     <div class="bands" id="bands"></div>
     <div class="today-panel">
@@ -99,23 +102,26 @@
   </section>
 
   <section class="block" id="how">
+    <p class="kicker">Step 2</p>
     <h2>A little, every week.</h2>
     <p class="dca-line">Like an allowance, in reverse. A little bit, every week. No matter the price.</p>
     <div class="sim">
       <span class="tag">DCA</span>
-      <p class="lab">Each week:</p>
+      <p class="lab"><strong>1. Pick an amount.</strong> It goes in each week.</p>
       <div class="chips" id="amt-chips">
         <button type="button" class="chip" data-amt="10">$10</button>
         <button type="button" class="chip" data-amt="25">$25</button>
         <button type="button" class="chip" data-amt="50">$50</button>
         <button type="button" class="chip" data-amt="100">$100</button>
       </div>
+      <p class="lab"><strong>2. Pick a span.</strong> One, three, or five years.</p>
       <div class="chips" id="yrs-chips">
         <button type="button" class="chip" data-yrs="1">1 year</button>
         <button type="button" class="chip" data-yrs="3">3 years</button>
         <button type="button" class="chip" data-yrs="5">5 years</button>
       </div>
       <div class="result">
+        <p class="lab"><strong>3. See the past.</strong></p>
         <p id="dca-put">You would have put in &hellip;</p>
         <p class="worth" id="dca-worth">It would be worth &hellip; today.</p>
         <p class="note">That is the past. Not a promise.</p>
@@ -125,6 +131,7 @@
   </section>
 
   <section class="block" id="where">
+    <p class="kicker">Step 3</p>
     <h2>The two ways people hold it.</h2>
     <div class="wrow">
       <h3>IBIT</h3>
@@ -141,6 +148,8 @@
   </section>
 
   <section class="block" id="learn">
+    <p class="kicker">Step 4</p>
+    <h2>Learn the words.</h2>
     <div class="strip">
       <div class="scard">
         <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 9h13l17 17-13 13L9 22z" fill="#ffd94d"/><circle cx="16" cy="16" r="3.5" fill="#16204a"/></svg>
@@ -338,7 +347,7 @@ function fill(data, savedCopy){
   if (data.today.bandIndex >= 0 && data.today.bandIndex < 9) highlight(data.today.bandIndex, false);
   const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
   $("chart").setAttribute("aria-label",
-    "Bitcoin growth chart. Colored bands wrap one line: bitcoin's own growth, fit to every price so far. Today it sits " +
+    "Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits " +
     (data.today.band ? "in the " + bandName + " band" : bandName) + ". Bitcoin is short for its age.");
 }
 
