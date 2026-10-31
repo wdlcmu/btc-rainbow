@@ -1,0 +1,121 @@
+# Bitcoin Rainbow: full page text
+
+> Full text and data facts from https://btc-rainbow-site.pages.dev/
+> Bitcoin Rainbow is a free site in plain words. It tells what bitcoin is, shows where the price sits next to its own past growth, and makes the author's case for the long run, crashes shown plainly.
+> Its tools only measure: a chart readout and a replay of small weekly buys on real past prices. No ads. No accounts.
+> Past prices: blockchain.info. Live price: Coinbase.
+> Facts below are as of Oct 31, 2026, unless a date is shown. Live facts change each day.
+> That is the past. Not a promise.
+
+## Home (https://btc-rainbow-site.pages.dev/)
+
+Bitcoin, in plain words.
+Why we think bitcoin stands higher in ten years.
+
+### Step 1: What bitcoin is
+
+Bitcoin is money for the internet. No company runs it. No boss can print more. Only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.
+
+### Step 2: Where are we now?
+
+It is a growth chart. One line is Bitcoin's own growth, fit to every price so far.
+
+Think of the marks on a wall for a child. The chart does the same for price. One line shows the growth path. Bands sit above and below the line.
+
+On Oct 31, 2026: Bitcoin is short for its age. One bitcoin costs $77,471 today. It sits in the Deep Blue band.
+
+### How the chart is made
+
+- The line is fit to all past prices with least squares.
+- The line is: ln(price) = -37.283 + 5.597 x ln(days since Jan 3, 2009).
+- Jan 3, 2009 is day one. It is the day the first block was made.
+- The fit uses 5,917 days with a price above zero.
+- Those days run from Aug 18, 2010 to Oct 29, 2026.
+- There are 9 bands. Each band is 0.3 wide in log space.
+- The line sits in the third band from the base. The base of the bands is the line times 0.47. The top is the line times 7.03.
+- Band names are colors only. Old charts used names that told you to buy or sell. This site does not.
+
+### The 9 bands on Oct 31, 2026
+
+Each row shows the price range for that band on Oct 31, 2026, and the share of all past days that sat in that band.
+
+- Deep Blue: $67,007 to $90,449. 23.2% of days. Way under the line.
+- Blue: $90,449 to $122,094. 16.3% of days. Under the line, lots.
+- Sky: $122,094 to $164,810. 13.4% of days. Right on track.
+- Green: $164,810 to $222,470. 14.0% of days. Just over the line.
+- Lime: $222,470 to $300,303. 7.3% of days. Over the line.
+- Yellow: $300,303 to $405,366. 6.8% of days. Far over the line.
+- Orange: $405,366 to $547,187. 4.5% of days. Way over the line.
+- Dark Orange: $547,187 to $738,625. 1.8% of days. Near the top.
+- Red: $738,625 to $997,040. 1.6% of days. At the top. Rare.
+- 597 days sat below all bands. 57 days sat above all bands.
+
+### Two points marked on the chart
+
+- 2021 top: $67,562 (Nov 9, 2021 close in this data set).
+- 2022 low: $15,760 (Nov 22, 2022 close in this data set).
+
+### Step 3: Why we think it climbs on
+
+Its line climbs for 16 years. It fell hard, many times. It climbed back each time. Pick any start day. Four years on, the price stood higher. Every time, so far.
+
+Why might it go on? Only 21 million will ever exist. Most are already out. New coins come slower every four years. The last cut was in 2024. Big funds sell it in stock accounts. That is the case: a belief, not a fact.
+
+### Step 4: A little, every week
+
+Like an allowance, in reverse. A little, every week.
+
+This is called DCA. It means you buy a set sum on a set day, week by week.
+
+Pick an amount: $10, $25, $50, or $100 a week.
+Pick a span: 1, 3, or 5 years.
+See the past: the tool buys once a week at the real close near that day. It adds up the coins. It values them at the live price.
+
+Results as of Oct 31, 2026 (live price $77,471). Past only.
+
+- $10 a week, 1 year, 53 buys: put in $530. Worth $542.
+- $25 a week, 1 year, 53 buys: put in $1,325. Worth $1,355.
+- $50 a week, 1 year, 53 buys: put in $2,650. Worth $2,710.
+- $100 a week, 1 year, 53 buys: put in $5,300. Worth $5,420.
+- $10 a week, 3 years, 157 buys: put in $1,570. Worth $1,684.
+- $25 a week, 3 years, 157 buys: put in $3,925. Worth $4,210.
+- $50 a week, 3 years, 157 buys: put in $7,850. Worth $8,420.
+- $100 a week, 3 years, 157 buys: put in $15,700. Worth $16,839.
+- $10 a week, 5 years, 261 buys: put in $2,610. Worth $4,712.
+- $25 a week, 5 years, 261 buys: put in $6,525. Worth $11,779.
+- $50 a week, 5 years, 261 buys: put in $13,050. Worth $23,559.
+- $100 a week, 5 years, 261 buys: put in $26,100. Worth $47,118.
+
+That is the past. Not a promise.
+
+### Step 5: It swings hard. We could be wrong
+
+Since 2011, it fell by half or more. Seven times. In 2022, it fell by about three fourths. It can do that again. A total loss should sting, not sink you.
+
+It could fall and stay down. New laws could hurt it. The climb is a pattern, not a law. Many fans keep 5 to 10 in 100 saved. The bold end is 10 to 20 in 100. Only money you will not need for years. This is learning, not financial advice.
+
+### Step 6: The two ways people hold it
+
+- IBIT: in a stock account, like a stock. You do not hold the coins.
+- Exchange app: you hold real bitcoin. You keep the keys.
+- Fees: both charge fees. IBIT: yearly. Apps: per buy.
+
+### Step 7: Learn the words
+
+- Price: price is the tag at the store. It changes every day.
+- Technical: watching the line. Up, down, or flat?
+- Fundamental: a health check. Strong? Rare? Used a lot? Only 21 million will ever be.
+
+### One year ago
+
+- One year before Oct 31, 2026, the price was $109,553. The past year was down 29.3%. The site calls that down a lot.
+
+## Privacy (https://btc-rainbow-site.pages.dev/privacy)
+
+This site reads public price data. It does not ask for your name. It has no accounts. It sets no tracking cookies of its own. Prices come from Coinbase and blockchain.info. Not advice. Just a picture of the past.
+
+## Terms (https://btc-rainbow-site.pages.dev/terms)
+
+This site shows past prices in plain words. It does not give financial advice. It never says buy or sell. Prices can be wrong or late. A price here can be old by the time you read it.
+
+Built with Muse.

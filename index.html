@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bitcoin Rainbow</title>
-<meta name="description" content="Bitcoin, measured against its own growth. The rainbow growth chart, a weekly-buy simulator on real prices, and the two ways people hold it. In plain words. Not advice.">
+<meta name="description" content="Why we think bitcoin stands higher in ten years. What bitcoin is, the rainbow chart of every climb and crash since 2010, what going wrong would look like, and the two ways people hold it. In plain words.">
 <style>
   :root{
     --bg:#0d1330; --panel:#16204a; --panel2:#1b2757; --ink:#f4f6ff; --soft:#b9c2e8;
@@ -17,7 +17,8 @@
     font-size:19px;line-height:1.45}
   .wrap{max-width:960px;margin:0 auto;padding:20px 16px 8px}
   header{text-align:center;padding:26px 0 4px}
-  h1{font-size:40px;line-height:1.1;margin:0 0 14px;font-weight:800;letter-spacing:-.5px}
+  h1{font-size:40px;line-height:1.1;margin:0 0 10px;font-weight:800;letter-spacing:-.5px}
+  .sub{font-size:21px;color:var(--soft);margin:0 auto 16px;max-width:34em}
   .btn{display:inline-block;background:var(--gold);color:#221a00;font-weight:700;
     padding:13px 22px;border-radius:999px;text-decoration:none;font-size:19px;min-height:48px}
   section.block{margin:30px 0 0}
@@ -83,16 +84,23 @@
 <div class="wrap">
   <header>
     <h1>Bitcoin, in plain words.</h1>
-    <a class="btn" href="#now">See today</a>
+    <p class="sub">Why we think bitcoin stands higher in ten years.</p>
+    <a class="btn" href="#what">Start here</a>
   </header>
 
-  <section class="block" id="now">
+  <section class="block" id="what">
     <p class="kicker">Step 1</p>
+    <h2>What bitcoin is.</h2>
+    <p class="growth-note">Bitcoin is money for the internet. No company runs it. No boss can print more. Only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.</p>
+  </section>
+
+  <section class="block" id="now">
+    <p class="kicker">Step 2</p>
     <h2>Where are we now?</h2>
-    <p class="growth-note" id="rainbow-note">It is a growth chart. The lines show how tall Bitcoin should be.</p>
+    <p class="growth-note" id="rainbow-note">It is a growth chart. One line is Bitcoin's own growth, fit to every price so far.</p>
     <div class="chartbox">
       <svg id="chart" viewBox="0 0 1000 540" role="img"
-        aria-label="Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
+        aria-label="Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
     </div>
     <div class="bands" id="bands"></div>
     <div class="today-panel">
@@ -101,10 +109,17 @@
     </div>
   </section>
 
+  <section class="block" id="case">
+    <p class="kicker">Step 3</p>
+    <h2>Why we think it climbs on.</h2>
+    <p class="growth-note">Its line climbs for 16 years. It fell hard, many times. It climbed back each time. Pick any start day. Four years on, the price stood higher. Every time, so far.</p>
+    <p class="growth-note">Why might it go on? Only 21 million will ever exist. Most are already out. New coins come slower every four years. The last cut was in 2024. Big funds sell it in stock accounts. That is the case: a belief, not a fact.</p>
+  </section>
+
   <section class="block" id="how">
-    <p class="kicker">Step 2</p>
+    <p class="kicker">Step 4</p>
     <h2>A little, every week.</h2>
-    <p class="dca-line">Like an allowance, in reverse. A little bit, every week. No matter the price.</p>
+    <p class="dca-line">Like an allowance, in reverse. A little, every week.</p>
     <div class="sim">
       <span class="tag">DCA</span>
       <p class="lab"><strong>1. Pick an amount.</strong> It goes in each week.</p>
@@ -130,8 +145,15 @@
     <p class="source">Past prices: blockchain.info. Live price: Coinbase.</p>
   </section>
 
+  <section class="block" id="risk">
+    <p class="kicker">Step 5</p>
+    <h2>It swings hard. We could be wrong.</h2>
+    <p class="growth-note">Since 2011, it fell by half or more. Seven times. In 2022, it fell by about three fourths. It can do that again. A total loss should sting, not sink you.</p>
+    <p class="growth-note">It could fall and stay down. New laws could hurt it. The climb is a pattern, not a law. Many fans keep 5 to 10 in 100 saved. The bold end is 10 to 20 in 100. Only money you will not need for years. This is learning, not financial advice.</p>
+  </section>
+
   <section class="block" id="where">
-    <p class="kicker">Step 3</p>
+    <p class="kicker">Step 6</p>
     <h2>The two ways people hold it.</h2>
     <div class="wrow">
       <h3>IBIT</h3>
@@ -148,7 +170,7 @@
   </section>
 
   <section class="block" id="learn">
-    <p class="kicker">Step 4</p>
+    <p class="kicker">Step 7</p>
     <h2>Learn the words.</h2>
     <div class="strip">
       <div class="scard">
@@ -171,7 +193,7 @@
   </section>
 
   <footer>
-    <p>Not advice. Just a picture of the past.</p>
+    <p>This is learning, not financial advice.</p>
     <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
     <p>Built with Muse.</p>
   </footer>
@@ -347,7 +369,7 @@ function fill(data, savedCopy){
   if (data.today.bandIndex >= 0 && data.today.bandIndex < 9) highlight(data.today.bandIndex, false);
   const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
   $("chart").setAttribute("aria-label",
-    "Bitcoin growth chart. Colored bands show how tall bitcoin should be by now. Today it sits " +
+    "Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits " +
     (data.today.band ? "in the " + bandName + " band" : bandName) + ". Bitcoin is short for its age.");
 }
 
