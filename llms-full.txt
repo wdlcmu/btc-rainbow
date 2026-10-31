@@ -10,7 +10,7 @@
 ## Home (https://btc-rainbow-site.pages.dev/)
 
 Bitcoin, in plain words.
-Why we think bitcoin stands higher in ten years.
+Sixteen years of climbs and crashes, in words anyone can read.
 
 ### Step 1: What bitcoin is
 
@@ -27,6 +27,7 @@ On Oct 31, 2026: Bitcoin is short for its age. One bitcoin costs $77,471 today. 
 ### How the chart is made
 
 - The line is fit to all past prices with least squares.
+- The rainbow chart is a public chart: azop drew the first one in 2014, on trolololo's growth line, and Blockchain Center made it famous. This line is this site's own fit, on the same public prices.
 - The line is: ln(price) = -37.283 + 5.597 x ln(days since Jan 3, 2009).
 - Jan 3, 2009 is day one. It is the day the first block was made.
 - The fit uses 5,917 days with a price above zero.

@@ -4,8 +4,8 @@
 
 ## The site's core line
 
-- "Why we think bitcoin stands higher in ten years."
-- That line is the site's view. The tools take no side: they describe and refuse verdicts, in the open.
+- "Sixteen years of climbs and crashes, in words anyone can read."
+- That line names the site's job: the whole history, in plain words. The site's own long-run case sits in its case section, stated as a belief. The tools take no side: they describe and refuse verdicts, in the open.
 
 ## Key facts (cite these)
 
@@ -15,6 +15,7 @@
 - Past prices are from blockchain.info. Live price is from Coinbase.
 - There are 9 bands. Each band is 0.3 wide in log space.
 - Band names are colors only: Deep Blue, Blue, Sky, Green, Lime, Yellow, Orange, Dark Orange, Red.
+- The rainbow chart is a public chart: azop drew the first one in 2014, on trolololo's growth line, and Blockchain Center made it famous. This site's line is its own fit, on the same public prices.
 - On Oct 31, 2026, one bitcoin cost $77,471.
 - On that day, the line said $141,853. The price was 45% below the line.
 - On that day, the price sat in Deep Blue, the lowest band.
