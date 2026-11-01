@@ -14,11 +14,11 @@ Sixteen years of climbs and crashes, in words anyone can read.
 
 ### Step 1: What bitcoin is
 
-Bitcoin is money for the internet. No company runs it. No boss can print more. Only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.
+Bitcoin is money for the internet. No company runs it, and no boss can print more: only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.
 
 ### Step 2: Where are we now?
 
-It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. The chart is drawn in percents, not dollars. A jump from $1 to $2 takes the same space as a jump from $50,000 to $100,000, so the whole history fits on one page. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. Today one bitcoin costs $77,495, sitting in the Deep Blue band, way below the line. A Reddit user, azop, drew the first rainbow in 2014, on a growth line by trolololo, a forum user. Blockchain Center made the chart famous. The line here is our own fit of the same public prices. That is the past. Not a promise.
+It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. Today one bitcoin costs $77,495, sitting in the Deep Blue band, way below the line. A Reddit user, azop, drew the first rainbow in 2014, on a growth line by trolololo, a forum user. Blockchain Center made the chart famous. The line here is our own fit of the same public prices. That is the past. Not a promise.
 
 Think of the marks on a wall for a child. The chart does the same for price. One line shows the growth path. Bands sit above and below the line.
 

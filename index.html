@@ -22,7 +22,7 @@
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-{"@type":"Question","name":"What is the Bitcoin rainbow chart?","acceptedAnswer":{"@type":"Answer","text":"It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. The chart is drawn in percents, not dollars. A jump from $1 to $2 takes the same space as a jump from $50,000 to $100,000, so the whole history fits on one page. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. A Reddit user, azop, drew the first rainbow in 2014, on a growth line by trolololo, a forum user. Blockchain Center made the chart famous. The line here is our own fit of the same public prices. That is the past. Not a promise."}},
+{"@type":"Question","name":"What is the Bitcoin rainbow chart?","acceptedAnswer":{"@type":"Answer","text":"It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. That is the past. Not a promise."}},
 {"@type":"Question","name":"What does DCA mean on this site?","acceptedAnswer":{"@type":"Answer","text":"You buy a set sum on a set day, week by week. Like an allowance, in reverse."}},
 {"@type":"Question","name":"Does this site give financial advice?","acceptedAnswer":{"@type":"Answer","text":"No. This is learning, not financial advice. That is the past. Not a promise."}}]}
 </script>
@@ -157,13 +157,13 @@
   <section class="block" id="what">
     <p class="kicker">Step 1</p>
     <h2>What bitcoin is.</h2>
-    <p class="growth-note">Bitcoin is money for the internet. No company runs it. No boss can print more. Only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.</p>
+    <p class="growth-note">Bitcoin is money for the internet. No company runs it, and no boss can print more: only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.</p>
   </section>
 
   <section class="block" id="now">
     <p class="kicker">Step 2</p>
     <h2>Where are we now?</h2>
-    <p class="growth-note" id="rainbow-note">It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. The chart is drawn in percents, not dollars. A jump from $1 to $2 takes the same space as a jump from $50,000 to $100,000, so the whole history fits on one page. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. A Reddit user, azop, drew the first rainbow in 2014, on a growth line by trolololo, a forum user. Blockchain Center made the chart famous. The line here is our own fit of the same public prices. That is the past. Not a promise.</p>
+    <p class="growth-note" id="rainbow-note">It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. That is the past. Not a promise.</p>
     <div class="today-panel">
       <p id="today-text">One moment. We are reading the chart.</p>
       <p class="asof" id="asof"></p>
@@ -179,7 +179,7 @@
     <div class="bands" id="bands"></div>
     <div class="read-panel" id="band-panel" aria-live="polite">
       <h3 id="band-title">What the colors mean.</h3>
-      <p id="band-body">Tap a color on the chart, or a band in the list. Each band tells you three things: how far from the line it sits, how many days the price has lived there, and what the year after past visits did.</p>
+      <p id="band-body">Tap a color on the chart, or a band in the list. Each band tells you how far from the line it sits, how many days the price has lived there, and what the next year did after past visits.</p>
     </div>
     <div class="buybox" id="buy">
       <h3>So, does this mean buy?</h3>
@@ -187,7 +187,7 @@
       <p>What it can do is show what happened the other times the price sat where it sits now. That is the band panel above, and the day scrubber under the chart.</p>
       <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is learning, not financial advice.</p>
     </div>
-    <h3 class="lab-h3">Every day, on one chart.</h3>
+    <h3 class="lab-h3" id="lab">Every day, on one chart.</h3>
     <p class="growth-note">Drag on the chart, or use the slider. Pick any day. See its price and its band. See the year that came next.</p>
     <div class="lab-card">
       <svg id="lab-chart" role="img" aria-label="Bitcoin rainbow chart, full history, every day since 2010"></svg>
@@ -213,7 +213,7 @@
     <div class="lab-honest">
       <p><strong>How to read this chart.</strong></p>
       <p id="h-method"></p>
-      <p>The bands are a ruler, not a road. Bitcoin has sat in every band. It fell hard from high bands. It fell hard from mid bands too.</p>
+      <p>The bands are a ruler, not a road. Bitcoin has sat in every band, and it has fallen hard from high bands and mid bands alike.</p>
       <p><strong>A model, not prophecy.</strong> This line shows the past. It does not know the future. No one does. Past prices never promise future ones.</p>
             <p id="h-source"></p>
       <p><strong>Where this chart comes from.</strong> The rainbow is a public chart. A Reddit user, azop, drew the first one in 2014. A forum user, trolololo, drew the growth line. Blockchain Center made the chart famous. The line here is our own fit. It uses the same public price history.</p>
@@ -227,8 +227,8 @@
   <section class="block" id="case">
     <p class="kicker">Step 3</p>
     <h2>Why we think it climbs on. A belief, not a fact.</h2>
-    <p class="growth-note">Its line climbs for 16 years. It fell hard, many times. It climbed back each time. Pick any start day. Four years on, the price stood higher. Every time, so far.</p>
-    <p class="growth-note">Why might it go on? Only 21 million will ever exist. Most are already out. New coins come slower every four years. The last cut was in 2024. Big funds sell it in stock accounts. That is the case: a belief, not a fact. This is learning, not financial advice.</p>
+    <p class="growth-note">Its line climbs for 16 years. It fell hard, many times, and climbed back each time. Pick any start day: four years on, the price stood higher. Every time, so far.</p>
+    <p class="growth-note">Why might it go on? Only 21 million will ever exist, most are already out, and new coins come slower every four years — the last cut was in 2024. Big funds sell it in stock accounts. That is the case: a belief, not a fact. This is learning, not financial advice.</p>
   </section>
 
   <section class="block" id="how">
@@ -263,7 +263,7 @@
   <section class="block" id="risk">
     <p class="kicker">Step 5</p>
     <h2>It swings hard. We could be wrong.</h2>
-    <p class="growth-note">Since 2011, it fell by half or more. Seven times. In 2022, it fell by about three fourths. It can do that again. A total loss should sting, not sink you.</p>
+    <p class="growth-note">Since 2011, it has fallen by half or more seven times. In 2022, it fell by about three fourths. It can do that again. A total loss should sting, not sink you.</p>
     <p class="growth-note">It could fall and stay down. New laws could hurt it. The climb is a pattern, not a law. Many fans keep 5 to 10 in 100 saved. The bold end is 10 to 20 in 100. Only money you will not need for years. This is learning, not financial advice.</p>
   </section>
 
@@ -538,7 +538,8 @@ function fill(data, savedCopy){
   $("price-text").textContent = data.strip.price;
   $("technical-text").textContent = data.strip.technical;
   $("fundamental-text").textContent = data.strip.fundamental;
-  $("rainbow-note").textContent = data.texts.rainbow;
+  // The under-chart note is static site copy (words pass, Nov 1):
+  // data.texts.rainbow still feeds the tools, not this page.
   $("asof").textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtDate(data.spot.ts) + ".";
   if (data.today.bandIndex >= 0 && data.today.bandIndex < 9) highlight(data.today.bandIndex, false);
   const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
@@ -699,6 +700,14 @@ load();
   svg.addEventListener("pointerdown", fromEvent);
   scrub.addEventListener("input", () => { if (window.pingChart) window.pingChart(); select(Math.round(scrub.value / 100 * (pts.length - 1))); });
   select(pts.length - 1);
+
+  // Story pages link here with a set day: /?day=2018-12-16#lab opens the
+  // scrubber on that day (the low of the 2018 fall, for example).
+  const wantDay = new URLSearchParams(location.search).get("day");
+  if (wantDay) {
+    const wts = Date.parse(wantDay + "T00:00:00Z") / 1000;
+    if (isFinite(wts)) select(nearestIdx(Math.max(t0, Math.min(t1, wts))));
+  }
 
   // ---- drawdown table (every episode >= 40%)
   const NAMES = { "2010-09-16": "2010 (early days)", "2010-11-08": "2010 (early days)",

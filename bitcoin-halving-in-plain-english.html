@@ -25,13 +25,18 @@ h1{font-size:32px;line-height:1.15} h2{font-size:24px;margin-top:28px}
 a{color:#ffd94d} .note{color:#b9c2e8} table{border-collapse:collapse;width:100%}
 td,th{border:1px solid #2c3a75;padding:8px 10px;text-align:left;font-size:17px}
 .btn{display:inline-block;background:#ffd94d;color:#221a00;font-weight:700;padding:13px 22px;border-radius:999px;text-decoration:none}
+.hbars{margin:14px 0 6px}
+.hbar{display:flex;align-items:center;gap:10px;margin:5px 0}
+.hbar i{display:block;height:20px;background:#f2c230;border-radius:4px;flex:none}
+.hbar span{font-size:16px;color:#b9c2e8}
+.chartcap{color:#b9c2e8;font-size:16px;margin:8px 0 0}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>What is a bitcoin halving?</h1>
-<p>New coins are made when a new block is made. The block pays out new coins. Each 210,000 blocks, that pay is cut in half. That cut is the halving.</p>
-<p>Think of a well that gives less each few years. The flow slows by half each time. In time, it slows to near zero.</p>
+<p>New coins are made with each new block, as the block's pay. Each 210,000 blocks, that pay is cut in half. That cut is the halving.</p>
+<p>Think of a well that gives less every few years: the flow halves each time, and in time slows to near zero.</p>
 <h2>The past cuts</h2>
 <table>
 <tr><th>Date</th><th>Pay per block</th></tr>
@@ -41,11 +46,19 @@ td,th{border:1px solid #2c3a75;padding:8px 10px;text-align:left;font-size:17px}
 <tr><td>May 11, 2020</td><td>6.25 coins</td></tr>
 <tr><td>Apr 19, 2024</td><td>3.125 coins</td></tr>
 </table>
+<div class="hbars" role="img" aria-label="Pay per block at each cut: 50 coins in 2009, then 25, 12.5, 6.25, and 3.125 coins. Each bar is half the one before.">
+<div class="hbar"><i style="width:62%"></i></div>
+<div class="hbar"><i style="width:31%"></i></div>
+<div class="hbar"><i style="width:15.5%"></i></div>
+<div class="hbar"><i style="width:7.75%"></i></div>
+<div class="hbar"><i style="width:3.9%"></i></div>
+</div>
+<p class="chartcap">The pay per block, drawn to scale. Each cut halves it.</p>
 <p>210,000 blocks take about four years. So cuts land about each four years.</p>
 <h2>What comes next</h2>
-<p>The next cut falls at block 1,050,000. At the past pace, that lands in about 2028. The date is set by block count, not by a set day. So treat 2028 as a rough guide, not a fixed date.</p>
+<p>The next cut falls at block 1,050,000 — at the past pace of blocks, about 2028. The date is set by block count, not by a calendar, so treat 2028 as a rough guide, not a fixed date.</p>
 <p>With all cuts in place, only 21 million coins will ever be made.</p>
-<p>This page says what the halving is. It does not say what the price will do. No one can know that from this fact alone.</p>
+<p>This page says what the halving is — not what the price will do. No one can know that from this fact alone.</p>
 <p><a class="btn" href="/">See the growth chart</a></p>
 <p><a href="/what-is-a-bitcoin-bear-market">What is a bear market in bitcoin?</a></p>
 <p><a href="/how-long-do-bitcoin-crashes-last">How long do bitcoin crashes last?</a></p>
