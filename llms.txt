@@ -1,6 +1,6 @@
 # Bitcoin Rainbow
 
-> Bitcoin Rainbow (https://btc-rainbow-site.pages.dev/) is a free site in plain words. It tells what bitcoin is, shows where the price sits next to its own past growth, and makes the author's case for the long run, with the crashes shown plainly. Its tools only measure: a chart readout and a replay of small weekly buys on real past prices. No ads. No accounts.
+> Bitcoin Rainbow (https://thebitcoinrainbow.com/) is a free site in plain words. It tells what bitcoin is, shows where the price sits next to its own past growth, and makes the author's case for the long run, with the crashes shown plainly. Its tools only measure: a chart readout and a replay of small weekly buys on real past prices. No ads. No accounts.
 
 ## The site's core line
 
@@ -34,16 +34,16 @@
 
 ## Start here
 
-- [Home and chart](https://btc-rainbow-site.pages.dev/): see the chart, tap a band, and run the weekly buy tool.
-- [Ask in your own words](https://btc-rainbow-site.pages.dev/ask): plain facts from the chart. No advice. Nothing you type is saved.
-- [The rainbow chart, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-rainbow-chart-explained): one line, nine bands, and where the price sits.
-- [What is bitcoin, in plain words](https://btc-rainbow-site.pages.dev/what-is-bitcoin-in-plain-english): cash for the web, a hard cap, a shared list.
-- [DCA, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-dca-calculator): small buys, each week, on real past prices.
-- [The halving, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-halving-in-plain-english): new coins, cut in half, each 210,000 blocks.
-- [Should I buy bitcoin?](https://btc-rainbow-site.pages.dev/should-i-buy-bitcoin): no chart can answer that. The whole past, then the size question: sting, not sink.
-- [Has bitcoin ever lost money over 4 years?](https://btc-rainbow-site.pages.dev/has-bitcoin-ever-lost-money-over-4-years): no, not once so far. All 4,460 four-year stretches ended higher. The worst ended about a third higher.
-- [What happens after bitcoin crashes?](https://btc-rainbow-site.pages.dev/what-happens-after-bitcoin-crashes): each big fall so far ended, back at the old top in about two to three years. The newest fall is still open.
-- [Full page text](https://btc-rainbow-site.pages.dev/llms-full.txt): the full text of this site in one file, with band facts and past weekly buy results.
+- [Home and chart](https://thebitcoinrainbow.com/): see the chart, tap a band, and run the weekly buy tool.
+- [Ask in your own words](https://thebitcoinrainbow.com/ask): plain facts from the chart. No advice. Nothing you type is saved.
+- [The rainbow chart, in plain words](https://thebitcoinrainbow.com/bitcoin-rainbow-chart-explained): one line, nine bands, and where the price sits.
+- [What is bitcoin, in plain words](https://thebitcoinrainbow.com/what-is-bitcoin-in-plain-english): cash for the web, a hard cap, a shared list.
+- [DCA, in plain words](https://thebitcoinrainbow.com/bitcoin-dca-calculator): small buys, each week, on real past prices.
+- [The halving, in plain words](https://thebitcoinrainbow.com/bitcoin-halving-in-plain-english): new coins, cut in half, each 210,000 blocks.
+- [Should I buy bitcoin?](https://thebitcoinrainbow.com/should-i-buy-bitcoin): no chart can answer that. The whole past, then the size question: sting, not sink.
+- [Has bitcoin ever lost money over 4 years?](https://thebitcoinrainbow.com/has-bitcoin-ever-lost-money-over-4-years): no, not once so far. All 4,460 four-year stretches ended higher. The worst ended about a third higher.
+- [What happens after bitcoin crashes?](https://thebitcoinrainbow.com/what-happens-after-bitcoin-crashes): each big fall so far ended, back at the old top in about two to three years. The newest fall is still open.
+- [Full page text](https://thebitcoinrainbow.com/llms-full.txt): the full text of this site in one file, with band facts and past weekly buy results.
 
 ## The weekly buy tool
 
@@ -68,5 +68,5 @@
 
 ## Optional
 
-- [Privacy](https://btc-rainbow-site.pages.dev/privacy)
-- [Terms](https://btc-rainbow-site.pages.dev/terms)
+- [Privacy](https://thebitcoinrainbow.com/privacy)
+- [Terms](https://thebitcoinrainbow.com/terms)

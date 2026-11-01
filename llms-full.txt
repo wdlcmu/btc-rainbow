@@ -1,13 +1,13 @@
 # Bitcoin Rainbow: full page text
 
-> Full text and data facts from https://btc-rainbow-site.pages.dev/
+> Full text and data facts from https://thebitcoinrainbow.com/
 > Bitcoin Rainbow is a free site in plain words. It tells what bitcoin is, shows where the price sits next to its own past growth, and makes the author's case for the long run, crashes shown plainly.
 > Its tools only measure: a chart readout and a replay of small weekly buys on real past prices. No ads. No accounts.
 > Past prices: blockchain.info. Live price: Coinbase.
 > Facts below are as of Oct 31, 2026, unless a date is shown. Live facts change each day.
 > That is the past. Not a promise.
 
-## Home (https://btc-rainbow-site.pages.dev/)
+## Home (https://thebitcoinrainbow.com/)
 
 The Bitcoin Rainbow in plain words.
 Sixteen years of climbs and crashes, in words anyone can read.
@@ -118,23 +118,23 @@ It could fall and stay down. New laws could hurt it. The climb is a pattern, not
 
 - One year before Oct 31, 2026, the price was $109,553. The past year was down 29.3%. The site calls that down a lot.
 
-## Should I buy bitcoin? (https://btc-rainbow-site.pages.dev/should-i-buy-bitcoin)
+## Should I buy bitcoin? (https://thebitcoinrainbow.com/should-i-buy-bitcoin)
 
 No chart can answer that, and this site will not try. Two facts from the past: pick any start day, and four years on the price stood higher, for all 4,460 four-year stretches; and the price fell by half or more seven times, worst 93% in 2011. The record is the past, not a promise. The size is the real choice: size it so a total loss stings but does not sink you. Many fans hold 5 to 10 of every 100 saved dollars; the bold end is 10 to 20 in 100. Only money you will not need for years. This is learning, not financial advice.
 
-## Has bitcoin ever lost money over 4 years? (https://btc-rainbow-site.pages.dev/has-bitcoin-ever-lost-money-over-4-years)
+## Has bitcoin ever lost money over 4 years? (https://thebitcoinrainbow.com/has-bitcoin-ever-lost-money-over-4-years)
 
 No, not once so far. All 4,460 four-year stretches from Aug 2010 to Oct 2026 ended higher, and all 2,270 ten-year stretches ended higher. The worst stretch began Apr 9, 2021 at $58,049 and ended four years on at $76,267, about a third higher. The middle can still hurt: buy at the Dec 2017 top ($19,280) and the price was $3,232 one year on, a fall of 83%, before ending four years on at $47,658. "So far" is part of the answer. That is the past, not a promise.
 
-## What happens after bitcoin crashes? (https://btc-rainbow-site.pages.dev/what-happens-after-bitcoin-crashes)
+## What happens after bitcoin crashes? (https://thebitcoinrainbow.com/what-happens-after-bitcoin-crashes)
 
 So far, each big fall ended, and the price climbed back to its old top in about two to three years. The four biggest: 2011, $34 to $2, down 93%, back in about 2 years; 2013 to 2015, $1,137 to $172, down 85%, back in about 3 years; 2017 to 2018, $19,280 to $3,232, down 83%, back in about 3 years; 2021 to 2022, $67,562 to $15,760, down 77%, back in about 2 years. Comebacks are not straight lines: after the spring 2021 low of $29,790, the price was lower a year on, at $23,227. The newest fall is still open: the top was Oct 2025 at $124,777, the price fell 53% to $58,534 by Jul 2026, and sat near $81,000 at the end of Oct 2026. No fall is owed an ending. This is learning, not financial advice.
 
-## Privacy (https://btc-rainbow-site.pages.dev/privacy)
+## Privacy (https://thebitcoinrainbow.com/privacy)
 
 This site reads public price data. It does not ask for your name. It has no accounts. It sets no tracking cookies of its own. Prices come from Coinbase and blockchain.info. Not advice. Just a picture of the past.
 
-## Terms (https://btc-rainbow-site.pages.dev/terms)
+## Terms (https://thebitcoinrainbow.com/terms)
 
 This site shows past prices in plain words. It does not give financial advice. It never says buy or sell. Prices can be wrong or late. A price here can be old by the time you read it.
 
