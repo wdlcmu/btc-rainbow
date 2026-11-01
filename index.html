@@ -444,9 +444,26 @@ function draw(data){
   s+=`<text x="${lx}" y="${dy-12}" fill="#ffd94d" font-size="16" font-weight="700" text-anchor="${anchor}" pointer-events="none" style="paint-order:stroke;stroke:#0d1330;stroke-width:3.5px">Today</text>`;
   svg.innerHTML=s;
   window.RB_MAP = { t0, t1, L, R, W, H, T, B, yMin, yMax };
+  // Measurement (Sprint Lane 1, Oct 31, 2026): the first time a visitor
+  // actually drives a chart on this page — scrubs to a day or taps a
+  // band — count one chart interaction, once per page view. Counts
+  // only: no day, no band, nothing about the visitor leaves the page.
+  window.__rbChartCounted = false;
+  window.pingChart = function () {
+    if (window.__rbChartCounted) return;
+    window.__rbChartCounted = true;
+    try {
+      fetch("https://btc-rainbow-ask-staging.wdlcmu.workers.dev/api/count", {
+        method: "POST",
+        headers: { "content-type": "text/plain" },
+        body: JSON.stringify({ kind: "chart" }),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) { /* counting must never break the chart */ }
+  };
   svg.querySelectorAll("polygon.band-poly").forEach((poly) => {
     const k = Number(poly.getAttribute("data-band"));
-    poly.addEventListener("click", () => { highlight(k, true); if (window.RB_showBand) window.RB_showBand(k); });
+    poly.addEventListener("click", () => { if (window.pingChart) window.pingChart(); highlight(k, true); if (window.RB_showBand) window.RB_showBand(k); });
     poly.addEventListener("mouseenter", () => highlight(k, false));
   });
 }
@@ -488,10 +505,10 @@ function buildRows(data){
   }).join("");
   box.querySelectorAll(".band-row").forEach((row) => {
     const k = Number(row.getAttribute("data-band"));
-    row.addEventListener("click", () => { highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); });
+    row.addEventListener("click", () => { if (window.pingChart) window.pingChart(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); });
     row.addEventListener("mouseenter", () => highlight(k, false));
     row.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (window.pingChart) window.pingChart(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); }
     });
   });
 }
@@ -672,6 +689,7 @@ load();
     } else ddEl.style.display = "none";
   }
   function fromEvent(e) {
+    if (window.pingChart) window.pingChart();
     const r = svg.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width * W;
     const ts = t0 + (x - PL) / (W - PL - PR) * (t1 - t0);
@@ -679,7 +697,7 @@ load();
   }
   svg.addEventListener("pointermove", fromEvent);
   svg.addEventListener("pointerdown", fromEvent);
-  scrub.addEventListener("input", () => select(Math.round(scrub.value / 100 * (pts.length - 1))));
+  scrub.addEventListener("input", () => { if (window.pingChart) window.pingChart(); select(Math.round(scrub.value / 100 * (pts.length - 1))); });
   select(pts.length - 1);
 
   // ---- drawdown table (every episode >= 40%)
@@ -849,6 +867,7 @@ load();
       new MutationObserver(() => { if (!svg.contains(layer)) svg.appendChild(layer); })
         .observe(svg, { childList: true });
       const fromEvent = (e) => {
+        if (window.pingChart) window.pingChart();
         const r = svg.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width * map.W;
         const ts = map.t0 + (x - map.L) / (map.W - map.L - map.R) * (map.t1 - map.t0);
