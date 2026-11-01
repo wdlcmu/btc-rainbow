@@ -40,6 +40,9 @@
 - [What is bitcoin, in plain words](https://btc-rainbow-site.pages.dev/what-is-bitcoin-in-plain-english): cash for the web, a hard cap, a shared list.
 - [DCA, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-dca-calculator): small buys, each week, on real past prices.
 - [The halving, in plain words](https://btc-rainbow-site.pages.dev/bitcoin-halving-in-plain-english): new coins, cut in half, each 210,000 blocks.
+- [Should I buy bitcoin?](https://btc-rainbow-site.pages.dev/should-i-buy-bitcoin): no chart can answer that. The whole past, then the size question: sting, not sink.
+- [Has bitcoin ever lost money over 4 years?](https://btc-rainbow-site.pages.dev/has-bitcoin-ever-lost-money-over-4-years): no, not once so far. All 4,460 four-year stretches ended higher. The worst ended about a third higher.
+- [What happens after bitcoin crashes?](https://btc-rainbow-site.pages.dev/what-happens-after-bitcoin-crashes): each big fall so far ended, back at the old top in about two to three years. The newest fall is still open.
 - [Full page text](https://btc-rainbow-site.pages.dev/llms-full.txt): the full text of this site in one file, with band facts and past weekly buy results.
 
 ## The weekly buy tool
