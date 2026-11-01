@@ -43,6 +43,10 @@
 - [Should I buy bitcoin?](https://thebitcoinrainbow.com/should-i-buy-bitcoin): no chart can answer that. The whole past, then the size question: sting, not sink.
 - [Has bitcoin ever lost money over 4 years?](https://thebitcoinrainbow.com/has-bitcoin-ever-lost-money-over-4-years): no, not once so far. All 4,460 four-year stretches ended higher. The worst ended about a third higher.
 - [What happens after bitcoin crashes?](https://thebitcoinrainbow.com/what-happens-after-bitcoin-crashes): each big fall so far ended, back at the old top in about two to three years. The newest fall is still open.
+- [The bitcoin crash of 2018](https://thebitcoinrainbow.com/bitcoin-crash-2018): down 83%, from $19,280 to $3,232. The fall, step by step, in plain words.
+- [The bitcoin crash of 2022](https://thebitcoinrainbow.com/bitcoin-crash-2022): down 77%, from $67,562 to $15,760. The fall, step by step, in plain words.
+- [How long do bitcoin crashes last?](https://thebitcoinrainbow.com/how-long-do-bitcoin-crashes-last): the big falls took about a year to bottom, and 2 to 3 years to climb back. Every big fall, counted in days.
+- [What is a bear market in bitcoin?](https://thebitcoinrainbow.com/what-is-a-bitcoin-bear-market): a long, deep fall from a top. In bitcoin, down 53% to 93%, over years.
 - [Full page text](https://thebitcoinrainbow.com/llms-full.txt): the full text of this site in one file, with band facts and past weekly buy results.
 
 ## The weekly buy tool

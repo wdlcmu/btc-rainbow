@@ -130,6 +130,22 @@ No, not once so far. All 4,460 four-year stretches from Aug 2010 to Oct 2026 end
 
 So far, each big fall ended, and the price climbed back to its old top in about two to three years. The four biggest: 2011, $34 to $2, down 93%, back in about 2 years; 2013 to 2015, $1,137 to $172, down 85%, back in about 3 years; 2017 to 2018, $19,280 to $3,232, down 83%, back in about 3 years; 2021 to 2022, $67,562 to $15,760, down 77%, back in about 2 years. Comebacks are not straight lines: after the spring 2021 low of $29,790, the price was lower a year on, at $23,227. The newest fall is still open: the top was Oct 2025 at $124,777, the price fell 53% to $58,534 by Jul 2026, and sat near $81,000 at the end of Oct 2026. No fall is owed an ending. This is learning, not financial advice.
 
+## The bitcoin crash of 2018 (https://thebitcoinrainbow.com/bitcoin-crash-2018)
+
+Bitcoin topped at $19,280 on Dec 17, 2017, then fell for a year. By Feb 6, 2018 it was $6,925, down 64%. The low was $3,232 on Dec 16, 2018, down 83%, 364 days after the top. The price first closed above the old top on Dec 1, 2020, at $19,710: 1,080 days after the top, about 3 years. This crash ended; no fall is owed an ending. This is learning, not financial advice.
+
+## The bitcoin crash of 2022 (https://thebitcoinrainbow.com/bitcoin-crash-2022)
+
+Bitcoin topped at $67,562 on Nov 9, 2021, then fell for just over a year. By Jun 19, 2022 it was $18,978, down 72%. The last drop came in Nov 2022, the month the FTX exchange failed. The low was $15,760 on Nov 22, 2022, down 77%, 378 days after the top. The price first closed above the old top on Mar 5, 2024, at $68,378: 847 days after the top, about 2 years and 4 months. This crash ended; no fall is owed an ending. This is learning, not financial advice.
+
+## How long do bitcoin crashes last? (https://thebitcoinrainbow.com/how-long-do-bitcoin-crashes-last)
+
+Counted in days from the daily price record: 2011, down 93%, 164 days down, 630 days top to top again; 2013 to 2015, down 85%, 406 days down, 1,177 days top to top again; 2017 to 2018, down 83%, 364 days down, 1,080 days; spring 2021, down 53%, 98 days down, 189 days; 2021 to 2022, down 77%, 378 days down, 847 days. The 2025 fall is still open: down 53% to its low so far, not back at the top. Falls of a fifth to a third happened ten more times and most ended in weeks. This is learning, not financial advice.
+
+## What is a bear market in bitcoin? (https://thebitcoinrainbow.com/what-is-a-bitcoin-bear-market)
+
+A bear market is a long, deep fall from a price top; writers often draw the line at 20% down. Since 2011, bitcoin has fallen by half or more seven times: 2011 down 93%, 2013 down 71%, 2013 to 2015 down 85%, 2017 to 2018 down 83%, spring 2021 down 53%, 2021 to 2022 down 77%, and 2025 to now down 53%, still open. A crash is about speed; a bear market is about length. The word names the past; it does not time the next turn. This is learning, not financial advice.
+
 ## Privacy (https://thebitcoinrainbow.com/privacy)
 
 This site reads public price data. It does not ask for your name. It has no accounts. It sets no tracking cookies of its own. Prices come from Coinbase and blockchain.info. Not advice. Just a picture of the past.
