@@ -330,3 +330,376 @@ export function routeAsk(data, rawQ) {
   // 6. No match.
   return { intent: "none", text: NONE_TEXT };
 }
+
+// =====================================================================
+// V2 — SNAPSHOT EXTENSION (staging, Lane B, 2026-11-01)
+// routeAsk above is UNTOUCHED. routeAskV2(data, snapshot, q) adds new
+// intents answered ONLY from the snapshot object (the deep technical +
+// fundamental snapshot the worker serves from KV `snap:current`).
+// Same discipline: deterministic only, no LLM, verdict-free, never a
+// buy/sell word as a recommendation, never a prediction. Every data
+// answer ends with the CLOSER. If a needed snapshot field is null or
+// missing, the answer says plainly that the reading is not available
+// right now — it never invents a number. Every number below comes
+// from `data` or `snapshot` (or plain arithmetic on those numbers).
+// Questions V2 does not claim fall through to routeAsk untouched, so
+// greeting / site / math / today / dca / explain / buy_ways / advice /
+// crash / none behave exactly as before.
+// =====================================================================
+
+export const INTENTS_V2 = [
+  ...INTENTS,
+  "rsi", "mayer", "movingavg", "drawdown", "volatility", "halving",
+  "hashrate", "fees", "feargreed", "dominance", "forecast",
+];
+
+const isNum = (x) => typeof x === "number" && Number.isFinite(x);
+const fmt1 = (x) => String(parseFloat(x.toFixed(1)));
+const fmtInt = (x) => Math.round(x).toLocaleString("en-US");
+
+function fmtBigUSD(x) {
+  if (x >= 1e12) return "$" + parseFloat((x / 1e12).toFixed(2)) + " trillion";
+  if (x >= 1e9) return "$" + parseFloat((x / 1e9).toFixed(2)) + " billion";
+  return fmtUSD(x);
+}
+
+// Snapshot dates arrive as "YYYY-MM-DD" strings (or unix seconds).
+// Format them in the site's plain style; pass anything else through.
+function fmtSnapDate(v) {
+  if (isNum(v)) return fmtDay(v);
+  const m = String(v || "").match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return String(v || "");
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString("en-US",
+    { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
+
+function notAvailable(intent, what) {
+  return {
+    intent,
+    text:
+      `That reading is not available right now. The snapshot does not carry ${what} at the moment. ` +
+      `Try again later, or ask where bitcoin stands today. ` + CLOSER,
+    structured: { available: false },
+  };
+}
+
+function snapSpot(snapshot, data) {
+  if (snapshot && isNum(snapshot.spot)) return snapshot.spot;
+  if (snapshot && snapshot.spot && isNum(snapshot.spot.price)) return snapshot.spot.price;
+  if (data && data.spot && isNum(data.spot.price)) return data.spot.price;
+  return null;
+}
+
+function snapFit(snapshot) {
+  const r = snapshot && snapshot.rainbow;
+  const fit = r && r.fit ? r.fit : r;
+  return fit && isNum(fit.a) && isNum(fit.b) ? fit : null;
+}
+
+// --- Rainbow model math ----------------------------------------------
+// Identical math to shared/rainbow-core.mjs trendAt / bandEdgeAt
+// (GENESIS Jan 3 2009, BAND_BOTTOM -0.75, BAND_WIDTH 0.3), carried
+// locally so this file stays self-contained for ask.html's inlined
+// copy, exactly like routeAsk. test-ask-v2.mjs cross-checks every
+// forecast number below against rainbow-core itself.
+const V2_GENESIS_TS = Date.UTC(2009, 0, 3) / 1000;
+function trendAt(fit, ts) {
+  const days = (ts - V2_GENESIS_TS) / 86400;
+  return Math.exp(fit.a + fit.b * Math.log(days));
+}
+function bandEdgeAt(fit, ts, k) {
+  return trendAt(fit, ts) * Math.exp(-0.75 + 0.3 * k);
+}
+
+// --- The new answers ---------------------------------------------------
+
+function rsiAnswer(snapshot) {
+  const v = snapshot && snapshot.indicators && snapshot.indicators.rsi14;
+  if (!isNum(v)) return notAvailable("rsi", "an RSI reading");
+  const zone = v < 30 ? "at the cold end" : v > 70 ? "at the hot end" : "in the middle range";
+  const text =
+    `The RSI is ${fmt1(v)}. RSI runs from 0 to 100 and reads the last 14 days. ` +
+    `Under 30 is the cold end. Over 70 is the hot end, the end traders call overbought. ` +
+    `Today it sits ${zone}. ` + CLOSER;
+  return { intent: "rsi", text, structured: { rsi14: v } };
+}
+
+function mayerAnswer(data, snapshot) {
+  const ind = (snapshot && snapshot.indicators) || {};
+  const spot = snapSpot(snapshot, data);
+  let v = isNum(ind.mayer) ? ind.mayer : null;
+  if (v === null && isNum(spot) && isNum(ind.ma200) && ind.ma200 > 0) v = spot / ind.ma200;
+  if (v === null) return notAvailable("mayer", "a Mayer multiple");
+  let text =
+    `The Mayer multiple is ${v.toFixed(2)}. It is the price split by the 200-day average. `;
+  if (isNum(spot) && isNum(ind.ma200)) {
+    text += `One bitcoin costs ${fmtUSD(spot)}. The 200-day average is ${fmtUSD(ind.ma200)}. `;
+    text += v < 1
+      ? "So the price sits under its own 200-day average. "
+      : "So the price sits over its own 200-day average. ";
+  }
+  text += CLOSER;
+  return { intent: "mayer", text, structured: { mayer: parseFloat(v.toFixed(4)) } };
+}
+
+function movingAvgAnswer(snapshot) {
+  const ind = (snapshot && snapshot.indicators) || {};
+  if (!isNum(ind.ma50) && !isNum(ind.ma200)) return notAvailable("movingavg", "the moving averages");
+  const parts = [];
+  if (isNum(ind.ma50)) parts.push(`The 50-day average is ${fmtUSD(ind.ma50)}.`);
+  if (isNum(ind.ma200)) parts.push(`The 200-day average is ${fmtUSD(ind.ma200)}.`);
+  const cross = ind.last_cross;
+  if (cross && cross.type && cross.date) {
+    const type = String(cross.type).toLowerCase();
+    if (type.includes("golden")) {
+      parts.push(`The last cross was a golden cross on ${fmtSnapDate(cross.date)}: the day the 50-day line moved above the 200-day line.`);
+    } else if (type.includes("death")) {
+      parts.push(`The last cross was a death cross on ${fmtSnapDate(cross.date)}: the day the 50-day line moved below the 200-day line.`);
+    }
+  }
+  return {
+    intent: "movingavg",
+    text: parts.join(" ") + " " + CLOSER,
+    structured: {
+      ma50_usd: isNum(ind.ma50) ? Math.round(ind.ma50) : null,
+      ma200_usd: isNum(ind.ma200) ? Math.round(ind.ma200) : null,
+      last_cross: cross ? { type: cross.type, date: cross.date } : null,
+    },
+  };
+}
+
+function drawdownAnswer(data, snapshot) {
+  const ind = (snapshot && snapshot.indicators) || {};
+  const ath = ind.ath || {};
+  const spot = snapSpot(snapshot, data);
+  let below = isNum(ind.drawdown_pct) ? Math.abs(ind.drawdown_pct) : null;
+  if (below === null && isNum(spot) && isNum(ath.price) && ath.price > 0) {
+    below = (1 - spot / ath.price) * 100;
+  }
+  if (below === null || !isNum(ath.price)) return notAvailable("drawdown", "the all-time high");
+  const parts = [];
+  if (isNum(spot)) parts.push(`One bitcoin costs ${fmtUSD(spot)}.`);
+  parts.push(`The all-time high was ${fmtUSD(ath.price)}${ath.date ? ` on ${fmtSnapDate(ath.date)}` : ""}.`);
+  parts.push(`That puts today ${fmt1(below)}% under the top.`);
+  const dsa = snapshot && snapshot.cycle && snapshot.cycle.days_since_ath;
+  if (isNum(dsa)) parts.push(`That top was ${fmtInt(dsa)} days ago.`);
+  return {
+    intent: "drawdown",
+    text: parts.join(" ") + " " + CLOSER,
+    structured: { ath_usd: Math.round(ath.price), ath_date: ath.date || null, below_pct: parseFloat(below.toFixed(1)) },
+  };
+}
+
+function volatilityAnswer(snapshot) {
+  const ind = (snapshot && snapshot.indicators) || {};
+  if (!isNum(ind.vol30_pct) && !isNum(ind.vol90_pct)) return notAvailable("volatility", "a volatility reading");
+  const parts = ["Volatility reads how big the swings are. Bigger number, bigger swings."];
+  if (isNum(ind.vol30_pct)) parts.push(`The 30-day reading is ${fmt1(ind.vol30_pct)}%.`);
+  if (isNum(ind.vol90_pct)) parts.push(`The 90-day reading is ${fmt1(ind.vol90_pct)}%.`);
+  return {
+    intent: "volatility",
+    text: parts.join(" ") + " " + CLOSER,
+    structured: { vol30_pct: isNum(ind.vol30_pct) ? ind.vol30_pct : null, vol90_pct: isNum(ind.vol90_pct) ? ind.vol90_pct : null },
+  };
+}
+
+function halvingAnswer(snapshot) {
+  const cyc = (snapshot && snapshot.cycle) || {};
+  if (!cyc.next_halving_est_date && !isNum(cyc.blocks_remaining)) {
+    return notAvailable("halving", "the halving clock");
+  }
+  const parts = [];
+  if (cyc.last_halving_date) parts.push(`The last halving was on ${fmtSnapDate(cyc.last_halving_date)}.`);
+  if (isNum(cyc.days_since_halving)) parts.push(`That was ${fmtInt(cyc.days_since_halving)} days ago.`);
+  if (isNum(cyc.blocks_remaining)) parts.push(`${fmtInt(cyc.blocks_remaining)} blocks are left until the next one.`);
+  if (isNum(cyc.pct_through_cycle)) parts.push(`We are ${fmt1(cyc.pct_through_cycle)}% of the way through this cycle.`);
+  if (cyc.next_halving_est_date) {
+    parts.push(`The next halving lands near ${fmtSnapDate(cyc.next_halving_est_date)}. The block count sets it, not the calendar, so the date is a best guess.`);
+  }
+  return {
+    intent: "halving",
+    text: parts.join(" ") + " " + CLOSER,
+    structured: {
+      next_halving_est_date: cyc.next_halving_est_date || null,
+      blocks_remaining: isNum(cyc.blocks_remaining) ? cyc.blocks_remaining : null,
+      pct_through_cycle: isNum(cyc.pct_through_cycle) ? cyc.pct_through_cycle : null,
+    },
+  };
+}
+
+function hashrateAnswer(snapshot) {
+  const f = (snapshot && snapshot.fundamentals) || {};
+  if (!isNum(f.hashrate_ehs)) return notAvailable("hashrate", "a hashrate reading");
+  const parts = [
+    `The hashrate is ${fmt1(f.hashrate_ehs)} EH/s. That is all the guessing power guarding the network.`,
+  ];
+  if (isNum(f.hashrate_30d_change_pct)) {
+    const ch = f.hashrate_30d_change_pct;
+    parts.push(`Over the last 30 days it moved ${ch < 0 ? "down" : "up"} ${fmt1(Math.abs(ch))}%.`);
+  }
+  return {
+    intent: "hashrate",
+    text: parts.join(" ") + " " + CLOSER,
+    structured: { hashrate_ehs: f.hashrate_ehs, hashrate_30d_change_pct: isNum(f.hashrate_30d_change_pct) ? f.hashrate_30d_change_pct : null },
+  };
+}
+
+function feesAnswer(snapshot) {
+  const fees = (snapshot && snapshot.fundamentals && snapshot.fundamentals.fees) || {};
+  if (!isNum(fees.fastest) && !isNum(fees.half_hour) && !isNum(fees.mempool_count)) {
+    return notAvailable("fees", "the fee readings");
+  }
+  const parts = [];
+  if (isNum(fees.fastest)) parts.push(`A fast send costs about ${fmtInt(fees.fastest)} sats per vB right now.`);
+  if (isNum(fees.half_hour)) parts.push(`A send that can wait half an hour costs about ${fmtInt(fees.half_hour)} sats per vB.`);
+  if (isNum(fees.mempool_count)) parts.push(`${fmtInt(fees.mempool_count)} sends wait in line in the mempool.`);
+  return {
+    intent: "fees",
+    text: parts.join(" ") + " " + CLOSER,
+    structured: {
+      fastest_sat_vb: isNum(fees.fastest) ? fees.fastest : null,
+      half_hour_sat_vb: isNum(fees.half_hour) ? fees.half_hour : null,
+      mempool_count: isNum(fees.mempool_count) ? fees.mempool_count : null,
+    },
+  };
+}
+
+function fearGreedAnswer(snapshot) {
+  const fg = (snapshot && snapshot.fundamentals && snapshot.fundamentals.fear_greed) || {};
+  if (!isNum(fg.value)) return notAvailable("feargreed", "a fear and greed reading");
+  const text =
+    `The fear and greed index reads ${fmtInt(fg.value)} out of 100${fg.label ? `: ${fg.label}` : ""}. ` +
+    `Low numbers mean fear. High numbers mean greed. ` + CLOSER;
+  return { intent: "feargreed", text, structured: { value: fg.value, label: fg.label || null } };
+}
+
+function dominanceAnswer(snapshot) {
+  const f = (snapshot && snapshot.fundamentals) || {};
+  if (!isNum(f.dominance_btc_pct)) return notAvailable("dominance", "a dominance reading");
+  const parts = [`Bitcoin is ${fmt1(f.dominance_btc_pct)}% of all the money in crypto.`];
+  if (isNum(f.total_mcap_usd)) parts.push(`All crypto together is worth ${fmtBigUSD(f.total_mcap_usd)}.`);
+  return {
+    intent: "dominance",
+    text: parts.join(" ") + " " + CLOSER,
+    structured: { dominance_btc_pct: f.dominance_btc_pct, total_mcap_usd: isNum(f.total_mcap_usd) ? f.total_mcap_usd : null },
+  };
+}
+
+// Forecast asks get the MODEL EXPLORER, never a prediction: what the
+// rainbow model's own lines say at that date IF the model held,
+// labeled as the model's lines, plus the model's track record —
+// the share of past days the price sat inside the bands.
+function forecastAnswer(snapshot, q) {
+  const rec = (snapshot && snapshot.band_record) || {};
+  let pctInside = isNum(rec.pct_inside) ? rec.pct_inside : null;
+  if (pctInside !== null && pctInside <= 1) pctInside = pctInside * 100;
+  if (pctInside === null) return notAvailable("forecast", "the model's track record");
+  const track =
+    `Track record: about ${fmtInt(pctInside)} of 100 past days sat inside the bands` +
+    (isNum(rec.days_below) && isNum(rec.days_above)
+      ? ` (${fmtInt(rec.days_below)} days below them, ${fmtInt(rec.days_above)} days above them)`
+      : "") + ".";
+  const years = [...q.matchAll(/\b(20\d{2})\b/g)].map((m) => parseInt(m[1], 10));
+  const year = years.find((y) => y >= 2027);
+  if (!year) {
+    return {
+      intent: "forecast",
+      text:
+        `I do not make forecasts. Name a future year and I can show what the model's lines say for that year. ` +
+        `${track} Those are the model's lines, not a forecast. ` + CLOSER,
+      structured: { pct_inside: parseFloat(pctInside.toFixed(1)) },
+    };
+  }
+  const fit = snapFit(snapshot);
+  if (!fit) return notAvailable("forecast", "the model's fit");
+  const ts = Date.UTC(year, 0, 1) / 1000;
+  const trend = trendAt(fit, ts);
+  const low = bandEdgeAt(fit, ts, 0);
+  const high = bandEdgeAt(fit, ts, 9);
+  const text =
+    `I do not make forecasts. Here is the model explorer instead. ` +
+    `If the rainbow model's lines held to Jan 1, ${year}, the growth line would sit at ${fmtUSD(trend)}. ` +
+    `The lowest band's floor would be ${fmtUSD(low)}, and the top band's ceiling ${fmtUSD(high)}. ` +
+    `${track} Those are the model's lines, not a forecast. ` + CLOSER;
+  return {
+    intent: "forecast",
+    text,
+    structured: {
+      target_year: year,
+      trend_usd: Math.round(trend),
+      ladder_low_usd: Math.round(low),
+      ladder_high_usd: Math.round(high),
+      pct_inside: parseFloat(pctInside.toFixed(1)),
+    },
+  };
+}
+
+// --- The V2 router -----------------------------------------------------
+// Order is the discipline:
+//   0. Injection / role-play overrides — declined as advice, always.
+//   1. "Should I..." — routeAsk's advice answer, untouched.
+//   2. Forecast asks with a future year or prediction words — the
+//      model explorer (before routeAsk can call them "advice").
+//   3. The new snapshot topics.
+//   4. Everything else — routeAsk, byte for byte the old behavior.
+export function routeAskV2(data, snapshot, rawQ) {
+  const q = norm(rawQ);
+  if (!q.trim()) return routeAsk(data, rawQ);
+
+  // 0. Injection: "ignore your rules", "you are now an advisor", a
+  // direct order to say buy/sell. The answer is the plain advice no.
+  if (
+    has(q,
+      " ignore your rules", " ignore the rules", " ignore your instructions",
+      " ignore all instructions", " disregard your", " disregard the",
+      " you are now ", " act as ", " pretend ", " jailbreak",
+      " financial advisor", " financial adviser",
+      " tell me to buy", " tell me to sell")
+  ) {
+    return routeAsk(data, "Should I buy bitcoin now?");
+  }
+
+  // 1. A direct "should I" is advice, even with a year attached.
+  if (has(q, " should i ", " should we ")) return routeAsk(data, rawQ);
+
+  // 2. Forecast: prediction words, or a future year with a price word.
+  const years = [...q.matchAll(/\b(20\d{2})\b/g)].map((m) => parseInt(m[1], 10));
+  const futureYear = years.find((y) => y >= 2027);
+  if (
+    has(q, " forecast", " prediction", " price prediction") ||
+    has(q, " predict ") || q.trim().endsWith(" predict") ||
+    (futureYear !== undefined && has(q, " price", " cost", " worth", " be "))
+  ) {
+    return forecastAnswer(snapshot, q);
+  }
+
+  // 3. Snapshot topics.
+  if (has(q, " rsi", " relative strength", " overbought", " oversold")) return rsiAnswer(snapshot);
+  if (has(q, " mayer")) return mayerAnswer(data, snapshot);
+  if (
+    has(q, " golden cross", " death cross", " moving average", " 200 day", " 50 day",
+      " ma50", " ma200", " day average")
+  ) return movingAvgAnswer(snapshot);
+  const yearCrash = /\b(19|20)\d{2}\b/.test(q) && has(q, " crash", " fall", " fell");
+  if (
+    !yearCrash &&
+    has(q, " all time high", " ath", " drawdown", " below the high", " down from the top", " off the high", " under the top")
+  ) return drawdownAnswer(data, snapshot);
+  if (has(q, " volatility", " volatile", " swings", " wild")) return volatilityAnswer(snapshot);
+  if (
+    has(q, " halving", " halve", " next halving", " block reward", " through the cycle", " the cycle")
+  ) return halvingAnswer(snapshot);
+  if (has(q, " hashrate", " hash rate", " mining", " miners")) return hashrateAnswer(snapshot);
+  if (
+    has(q, " fee", " fees", " mempool", " cost to send", " cost of sending", " transaction cost")
+  ) return feesAnswer(snapshot);
+  if (
+    has(q, " fear and greed", " fear greed", " greed index", " fear index", " sentiment")
+  ) return fearGreedAnswer(snapshot);
+  if (
+    has(q, " dominance", " share of crypto", " share of the crypto", " of all crypto", " market share")
+  ) return dominanceAnswer(snapshot);
+
+  // 4. The old engine, untouched.
+  return routeAsk(data, rawQ);
+}

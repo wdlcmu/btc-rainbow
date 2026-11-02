@@ -4,7 +4,7 @@
 > Bitcoin Rainbow is a free site in plain words. It tells what bitcoin is, shows where the price sits next to its own past growth, and makes the author's case for the long run, crashes shown plainly.
 > Its tools only measure: a chart readout and a replay of small weekly buys on real past prices. No ads. No accounts.
 > Past prices: blockchain.info. Live price: Coinbase.
-> Facts below are as of Oct 31, 2026, unless a date is shown. Live facts change each day.
+> Facts below are as of Oct 31, 2026, unless a date is shown. Live facts change each day. Since Nov 1, 2026 the homepage also carries live computed gauges (RSI, Mayer Multiple, the 50/200-day lines, drawdown, swing size), network readings (halving clock, supply issued, hashrate, fees, Fear and Greed, dominance), a tap-a-crash explorer, a model explorer with the model's track record, and a daily read kept at /analysis — all computed from the same public data, none of it financial advice.
 > That is the past. Not a promise.
 
 ## Home (https://thebitcoinrainbow.com/)

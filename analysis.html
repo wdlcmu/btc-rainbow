@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today's Read — the archive — The Bitcoin Rainbow</title>
+<meta name="description" content="Every daily read, kept. Each one was written from that day's computed numbers: the rainbow band, the gauges, and the network. Analysis and education, not financial advice.">
+<link rel="canonical" href="https://thebitcoinrainbow.com/analysis">
+<meta name="theme-color" content="#0d1330">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌈</text></svg>">
+<style>
+  :root{--bg:#0d1330;--panel:#16204a;--panel2:#1b2757;--ink:#f4f6ff;--soft:#b9c2e8;--gold:#ffd94d;--line:#2c3a75}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:19px;line-height:1.45}
+  .wrap{max-width:820px;margin:0 auto;padding:20px 16px 8px}
+  h1{font-size:34px;line-height:1.12;margin:18px 0 8px;font-weight:800}
+  .sub{font-size:19px;color:var(--soft);margin:0 0 16px}
+  .dates{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+  .chip{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-size:16.5px;font-weight:700;min-height:46px;cursor:pointer}
+  .chip.on{background:var(--gold);color:#221a00;border-color:var(--gold)}
+  .notebox{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:18px 20px 10px}
+  .notebox h2{font-size:23px;margin:0 0 10px}
+  .notebox p{font-size:18.5px;margin:0 0 9px}
+  .notebox .fine{color:var(--soft);font-size:15.5px}
+  a{color:var(--gold);font-weight:700}
+  footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:16.5px}
+</style>
+<script>
+window.FLEET_CFG = {
+  site: "bitcoin-rainbow",
+  completes: [ { sel: "#note", surface: "todays-read", minText: 60 } ]
+};
+</script>
+<!-- Fleet analytics — shared instrumentation (Nov 1, 2026; taxonomy:
+     ~/workspace/chief-of-staff/fleet-instrumentation-taxonomy-2026-11-01.md).
+     PostHog project 624507. Anonymous metadata only: event names + enum
+     properties. Never sends typed text, names, emails, pairings, or
+     tokens. Session recording off, autocapture off.
+     Per site: set window.FLEET_CFG (site slug + hooks) in a small script
+     block BEFORE this block. Internal rule (fleet-wide): ?internal=1
+     once on a device sets a localStorage flag; every event from that
+     device carries internal:true; funnel queries filter it out. -->
+<script>
+(function(){
+  var CFG = window.FLEET_CFG || {};
+  var SITE = CFG.site || "unknown";
+  var KEY = "phc_t9dkHXAZR5VEjPFm3K5JDzGKFsNNxKcwSxxcEBEeLbS7";
+  var _int = null;
+  function isInternal(){
+    if (_int !== null) return _int;
+    var flag = false;
+    try {
+      var q = location.search || "";
+      if (/[?&]internal=1(?:&|$)/.test(q)) { try { localStorage.setItem("fleet_internal", "1"); } catch(e){} flag = true; }
+      else if (/[?&]internal=0(?:&|$)/.test(q)) { try { localStorage.removeItem("fleet_internal"); } catch(e){} }
+      else if (/[?&](probe|sim)=/.test(q)) { flag = true; }
+      else { try { flag = localStorage.getItem("fleet_internal") === "1"; } catch(e){} }
+    } catch(e2){}
+    _int = flag;
+    return flag;
+  }
+  var Q = [];
+  function track(name, props){
+    props = props || {};
+    props.site = SITE;
+    try { if (isInternal()) props.internal = true; } catch(e){}
+    try {
+      if (window.posthog && posthog.capture) posthog.capture(name, props);
+      else { Q.push([name, props]); if (Q.length > 100) Q.shift(); }
+    } catch(e){}
+  }
+  window.FA = { track: track };
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://us.i.posthog.com/static/array.js";
+  s.onload = function(){
+    try {
+      if (window.posthog && posthog.init) {
+        posthog.init(KEY, {api_host: "https://us.i.posthog.com", autocapture: false, capture_pageview: true, disable_session_recording: true});
+        try { posthog.register({site: SITE, internal: isInternal()}); } catch(e){}
+        try { if (isInternal() && posthog.people && posthog.people.set) posthog.people.set({fleet_internal: true}); } catch(e){}
+        while (Q.length) { var e0 = Q.shift(); try { posthog.capture(e0[0], e0[1]); } catch(e){} }
+      }
+    } catch(e){}
+  };
+  document.head.appendChild(s);
+
+  function onReady(fn){ if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn); else fn(); }
+  function vis(el){
+    if (!el) return false;
+    var cs = getComputedStyle(el);
+    if (cs.display === "none" || cs.visibility === "hidden") return false;
+    return !!(el.offsetWidth || el.offsetHeight || (el.getClientRects && el.getClientRects().length));
+  }
+  function txt(el){ return ((el && el.textContent) || "").replace(/\s+/g, " ").trim(); }
+
+  onReady(function(){
+    try {
+      var started = {};
+      (CFG.starts || []).forEach(function(st){
+        Array.prototype.forEach.call(document.querySelectorAll(st.sel), function(el){
+          el.addEventListener(st.on || "click", function(){
+            var k = st.surface || "tool";
+            if (started[k]) return;
+            started[k] = true;
+            track("tool_start", {surface: k});
+          });
+        });
+      });
+      (CFG.completes || []).forEach(function(cp){
+        var done = false;
+        function check(){
+          if (done) return;
+          var el = document.querySelector(cp.sel);
+          if (el && vis(el) && txt(el).length >= (cp.minText || 1)) {
+            done = true;
+            track("tool_complete", {surface: cp.surface || "tool"});
+          }
+        }
+        /* Observe the body and re-resolve the selector on every batch:
+           some tools replace the result node instead of filling it. */
+        new MutationObserver(check).observe(document.body, {childList: true, subtree: true, characterData: true, attributes: true});
+        check();
+      });
+      if (CFG.ask) {
+        var A = CFG.ask;
+        var go = A.goSel ? document.querySelector(A.goSel) : null;
+        if (go) go.addEventListener("click", function(){ track("ask_asked", {surface: "ask"}); });
+        var ans = A.answerSel ? document.querySelector(A.answerSel) : null;
+        if (ans) {
+          var lastText = "", completed = false;
+          var checkA = function(){
+            var el = document.querySelector(A.answerSel);
+            if (!el) return;
+            var t = txt(el);
+            if (!t || t === lastText) return;
+            lastText = t;
+            var fb = null;
+            (A.fallbacks || []).some(function(f){ if (f.re.test(t)) { fb = f; return true; } return false; });
+            if (fb) { track("ask_fallback", {surface: "ask", missing: fb.missing}); return; }
+            var props = {surface: "ask"};
+            (A.kinds || []).some(function(k){ if (k.re.test(t)) { props.outcome = k.outcome; return true; } return false; });
+            if (!props.outcome && A.defaultOutcome) props.outcome = A.defaultOutcome;
+            track("ask_answered", props);
+            if (A.completeOnAnswer && !completed) { completed = true; track("tool_complete", {surface: "ask"}); }
+          };
+          new MutationObserver(checkA).observe(document.body, {childList: true, subtree: true, characterData: true});
+        }
+      }
+      (CFG.specials || []).forEach(function(sp){
+        try {
+          if (sp.on === "click") {
+            Array.prototype.forEach.call(document.querySelectorAll(sp.sel), function(el){
+              el.addEventListener("click", function(){ track(sp.name, sp.props || {}); });
+            });
+          } else if (sp.on === "appear") {
+            var fired = false;
+            var chk = function(){
+              if (fired) return;
+              var el = document.querySelector(sp.sel);
+              if (el && vis(el) && txt(el).length) { fired = true; track(sp.name, sp.props || {}); }
+            };
+            new MutationObserver(chk).observe(document.body, {childList: true, subtree: true, characterData: true, attributes: true});
+            chk();
+          } else if (sp.on === "loadmatch") {
+            if (sp.re.test(location.href)) track(sp.name, sp.props || {});
+          }
+        } catch(e){}
+      });
+    } catch(e){}
+  });
+})();
+</script>
+
+</head>
+<body>
+<div class="wrap">
+  <p><a href="/">&larr; The Bitcoin Rainbow</a></p>
+  <h1>Today's read — the archive.</h1>
+  <p class="sub">One read a day, written only from that day's computed numbers: the rainbow band, the gauges, the network. When a line fails its fact check, it is held back and the read says so. Analysis and education, not financial advice.</p>
+  <div class="dates" id="dates"></div>
+  <div class="notebox" id="note"><p>Reading the archive&hellip;</p></div>
+  <footer>
+    <p>That is the past. Not a promise.</p>
+    <p>Built with Muse.</p>
+  </footer>
+</div>
+<script src="snapshot-data.js"></script>
+<script>
+"use strict";
+(function () {
+  var BASE = "https://btc-rainbow-ask-staging.wdlcmu.workers.dev";
+  var box = document.getElementById("note");
+  var datesBox = document.getElementById("dates");
+  function fmtDate(iso) {
+    var d = new Date(iso + "T00:00:00Z");
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  }
+  function show(note) {
+    box.innerHTML = "";
+    var h = document.createElement("h2");
+    h.textContent = (note.headline || note.title || ("Read for " + fmtDate(note.date)));
+    box.appendChild(h);
+    (note.paragraphs || []).forEach(function (tx) {
+      var p = document.createElement("p"); p.textContent = tx; box.appendChild(p);
+    });
+    if (note.grounding_ok === false) {
+      var p = document.createElement("p"); p.className = "fine";
+      p.textContent = "One line of this read failed its fact check and was held back.";
+      box.appendChild(p);
+    }
+  }
+  function baked() {
+    if (window.BTC_NOTE) {
+      datesBox.innerHTML = "";
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip on"; b.textContent = fmtDate(window.BTC_NOTE.date) + " (saved copy)";
+      datesBox.appendChild(b);
+      show(window.BTC_NOTE);
+    } else {
+      box.innerHTML = "<p>The archive is resting. Please come back soon.</p>";
+    }
+  }
+  var want = new URLSearchParams(location.search).get("date");
+  fetch(BASE + "/api/analysis").then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (A) {
+      var dates = (A.archive || []).slice().sort().reverse();
+      if (A.today && dates.indexOf(A.today.date) < 0) dates.unshift(A.today.date);
+      datesBox.innerHTML = "";
+      dates.forEach(function (d) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "chip"; b.textContent = fmtDate(d);
+        b.addEventListener("click", function () {
+          datesBox.querySelectorAll(".chip").forEach(function (x) { x.classList.toggle("on", x === b); });
+          if (A.today && d === A.today.date) { show(A.today); return; }
+          box.innerHTML = "<p>Reading&hellip;</p>";
+          fetch(BASE + "/api/analysis?date=" + d).then(function (r) { return r.json(); })
+            .then(function (N) { if (N && N.note) show(N.note); else box.innerHTML = "<p>That read is not available.</p>"; })
+            .catch(function () { box.innerHTML = "<p>That read is not available.</p>"; });
+        });
+        datesBox.appendChild(b);
+      });
+      var first = datesBox.querySelector(".chip");
+      if (first) first.classList.add("on");
+      if (want && dates.indexOf(want) >= 0) {
+        fetch(BASE + "/api/analysis?date=" + want).then(function (r) { return r.json(); })
+          .then(function (N) { if (N && N.note) show(N.note); else if (A.today) show(A.today); })
+          .catch(function () { if (A.today) show(A.today); });
+      } else if (A.today) show(A.today);
+      else baked();
+    })
+    .catch(baked);
+})();
+</script>
+</body>
+</html>
