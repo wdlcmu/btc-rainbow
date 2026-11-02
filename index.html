@@ -43,6 +43,11 @@
   .sub{font-size:21px;color:var(--soft);margin:0 auto 16px;max-width:34em}
   .todayline{font-size:20px;font-weight:700;margin:0 auto 16px;max-width:34em}
   .todayline b{color:var(--gold)}
+  .herochart{max-width:780px;margin:2px auto 10px}
+  #hero-chart{touch-action:pan-y}
+  .herocap{font-size:16.5px;color:var(--soft);margin:0 auto 2px}
+  .herocap a{color:var(--gold);font-weight:700;display:inline-flex;align-items:center;
+    min-height:44px;padding:0 6px}
   .btn{display:inline-block;background:var(--gold);color:#221a00;font-weight:700;
     padding:13px 22px;border-radius:999px;text-decoration:none;font-size:19px;min-height:48px}
   section.block{margin:30px 0 0}
@@ -153,7 +158,11 @@
     <h1>The Bitcoin Rainbow in plain words.</h1>
     <p class="sub">Sixteen years of climbs and crashes, in words anyone can read.</p>
     <p class="todayline" id="hero-today">Today: reading the chart&hellip;</p>
-    <a class="btn" href="#now">See the chart</a>
+    <div class="chartbox herochart">
+      <svg id="hero-chart" viewBox="0 0 1000 400" role="img"
+        aria-label="Bitcoin rainbow chart. Nine colored bands around bitcoin's long-run growth line, and the price line of every week since 2010. Today the price sits in the Deep Blue band."></svg>
+    </div>
+    <p class="herocap"><a href="#now">Open the full chart</a> in Step 2: drag it, tap a color, pick any day.</p>
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
@@ -471,6 +480,53 @@ function draw(data){
   });
 }
 
+// Hero chart (D6, show it first, Nov 1): the same chart, drawn small in
+// the hero so the first screen shows the rainbow instead of a button
+// that promises it. Same data, same time span, same log scale as the
+// main chart below — same t0/t1 and y-range, so the picture cannot
+// drift from the full chart and the line gains no extra future.
+function drawHero(data){
+  const svg = $("hero-chart");
+  if (!svg) return;
+  const W=1000,H=400, L=10, R=10, T=12, B=12;
+  const iw=W-L-R, ih=H-T-B;
+  const t0=data.historyFirst.ts, t1=data.spot.ts + 45*86400;
+  const yMin=Math.log(0.05), yMax=Math.log(2000000);
+  const X=(ts)=> L + (ts-t0)/(t1-t0)*iw;
+  const Y=(p)=> T + (yMax-Math.log(p))/(yMax-yMin)*ih;
+  const fit=data.fit, genesis=data.genesisTs;
+  const trend=(ts)=> Math.exp(fit.a + fit.b*Math.log((ts-genesis)/86400));
+  let s="";
+  const steps=72;
+  for(let k=0;k<9;k++){
+    const top=[], bot=[];
+    for(let i=0;i<=steps;i++){
+      const ts=t0+(t1-t0)*i/steps;
+      top.push([X(ts), Y(trend(ts)*Math.exp(data.bandBottom + data.bandWidth*(k+1)))]);
+      bot.push([X(ts), Y(trend(ts)*Math.exp(data.bandBottom + data.bandWidth*k))]);
+    }
+    const pts=top.concat(bot.reverse()).map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+    s+=`<polygon points="${pts}" fill="${data.bands[k].color}" opacity="0.88"/>`;
+  }
+  const fitPts=[];
+  for(let i=0;i<=steps;i++){ const ts=t0+(t1-t0)*i/steps; fitPts.push(X(ts).toFixed(1)+","+Y(trend(ts)).toFixed(1)); }
+  s+=`<polyline points="${fitPts.join(" ")}" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-dasharray="6 5" opacity="0.75"/>`;
+  const pricePts=data.points.map(p=>X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1)).join(" ");
+  s+=`<polyline points="${pricePts}" fill="none" stroke="#ffffff" stroke-width="2.4"/>`;
+  const dx=X(data.spot.ts), dy=Y(data.spot.price);
+  s+=`<circle cx="${dx}" cy="${dy}" r="8" fill="#ffd94d" stroke="#0d1330" stroke-width="2.5"/>`;
+  const anchor = dx > W-R-130 ? "end" : "start";
+  const lx = anchor==="end" ? dx-13 : dx+13;
+  s+=`<text x="${lx}" y="${dy-13}" fill="#ffd94d" font-size="19" font-weight="700" text-anchor="${anchor}" style="paint-order:stroke;stroke:#0d1330;stroke-width:3.5px">Today</text>`;
+  svg.innerHTML=s;
+  if (data.today && data.today.band) {
+    svg.setAttribute("aria-label",
+      "Bitcoin rainbow chart. Nine colored bands around bitcoin's long-run growth line, and the price line of every week since 2010. Today the price sits in the " +
+      data.today.band.name + " band, " + Math.abs(data.today.pct) + "% " +
+      (data.today.pct < 0 ? "below" : "above") + " the line.");
+  }
+}
+
 // What each band means, in one line: how far from the line it sits.
 // (Site copy. The worker's band data still carries the short labels;
 // these lines are computed from the band edges themselves.)
@@ -519,6 +575,7 @@ function buildRows(data){
 function fill(data, savedCopy){
   chartData = data;
   draw(data);
+  drawHero(data);
   buildRows(data);
   renderSim();
   // Today panel, composed on the site from the engine's own fields:
@@ -583,6 +640,10 @@ async function load(){
     else $("today-text").textContent = "The chart is resting. Please come back soon.";
   }
 }
+// Hero first paint: draw from the saved copy now so the chart is on
+// the first screen at once; fill() redraws it with live data when the
+// worker answers.
+if (window.FALLBACK_CHART) { try { drawHero(window.FALLBACK_CHART); } catch(e){} }
 load();
 </script>
 <script src="data-daily.js"></script>
