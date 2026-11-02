@@ -41,6 +41,8 @@
   header{text-align:center;padding:26px 0 4px}
   h1{font-size:40px;line-height:1.1;margin:0 0 10px;font-weight:800;letter-spacing:-.5px}
   .sub{font-size:21px;color:var(--soft);margin:0 auto 16px;max-width:34em}
+  .todayline{font-size:20px;font-weight:700;margin:0 auto 16px;max-width:34em}
+  .todayline b{color:var(--gold)}
   .btn{display:inline-block;background:var(--gold);color:#221a00;font-weight:700;
     padding:13px 22px;border-radius:999px;text-decoration:none;font-size:19px;min-height:48px}
   section.block{margin:30px 0 0}
@@ -150,7 +152,8 @@
   <header>
     <h1>The Bitcoin Rainbow in plain words.</h1>
     <p class="sub">Sixteen years of climbs and crashes, in words anyone can read.</p>
-    <a class="btn" href="#what">Start here</a>
+    <p class="todayline" id="hero-today">Today: reading the chart&hellip;</p>
+    <a class="btn" href="#now">See the chart</a>
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
@@ -193,7 +196,7 @@
       <svg id="lab-chart" role="img" aria-label="Bitcoin rainbow chart, full history, every day since 2010"></svg>
       <input type="range" id="lab-scrub" min="0" max="100" value="100" step="0.01"
         aria-label="Scrub through Bitcoin price history by date">
-      <p class="lab-hint">Every number below comes from real daily closes.</p>
+      <p class="lab-hint">Every number below comes from real daily prices.</p>
       <div class="lab-readout">
         <div class="lab-stat"><div class="k">Date</div><div class="v" id="r-date">&hellip;</div><div class="n" id="r-age"></div></div>
         <div class="lab-stat"><div class="k">Price that day</div><div class="v" id="r-price">&hellip;</div><div class="n">Daily close</div></div>
@@ -220,7 +223,7 @@
     </div>
     <div class="sharecard">
       <img src="postcard.png" alt="Postcard of ten-year windows. Worst, middle, and best paths, side by side." width="1200" height="630" loading="lazy">
-      <p>That is the past. Not a promise.</p>
+      <p>Ten years at a time: the worst path, the middle path, and the best.</p>
     </div>
   </section>
 
@@ -228,7 +231,7 @@
     <p class="kicker">Step 3</p>
     <h2>Why we think it climbs on. A belief, not a fact.</h2>
     <p class="growth-note">Its line climbs for 16 years. It fell hard, many times, and climbed back each time. Pick any start day: four years on, the price stood higher. Every time, so far.</p>
-    <p class="growth-note">Why might it go on? Only 21 million will ever exist, most are already out, and new coins come slower every four years — the last cut was in 2024. Big funds sell it in stock accounts. That is the case: a belief, not a fact. This is learning, not financial advice.</p>
+    <p class="growth-note">Why might it go on? Only 21 million will ever exist, most are already out, and new coins come slower every four years — the last cut was in 2024. Big funds sell it in stock accounts. That is the case: a belief, not a fact.</p>
   </section>
 
   <section class="block" id="how">
@@ -236,7 +239,7 @@
     <h2>A little, every week.</h2>
     <p class="dca-line">Like an allowance, in reverse. A little, every week.</p>
     <div class="sim">
-      <span class="tag">DCA</span>
+      <span class="tag">Weekly buys</span>
       <p class="lab"><strong>1. Pick an amount.</strong> It goes in each week.</p>
       <div class="chips" id="amt-chips">
         <button type="button" class="chip" data-amt="10">$10</button>
@@ -264,14 +267,14 @@
     <p class="kicker">Step 5</p>
     <h2>It swings hard. We could be wrong.</h2>
     <p class="growth-note">Since 2011, it has fallen by half or more seven times. In 2022, it fell by about three fourths. It can do that again. A total loss should sting, not sink you.</p>
-    <p class="growth-note">It could fall and stay down. New laws could hurt it. The climb is a pattern, not a law. Many fans keep 5 to 10 in 100 saved. The bold end is 10 to 20 in 100. Only money you will not need for years. This is learning, not financial advice.</p>
+    <p class="growth-note">It could fall and stay down. New laws could hurt it. The climb is a pattern, not a law. Many fans keep 5 to 10 in 100 saved. The bold end is 10 to 20 in 100. Only money you will not need for years.</p>
   </section>
 
   <section class="block" id="where">
     <p class="kicker">Step 6</p>
     <h2>The two ways people hold it.</h2>
     <div class="wrow">
-      <h3>IBIT</h3>
+      <h3>IBIT (a stock fund)</h3>
       <p>In a stock account, like a stock. You do not hold the coins.</p>
     </div>
     <div class="wrow">
@@ -534,6 +537,24 @@ function fill(data, savedCopy){
   } else {
     $("today-text").textContent = data.todayText;
   }
+  // Hero fact line: the one number a first screen owes the visitor,
+  // composed from the same fields as the today panel below.
+  const heroEl = $("hero-today");
+  if (heroEl) {
+    const ht = data.today;
+    if (ht.band) {
+      const mid = ht.pct === 0 ? "right on its long-run line"
+        : `${Math.abs(ht.pct)}% ${ht.pct < 0 ? "below" : "above"} its long-run line`;
+      heroEl.innerHTML = "";
+      heroEl.appendChild(document.createTextNode("Today: one bitcoin costs "));
+      const b = document.createElement("b");
+      b.textContent = fmtUSD(ht.price);
+      heroEl.appendChild(b);
+      heroEl.appendChild(document.createTextNode(`. It sits in the ${ht.band.name} band, ${mid}.`));
+    } else {
+      heroEl.textContent = "Today: one bitcoin costs " + fmtUSD(data.spot.price) + ".";
+    }
+  }
   $("price-big").textContent = fmtUSD(data.spot.price);
   $("price-text").textContent = data.strip.price;
   $("technical-text").textContent = data.strip.technical;
@@ -733,10 +754,10 @@ load();
   document.getElementById("h-method").innerHTML =
     "<strong>The model:</strong> one line, fit to every daily close. " +
     "It uses " + D.fit.n.toLocaleString("en-US") + " closes in all. " +
-    "Nine bands sit on that line. Each band is 0.3 wide, in log space. " +
+    "Nine bands sit on that line. Each band is the same step wide. " +
     "Each step up is about 1.35 times the price below.";
   document.getElementById("h-source").innerHTML =
-    "<strong>The data:</strong> daily closes from blockchain.info, " + first.date + " to " +
+    "<strong>The data:</strong> daily prices from blockchain.info, " + first.date + " to " +
     last.date + ". Last close: " + fmt$(last.price) + " (" + last.date + ")." +
     (open.recoveredDate === null
       ? " That is still " + Math.abs(Math.round((last.price / open.peakPrice - 1) * 100)) +

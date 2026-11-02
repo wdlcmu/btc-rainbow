@@ -113,6 +113,7 @@
 </div>
 
 <script src="fallback-data.js"></script>
+<script src="data-daily.js"></script>
 <script type="module">
 import { routeAsk } from "./ask-engine.mjs";
 
@@ -127,6 +128,10 @@ const KIND_LABELS = {
   buy_ways: "How people buy it",
   advice: "Facts, not advice",
   none: "Not yet",
+  greeting: "Hello",
+  site: "What this site is",
+  math: "Quick math",
+  crash: "A past fall",
 };
 
 let chartData = null;
@@ -169,6 +174,11 @@ function ask(question){
   if (!chartData) {
     showAnswer({ intent: "none", text: "The chart is still loading. Try again in a moment." }, false);
     return;
+  }
+  // Crash answers use the same daily-close fall table the homepage
+  // lab chart draws (data-daily.js). Merge it into the chart data.
+  if (window.BTC_LAB && window.BTC_LAB.drawdowns && !chartData.drawdowns) {
+    chartData.drawdowns = window.BTC_LAB.drawdowns;
   }
   const ans = routeAsk(chartData, q);
   showAnswer(ans, usedSavedCopy);

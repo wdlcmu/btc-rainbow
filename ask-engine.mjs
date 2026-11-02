@@ -18,7 +18,7 @@
 // Counts: routeAsk returns an `intent` — one of INTENTS below. That
 // word, and only that word, is what the counts store ever sees.
 
-export const INTENTS = ["today", "dca", "explain", "buy_ways", "advice", "none"];
+export const INTENTS = ["today", "dca", "explain", "buy_ways", "advice", "none", "greeting", "site", "math", "crash"];
 
 export const CLOSER = "That is the past. Not a promise.";
 
@@ -144,6 +144,82 @@ export const NONE_TEXT =
   "Three: the plain words, and how people buy it. " +
   "Tap one below, or ask in new words.";
 
+// --- Conversation basics (sweep fix, Nov 1, 2026) --------------------
+// Greetings, "what is this site", and tiny sums used to fall through to
+// the no-match answer. They get short, honest answers first, then the
+// site's real job below still runs exactly as before.
+const GREETINGS = new Set([
+  "sup", "hi", "hello", "hey", "yo", "hiya", "hi there", "hello there",
+  "hey there", "good morning", "good afternoon", "good evening",
+  "what's up", "whats up",
+]);
+
+function mathAnswer(rawQ) {
+  const m = String(rawQ || "").match(/(\d+(?:\.\d+)?)\s*([+\-*\/x×])\s*(\d+(?:\.\d+)?)/i);
+  if (!m) return null;
+  const a = parseFloat(m[1]), b = parseFloat(m[3]), op = m[2].toLowerCase();
+  if (op === "/" && b === 0) {
+    return { intent: "math", text: "That one divides by zero, so it has no answer. Ask me a chart question, or try a new sum." };
+  }
+  const r = op === "+" ? a + b : op === "-" ? a - b : op === "/" ? a / b : a * b;
+  const word = op === "+" ? "plus" : op === "-" ? "minus" : op === "/" ? "divided by" : "times";
+  const out = String(parseFloat(r.toFixed(6)));
+  return { intent: "math", text: `${m[1]} ${word} ${m[3]} is ${out}.` };
+}
+
+function fmtDay(ts) {
+  return new Date(ts * 1000).toLocaleDateString("en-US",
+    { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
+
+// --- Past falls --------------------------------------------------------
+// Grounded only in the site's own numbers: data.drawdowns when the page
+// supplies it (the daily-close table the homepage lab chart draws), else
+// measured from data.points, the chart's own price series.
+function crashAnswer(data, q) {
+  const ym = q.match(/\b(19|20)\d{2}\b/);
+  const year = ym ? parseInt(ym[0], 10) : null;
+  const dds = Array.isArray(data.drawdowns) ? data.drawdowns : null;
+  if (dds && dds.length) {
+    let d = null;
+    if (year !== null) {
+      d = dds.find((x) => {
+        const py = parseInt(String(x.peakDate).slice(0, 4), 10);
+        const ty = parseInt(String(x.troughDate).slice(0, 4), 10);
+        return ty === year || py === year;
+      }) || null;
+    } else {
+      d = dds.reduce((a, b) => (b.depthPct > a.depthPct ? b : a), dds[0]);
+    }
+    if (!d) return null;
+    const name = year !== null ? `The ${year} fall` : "The biggest fall on this chart";
+    const plainDay = (s) => fmtDay(Date.parse(s + "T00:00:00Z") / 1000);
+    let text =
+      `${name}: bitcoin topped at ${fmtUSD(d.peakPrice)} on ${plainDay(d.peakDate)}. ` +
+      `It bottomed at ${fmtUSD(d.troughPrice)} on ${plainDay(d.troughDate)} — down ${d.depthPct}%. ` +
+      (d.recoveredDate
+        ? `It passed that top again on ${plainDay(d.recoveredDate)}. `
+        : "It has not passed that top again yet. ") +
+      CLOSER;
+    return { intent: "crash", text, structured: { peak_date: d.peakDate, trough_date: d.troughDate, drop_pct: d.depthPct } };
+  }
+  if (year === null || !Array.isArray(data.points) || !data.points.length) return null;
+  const yr = (ts) => new Date(ts * 1000).getUTCFullYear();
+  const before = data.points.filter((p) => yr(p[0]) >= year - 1 && yr(p[0]) <= year);
+  if (!before.length) return null;
+  const peak = before.reduce((a, b) => (b[1] > a[1] ? b : a), before[0]);
+  const after = data.points.filter((p) => p[0] >= peak[0] && yr(p[0]) <= year + 1);
+  if (after.length < 2) return null;
+  const trough = after.reduce((a, b) => (b[1] < a[1] ? b : a), after[0]);
+  const drop = Math.round((1 - trough[1] / peak[1]) * 1000) / 10;
+  if (!(drop > 0)) return null;
+  const text =
+    `The ${year} fall, measured on this chart: bitcoin topped at ${fmtUSD(peak[1])} on ${fmtDay(peak[0])}. ` +
+    `It bottomed at ${fmtUSD(trough[1])} on ${fmtDay(trough[0])} — down ${drop}%. ` +
+    CLOSER;
+  return { intent: "crash", text, structured: { peak_date: fmtDay(peak[0]), trough_date: fmtDay(trough[0]), drop_pct: drop } };
+}
+
 // --- The router ------------------------------------------------------
 // Order is the discipline:
 //   1. advice / forecast asks — declined plainly, facts offered.
@@ -155,6 +231,31 @@ export const NONE_TEXT =
 export function routeAsk(data, rawQ) {
   const q = norm(rawQ);
   if (!q.trim()) return { intent: "none", text: NONE_TEXT };
+
+  // 0. Conversation basics: greet back, say what this site is, do a
+  // tiny sum. (Crash questions sit below advice, so a "should I buy
+  // after the crash" ask still gets the plain no first.)
+  if (GREETINGS.has(q.trim())) {
+    return {
+      intent: "greeting",
+      text: "Hi. Good to see you. Ask me where bitcoin stands today, what a past fall looked like, or what a weekly buy did in the past.",
+    };
+  }
+  if (
+    has(q,
+      " what is this site", " what is this place", " what does this site do",
+      " what is this page", " what do you do", " who are you",
+      " what can you do", " what can i ask")
+  ) {
+    return {
+      intent: "site",
+      text: "This site shows sixteen years of bitcoin climbs and crashes, in words anyone can read. " +
+        "One chart holds every day since 2010. I can tell you where bitcoin stands today, " +
+        "how big a past fall was, and what a weekly buy did in the past. " + CLOSER,
+    };
+  }
+  const math = mathAnswer(rawQ);
+  if (math) return math;
 
   // 1. Advice or a forecast: never answered with a verdict.
   if (
@@ -172,6 +273,15 @@ export function routeAsk(data, rawQ) {
       text: "I do not give advice. I show facts from the past. " + t.text,
       structured: t.structured,
     };
+  }
+
+  // 1b. A past fall, measured from the site's own data.
+  if (
+    /\b(19|20)\d{2}\b/.test(q) && has(q, " crash", " fall", " fell", " drop", " bear market", " drawdown") ||
+    has(q, " crash", " bear market", " drawdown", " biggest fall", " worst fall")
+  ) {
+    const crash = crashAnswer(data, q);
+    if (crash) return crash;
   }
 
   // 2. How people buy it (information, not advice).
