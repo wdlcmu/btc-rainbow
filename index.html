@@ -141,6 +141,10 @@
   .lab-honest p strong{color:var(--ink)}
   .lab-ddlabel{font-size:11px;fill:#ffb3c8;font-weight:700}
   .lab-axislab{font-size:11px;fill:#b9c2e8}
+  #plain-chart{width:100%;height:auto;display:block;touch-action:pan-y;cursor:crosshair}
+  .plain-togs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+  .plain-sr-lab{font-size:13px;font-weight:800}
+  .lab-card input[type=range]#plain-scrub{margin-top:10px}
   .sharecard{margin:18px 0 0;text-align:center}
   .sharecard img{max-width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
   .sharecard p{font-size:19px;font-weight:700;margin:10px 0 0}
@@ -186,6 +190,7 @@ window.FLEET_CFG = {
   site: "bitcoin-rainbow",
   starts: [
     { sel: "#lab-scrub", on: "input", surface: "history-explorer" },
+    { sel: "#plain-scrub", on: "input", surface: "plain-chart" },
     { sel: "#crash-chips .chip", surface: "crash-explorer" },
     { sel: "#fc-years .chip", surface: "model-explorer" },
     { sel: ".hero-chips a", surface: "gauges" }
@@ -341,7 +346,6 @@ window.FLEET_CFG = {
   <header>
     <h1>The Bitcoin Rainbow in plain words.</h1>
     <p class="sub">Sixteen years of climbs and crashes, in words anyone can read.</p>
-    <p class="evoline">Now with the <b>gauges</b> traders watch and the <b>health of the network</b> itself — computed live from real data, never guessed.</p>
     <p class="todayline" id="hero-today">Today: reading the chart&hellip;</p>
     <div class="chartbox herochart">
       <svg id="hero-chart" viewBox="0 0 1000 400" role="img"
@@ -387,7 +391,7 @@ window.FLEET_CFG = {
       <h3>So, does this mean buy?</h3>
       <p>No. The chart shows where the price sits inside its own past pattern. It cannot say buy, and it cannot say skip. No chart can.</p>
       <p>What it can do: show what happened the other times the price sat where it sits now — the band panel above, the scrubber below.</p>
-      <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is learning, not financial advice.</p>
+      <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is analysis and education, not financial advice.</p>
     </div>
     <h3 class="lab-h3" id="lab">Every day, on one chart.</h3>
     <p class="growth-note">Pick any day. See its price, its band, and the year that came next.</p>
@@ -432,13 +436,48 @@ window.FLEET_CFG = {
     </div>
   </section>
 
+  <section class="block" id="plain">
+    <p class="kicker">The same prices, plain</p>
+    <h2>The plain chart.</h2>
+    <p class="growth-note" id="plain-lead">Reading the daily prices&hellip;</p>
+    <p class="growth-note">No colors. No bands. Just the price, day by day, since 2010. Two lines ride along with it. One averages the last 50 days. The other averages the last 200. Drag across the chart to read any day.</p>
+    <div class="lab-card">
+      <div class="plain-togs" role="group" aria-label="Time range">
+        <button type="button" class="chip" data-range="2y">Last 2 years</button>
+        <button type="button" class="chip on" data-range="5y">Last 5 years</button>
+        <button type="button" class="chip" data-range="all">All 16 years</button>
+      </div>
+      <svg id="plain-chart" viewBox="0 0 1000 460" role="img"
+        aria-label="Bitcoin price chart, plain. The price line, its 50-day average, and its 200-day average."></svg>
+      <input type="range" id="plain-scrub" min="0" max="100" value="100" step="1"
+        aria-label="Scrub through the plain price chart by date">
+      <p class="lab-hint">Every number here comes from the same real daily prices as the rainbow.</p>
+      <div class="lab-readout">
+        <div class="lab-stat"><div class="k">Date</div><div class="v" id="plain-date">&hellip;</div><div class="n">The day you picked</div></div>
+        <div class="lab-stat"><div class="k">Price that day</div><div class="v" id="plain-price">&hellip;</div><div class="n">Daily close</div></div>
+        <div class="lab-stat"><div class="k">50-day average</div><div class="v" id="plain-ma50">&hellip;</div><div class="n">Gold line</div></div>
+        <div class="lab-stat"><div class="k">200-day average</div><div class="v" id="plain-ma200">&hellip;</div><div class="n">Pink line</div></div>
+      </div>
+      <div class="plain-togs" role="group" aria-label="Chart layers" style="margin:12px 0 0">
+        <button type="button" class="chip on" data-tog="sr">Ceiling + floor</button>
+        <button type="button" class="chip on" data-tog="ma50">50-day average</button>
+        <button type="button" class="chip on" data-tog="ma200">200-day average</button>
+      </div>
+    </div>
+    <div class="read-panel" id="sr-panel" style="margin-top:12px">
+      <h3>Ceilings and floors.</h3>
+      <p id="sr-body">Reading the tops and bottoms&hellip;</p>
+      <p class="fine" id="sr-method"></p>
+    </div>
+  </section>
+
 
   <section class="block" id="gauges">
     <p class="kicker">Step 3</p>
     <h2>The gauges.</h2>
     <p class="growth-note">The readings traders watch, computed from the same daily prices.</p>
     <div class="cards">
-      <div class="gcard"><h3>RSI — heat gauge</h3><p class="big" id="g-rsi">&hellip;</p><p>A 0-to-100 heat gauge on the last two weeks of moves.</p><p id="g-rsi-note"></p></div>
+      <div class="gcard"><h3>RSI — heat gauge</h3><p class="big" id="g-rsi">&hellip;</p><p>It scores the last two weeks of moves, from 0 to 100.</p><p id="g-rsi-note"></p></div>
       <div class="gcard"><h3>Mayer Multiple</h3><p class="big" id="g-mayer">&hellip;</p><p>Today's price, divided by its 200-day average.</p><p id="g-mayer-note"></p></div>
       <div class="gcard"><h3>50-day / 200-day lines</h3><p class="big" id="g-ma">&hellip;</p><p>Two price averages. When the short one crosses the long one, traders call it golden (up) or death (down).</p><p id="g-ma-note"></p></div>
       <div class="gcard"><h3>Below the top</h3><p class="big" id="g-dd">&hellip;</p><p id="g-dd-note"></p></div>
@@ -486,7 +525,7 @@ window.FLEET_CFG = {
       </div>
       <div class="result" id="fc-out"><p>Reading the model&hellip;</p></div>
       <div class="result" id="fc-record"></div>
-      <p class="note">The model draws lines. It does not know the future. That is the past. Not a promise.</p>
+      <p class="note">The model draws lines. It does not know the future.</p>
     </div>
   </section>
 
@@ -501,13 +540,13 @@ window.FLEET_CFG = {
   <section class="block" id="case">
     <p class="kicker">Step 7</p>
     <h2>Why we think it climbs on. A belief, not a fact.</h2>
-    <p class="growth-note">Pick any start day: four years on, the price stood higher. Every time, so far. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years. That is the case: a belief, not a fact.</p>
+    <p class="growth-note">Pick any start day: four years on, the price stood higher. Every time, so far. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.</p>
   </section>
 
   <section class="block" id="how">
     <p class="kicker">Step 8</p>
     <h2>A little, every week.</h2>
-    <p class="dca-line">Like an allowance, in reverse. A little, every week.</p>
+    <p class="dca-line">Like an allowance, in reverse.</p>
     <div class="sim">
       <span class="tag">Weekly buys</span>
       <p class="lab"><strong>1. Pick an amount.</strong> It goes in each week.</p>
@@ -571,12 +610,12 @@ window.FLEET_CFG = {
       <div class="scard">
         <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><polyline points="5,34 16,22 24,28 42,11" fill="none" stroke="#35b6c9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="42" cy="11" r="3.5" fill="#35b6c9"/></svg>
         <h3>Technical</h3>
-        <p id="technical-text">Watching the line.</p>
+        <p id="technical-text">Technical means watching the line.</p>
       </div>
       <div class="scard">
         <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="13" r="9" fill="#3fae5a"/><circle cx="15" cy="18" r="6" fill="#3fae5a"/><circle cx="33" cy="18" r="6" fill="#3fae5a"/><path d="M24 21v8" stroke="#b07a3f" stroke-width="4" stroke-linecap="round"/><path d="M24 29c-2 4-5 6-9 8M24 29c0 4-1 7-2 10M24 29c2 4 5 6 9 8" stroke="#b07a3f" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
         <h3>Fundamental</h3>
-        <p id="fundamental-text">Fundamental is a health check.</p>
+        <p id="fundamental-text">Fundamental means a health check.</p>
       </div>
     </div>
     <div class="learnlinks">
@@ -1288,5 +1327,247 @@ load();
 <script src="snapshot-data.js"></script>
 <script src="daily-series.js"></script>
 <script src="evo.js"></script>
+<script>
+(function(){
+  "use strict";
+  var raw = window.BTC_DAILY || [];
+  var leadEl = document.getElementById("plain-lead");
+  var svg = document.getElementById("plain-chart");
+  if (!raw.length || !svg) { if (leadEl) leadEl.textContent = "The price series is not available right now."; return; }
+  var pts = raw.map(function(r){
+    var s = String(r[0]);
+    return [Date.UTC(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8)) / 1000, r[1]];
+  });
+  var lastI = pts.length - 1, lastTs = pts[lastI][0], lastP = pts[lastI][1];
+  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+  function fmtDate(ts){ return new Date(ts * 1000).toLocaleDateString("en-US",
+    { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }); }
+  function track(){ try { if (window.FA && FA.track) FA.track("tool_start", { surface: "plain-chart" }); } catch(e){} }
+
+  // ---- moving averages over the full history
+  function smaArr(n){
+    var out = new Array(pts.length).fill(null), sum = 0;
+    for (var i = 0; i < pts.length; i++){
+      sum += pts[i][1]; if (i >= n) sum -= pts[i - n][1];
+      if (i >= n - 1) out[i] = sum / n;
+    }
+    return out;
+  }
+  var MA50 = smaArr(50), MA200 = smaArr(200);
+
+  // ---- lead sentence: real numbers, computed from the series now
+  if (leadEl){
+    leadEl.textContent =
+      "Bitcoin's last close was " + fmt$(lastP) + ", on " + fmtDate(lastTs) + ". " +
+      "That is " + (lastP >= MA200[lastI] ? "above" : "below") + " its 200-day average of " + fmt$(MA200[lastI]) + ". " +
+      "It sits " + (lastP >= MA50[lastI] ? "above" : "below") + " its 50-day average of " + fmt$(MA50[lastI]) + ".";
+  }
+
+  // ---- ceilings and floors.
+  // Method: in the last 2 years of daily closes, a swing top is a close
+  // higher than the 10 closes on each side of it; a swing bottom mirrors
+  // it. Tops (or bottoms) within 3% of each other group into one level.
+  // A level needs at least 3 touches. The ceiling is the most-touched
+  // level fully above the last close (ties: the nearest one above); the
+  // floor mirrors that below. If either is missing at 2 years, the
+  // window widens to 3 years and the page says so.
+  function swingLevels(years){
+    var tStart = lastTs - years * 365.25 * 86400, w0 = 0;
+    while (w0 < lastI && pts[w0][0] < tStart) w0++;
+    var W = 10, highs = [], lows = [], k, j;
+    for (k = Math.max(W, w0); k <= lastI - W; k++){
+      var isH = true, isL = true;
+      for (j = k - W; j <= k + W; j++){
+        if (j === k) continue;
+        if (pts[j][1] >= pts[k][1]) isH = false;
+        if (pts[j][1] <= pts[k][1]) isL = false;
+      }
+      if (isH && pts[k][0] >= tStart) highs.push(k);
+      if (isL && pts[k][0] >= tStart) lows.push(k);
+    }
+    function cluster(idxs){
+      var sorted = idxs.slice().sort(function(a, b){ return pts[a][1] - pts[b][1]; });
+      var clusters = [];
+      sorted.forEach(function(idx){
+        var c = clusters[clusters.length - 1];
+        if (c){
+          var med = pts[c[Math.floor(c.length / 2)]][1];
+          if (Math.abs(pts[idx][1] - med) / med <= 0.03){ c.push(idx); return; }
+        }
+        clusters.push([idx]);
+      });
+      return clusters.filter(function(c){ return c.length >= 3; }).map(function(c){
+        var ps = c.map(function(idx){ return pts[idx][1]; });
+        return { touches: c.length, lo: Math.min.apply(null, ps), hi: Math.max.apply(null, ps) };
+      });
+    }
+    return { ceilings: cluster(highs), floors: cluster(lows) };
+  }
+  function pickLevel(list, above){
+    var ok = list.filter(function(c){ return above ? c.lo > lastP : c.hi < lastP; });
+    ok.sort(function(a, b){ return b.touches - a.touches || (above ? a.lo - b.lo : b.hi - a.hi); });
+    return ok[0] || null;
+  }
+  var srYears = 2, SR = swingLevels(2);
+  var ceil = pickLevel(SR.ceilings, true), floor = pickLevel(SR.floors, false);
+  var widened = false;
+  if (!ceil || !floor){
+    var SR3 = swingLevels(3);
+    ceil = pickLevel(SR3.ceilings, true); floor = pickLevel(SR3.floors, false);
+    if (ceil || floor){ srYears = 3; widened = true; }
+  }
+  var yrsTxt = srYears === 2 ? "two" : "three";
+  var srBody = document.getElementById("sr-body"), srMethod = document.getElementById("sr-method");
+  if (srBody){
+    var parts = ["A ceiling is a price bitcoin keeps bumping into. It climbs there, then turns back down.",
+                 "A floor is a price it keeps bouncing off."];
+    if (ceil) parts.push("Ceiling: " + fmt$(ceil.lo) + " to " + fmt$(ceil.hi) + ". Tops hit it " + ceil.touches + " times in the last " + yrsTxt + " years.");
+    if (floor) parts.push("Floor: " + fmt$(floor.lo) + " to " + fmt$(floor.hi) + ". Bottoms bounced off it " + floor.touches + " times.");
+    if (!ceil && !floor) parts.push("No price level earned 3 touches, so this chart draws none.");
+    else if (!ceil) parts.push("No ceiling earned 3 touches, so none is drawn.");
+    else if (!floor) parts.push("No floor earned 3 touches, so none is drawn.");
+    parts.push("That is the past. Not a promise.");
+    srBody.textContent = parts.join(" ");
+  }
+  if (srMethod){
+    srMethod.textContent = "How we pick them. A top is a close higher than the ten closes beside it. " +
+      "Tops within 3% count as one level. A level needs at least 3 touches. Ties go to the level nearest the last close. " +
+      (widened ? "Two years held no full pair of levels, so the window widened to three years. " : "") +
+      "Daily closes from blockchain.info, through " + fmtDate(lastTs) + ".";
+  }
+
+  // ---- the chart
+  var NS = "http://www.w3.org/2000/svg";
+  var W = 1000, H = 460, PL = 64, PR = 14, PT = 16, PB = 30;
+  var scrub = document.getElementById("plain-scrub");
+  var RANGES = { "2y": 2 * 365.25 * 86400, "5y": 5 * 365.25 * 86400, "all": Infinity };
+  var rangeKey = "5y";
+  var show = { sr: true, ma50: true, ma200: true };
+  var view = null, selI = lastI;
+  function el(tag, attrs, parent){
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(n); return n;
+  }
+  function niceStep(span){
+    var rawStep = span / 4, mag = Math.pow(10, Math.floor(Math.log10(rawStep))), norm = rawStep / mag;
+    return (norm >= 5 ? 10 : norm >= 2 ? 5 : norm >= 1 ? 2 : 1) * mag;
+  }
+  function render(){
+    var span = RANGES[rangeKey], i0 = 0;
+    if (isFinite(span)){
+      var tStart = lastTs - span;
+      while (i0 < lastI && pts[i0][0] < tStart) i0++;
+    }
+    var i1 = lastI, lo = Infinity, hi = -Infinity, i;
+    for (i = i0; i <= i1; i++){ if (pts[i][1] < lo) lo = pts[i][1]; if (pts[i][1] > hi) hi = pts[i][1]; }
+    if (rangeKey !== "all" && show.sr){
+      if (ceil){ lo = Math.min(lo, ceil.lo); hi = Math.max(hi, ceil.hi); }
+      if (floor){ lo = Math.min(lo, floor.lo); hi = Math.max(hi, floor.hi); }
+    }
+    var pad = (hi - lo) * 0.07 || 1;
+    var yLo = Math.max(0, lo - pad), yHi = hi + pad;
+    var t0 = pts[i0][0], t1 = pts[i1][0];
+    var X = function(ts){ return PL + (ts - t0) / (t1 - t0) * (W - PL - PR); };
+    var Y = function(p){ return PT + (yHi - p) / (yHi - yLo) * (H - PT - PB); };
+    view = { i0: i0, i1: i1, X: X, Y: Y };
+    svg.innerHTML = "";
+    // gridlines
+    var step = niceStep(yHi - yLo), gv;
+    for (gv = Math.ceil(yLo / step) * step; gv <= yHi; gv += step){
+      el("line", { x1: PL, y1: Y(gv), x2: W - PR, y2: Y(gv), stroke: "#ffffff", opacity: .10 });
+      var gt = el("text", { x: 6, y: Y(gv) + 4, class: "lab-axislab" });
+      gt.textContent = gv >= 1000 ? "$" + Math.round(gv / 100) / 10 + "k" : "$" + Math.round(gv);
+    }
+    var yr0 = new Date(t0 * 1000).getUTCFullYear(), yr1 = new Date(t1 * 1000).getUTCFullYear();
+    for (var yr = yr0; yr <= yr1; yr++){
+      var yts = Date.UTC(yr, 0, 1) / 1000;
+      if (yts < t0 || yts > t1) continue;
+      el("line", { x1: X(yts), y1: PT, x2: X(yts), y2: H - PB, stroke: "#ffffff", opacity: .07 });
+      var yt = el("text", { x: X(yts) + 3, y: H - 10, class: "lab-axislab" }); yt.textContent = yr;
+    }
+    // ceiling + floor zones
+    if (show.sr){
+      function zone(z, fill, edge, label, labelFill){
+        if (!z) return;
+        var yTop = Y(z.hi), yBot = Y(z.lo);
+        if (yBot < PT || yTop > H - PB) return;
+        el("rect", { x: PL, y: yTop, width: W - PL - PR, height: Math.max(3, yBot - yTop), fill: fill });
+        el("line", { x1: PL, y1: yTop, x2: W - PR, y2: yTop, stroke: edge, "stroke-width": 1.4, opacity: .8 });
+        el("line", { x1: PL, y1: yBot, x2: W - PR, y2: yBot, stroke: edge, "stroke-width": 1.4, opacity: .8 });
+        var t = el("text", { x: PL + 8, y: Math.max(PT + 14, yTop - 6), class: "plain-sr-lab", fill: labelFill });
+        t.textContent = label;
+      }
+      zone(ceil, "rgba(232,93,31,.20)", "#e85d1f", ceil ? "Ceiling " + fmt$(ceil.lo) + "\u2013" + fmt$(ceil.hi) : "", "#ffab7a");
+      zone(floor, "rgba(63,174,90,.20)", "#3fae5a", floor ? "Floor " + fmt$(floor.lo) + "\u2013" + fmt$(floor.hi) : "", "#8fe0a5");
+    }
+    // lines (downsampled to ~700 points)
+    function line(arr, color, width){
+      var idxs = [];
+      for (var i = view.i0; i <= view.i1; i++) if (arr[i] != null) idxs.push(i);
+      var stride = Math.max(1, Math.floor(idxs.length / 700)), pp = [];
+      idxs.forEach(function(idx, n){
+        if (n % stride === 0 || n === idxs.length - 1) pp.push(X(pts[idx][0]).toFixed(1) + "," + Y(arr[idx]).toFixed(1));
+      });
+      el("polyline", { fill: "none", stroke: color, "stroke-width": width, points: pp.join(" ") });
+    }
+    if (show.ma200) line(MA200, "#ff5d8f", 1.8);
+    if (show.ma50) line(MA50, "#ffd94d", 1.8);
+    line(pts.map(function(p){ return p[1]; }), "#f4f6ff", 1.8);
+    // crosshair + dot
+    view.cross = el("line", { y1: PT, y2: H - PB, stroke: "#ffd94d", "stroke-width": 1.4, opacity: 0 });
+    view.dot = el("circle", { r: 6, fill: "#ffd94d", stroke: "#0d1330", "stroke-width": 2, opacity: 0 });
+    scrub.min = 0; scrub.max = view.i1 - view.i0; scrub.step = 1;
+    if (selI < view.i0 || selI > view.i1) selI = view.i1;
+    select(selI);
+    svg.setAttribute("aria-label", "Bitcoin price chart, plain. " +
+      (rangeKey === "all" ? "All 16 years." : rangeKey === "2y" ? "The last 2 years." : "The last 5 years.") +
+      " Last close " + fmt$(lastP) + " on " + fmtDate(lastTs) + ".");
+  }
+  function select(i){
+    selI = i;
+    var p = pts[i];
+    view.cross.setAttribute("x1", view.X(p[0])); view.cross.setAttribute("x2", view.X(p[0]));
+    view.cross.setAttribute("opacity", 1);
+    view.dot.setAttribute("cx", view.X(p[0])); view.dot.setAttribute("cy", view.Y(p[1]));
+    view.dot.setAttribute("opacity", 1);
+    scrub.value = i - view.i0;
+    document.getElementById("plain-date").textContent = fmtDate(p[0]);
+    document.getElementById("plain-price").textContent = fmt$(p[1]);
+    document.getElementById("plain-ma50").textContent = MA50[i] == null ? "No average yet" : fmt$(MA50[i]);
+    document.getElementById("plain-ma200").textContent = MA200[i] == null ? "No average yet" : fmt$(MA200[i]);
+  }
+  function nearestIdx(ts){
+    var lo = view.i0, hi = view.i1;
+    while (hi - lo > 1){ var m = (lo + hi) >> 1; (pts[m][0] < ts) ? lo = m : hi = m; }
+    return (ts - pts[lo][0] <= pts[hi][0] - ts) ? lo : hi;
+  }
+  function fromEvent(e){
+    var r = svg.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width * W;
+    var ts = pts[view.i0][0] + (x - PL) / (W - PL - PR) * (pts[view.i1][0] - pts[view.i0][0]);
+    select(nearestIdx(Math.max(pts[view.i0][0], Math.min(pts[view.i1][0], ts))));
+  }
+  svg.addEventListener("pointerdown", fromEvent);
+  svg.addEventListener("pointermove", function(e){ if (e.pointerType === "mouse" || e.buttons) fromEvent(e); });
+  scrub.addEventListener("input", function(){ select(view.i0 + Number(scrub.value)); });
+  document.querySelectorAll("#plain [data-range]").forEach(function(c){
+    c.addEventListener("click", function(){
+      rangeKey = c.getAttribute("data-range");
+      document.querySelectorAll("#plain [data-range]").forEach(function(x){ x.classList.toggle("on", x === c); });
+      track(); render();
+    });
+  });
+  document.querySelectorAll("#plain [data-tog]").forEach(function(c){
+    c.addEventListener("click", function(){
+      var on = !c.classList.contains("on");
+      c.classList.toggle("on", on);
+      show[c.getAttribute("data-tog")] = on;
+      track(); render();
+    });
+  });
+  render();
+})();
+</script>
 </body>
 </html>
