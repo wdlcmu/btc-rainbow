@@ -140,6 +140,30 @@
   .lab-tablewrap table{width:100%;border-collapse:collapse;font-size:15px}
   .lab-tablewrap th,.lab-tablewrap td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
   .lab-tablewrap th{color:var(--soft);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+  /* Wave 1 (Nov 2, 2026): main-chart day slider, bought calculator,
+     crash table, sources & method. */
+  #chart-scrub{width:100%;margin:10px 0 2px;accent-color:var(--gold);min-height:44px}
+  .wif-inputs{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:0 0 4px}
+  .wif-field{display:flex;flex-direction:column;gap:5px}
+  .wif-field label{color:var(--soft);font-size:15.5px;font-weight:700}
+  .wif-field input{background:var(--panel2);color:var(--ink);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;font-size:18px;min-height:48px;font-family:inherit}
+  .ctable{width:100%;border-collapse:collapse;font-size:15.5px}
+  .ctable th,.ctable td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  .ctable th{color:var(--soft);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+  .ctable tbody tr{cursor:pointer}
+  .ctable tbody tr:hover,.ctable tbody tr.on{background:var(--panel2)}
+  .ctable .cfall{font-weight:800;white-space:nowrap}
+  .ctable .cnum{white-space:nowrap}
+  .ctable td span.sub{display:block;color:var(--soft);font-size:13.5px}
+  .mrow{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px}
+  .mrow h3{margin:0 0 5px;font-size:20px}
+  .mrow p{margin:0 0 6px;font-size:17px}
+  .mrow p:last-child{margin-bottom:0}
+  .mrow .fine{color:var(--soft);font-size:15.5px}
+  .mrow code{font-size:16px;background:var(--panel2);padding:2px 7px;border-radius:6px}
+  .fgsrc{color:var(--soft);font-size:14px;margin:6px 0 0}
+  .fgsrc a{color:var(--soft)}
   .lab-honest{background:var(--panel);border:1px solid var(--gold);border-radius:14px;padding:14px 16px;margin-top:18px}
   .lab-honest p{margin:6px 0;font-size:15px;color:var(--soft)}
   .lab-honest p strong{color:var(--ink)}
@@ -200,6 +224,8 @@
 window.FLEET_CFG = {
   site: "bitcoin-rainbow",
   starts: [
+    { sel: "#chart-scrub", on: "input", surface: "rainbow-explorer" },
+    { sel: "#wif-date", on: "change", surface: "bought-calculator" },
     { sel: "#lab-scrub", on: "input", surface: "history-explorer" },
     { sel: "#plain-scrub", on: "input", surface: "plain-chart" },
     { sel: "#crash-chips .chip", surface: "crash-explorer" },
@@ -389,9 +415,13 @@ window.FLEET_CFG = {
       <svg id="chart" viewBox="0 0 1000 540" role="img"
         aria-label="Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
     </div>
+    <input type="range" id="chart-scrub" min="0" max="100" value="100" step="0.01"
+      aria-label="Pick a day on the rainbow chart">
+    <p class="lab-hint" style="margin:0 2px 10px">Slide, or drag on the chart itself, to pick any day since 2010.</p>
     <div class="read-panel" id="scrub-panel">
       <h3 id="scrub-title">Touch the chart.</h3>
       <p id="scrub-body">Drag across the rainbow. Any day since 2010: its price, its band, and the year that came next.</p>
+      <p class="fine">Then try it with money: <a href="#bought" style="color:var(--gold);font-weight:700">what if you'd bought that day?</a> Or <a href="/ask" style="color:var(--gold);font-weight:700">ask about this day</a>.</p>
     </div>
     <p class="bands-cap">Nine bands, low to high. Dollar prices are today&rsquo;s. Last number: times the line.</p>
     <div class="bands" id="bands"></div>
@@ -433,6 +463,41 @@ window.FLEET_CFG = {
     <div class="crash-wrap">
       <svg id="crash-chart" viewBox="0 0 1000 300" role="img" aria-label="The picked fall, drawn from daily prices"></svg>
       <div id="crash-out" aria-live="polite"><p>Reading the falls&hellip;</p></div>
+    </div>
+    <h3 class="lab-h3" id="crash-table-h">Every big fall, in one table.</h3>
+    <p class="growth-note">The same seven falls, measured from the same daily closes. Tap a row to see that fall drawn above.</p>
+    <div class="lab-tablewrap">
+      <table class="ctable" id="crash-table">
+        <thead><tr>
+          <th scope="col">Fall</th><th scope="col">Top</th><th scope="col">Bottom</th>
+          <th scope="col">Fall</th><th scope="col">Days down</th><th scope="col">Back to the top</th>
+        </tr></thead>
+        <tbody id="crash-tbody"><tr><td colspan="6">Reading the falls&hellip;</td></tr></tbody>
+      </table>
+    </div>
+    <p class="source" id="crash-method">How each fall is measured: the top is a daily close. The fall runs to the lowest daily close after it. Days back to the top counts from the top to the first close at or above it again. Daily closes can miss a swing inside one day, so a fall here can read smaller than the worst hour of it.</p>
+    <h3 class="lab-h3" id="bought">What if you'd bought?</h3>
+    <p class="growth-note">Pick a day and a sum. See what that buy is worth at the last close.</p>
+    <div class="sim">
+      <span class="tag">One buy, one day</span>
+      <div class="wif-inputs">
+        <div class="wif-field">
+          <label for="wif-date">1. The day you buy</label>
+          <input type="date" id="wif-date">
+        </div>
+        <div class="wif-field">
+          <label for="wif-amt">2. The sum, in dollars</label>
+          <input type="number" id="wif-amt" min="1" step="any" value="1000" inputmode="decimal">
+        </div>
+      </div>
+      <div class="chips" id="wif-chips" style="margin-top:6px">
+        <button type="button" class="chip" data-wamt="100">$100</button>
+        <button type="button" class="chip on" data-wamt="1000">$1,000</button>
+        <button type="button" class="chip" data-wamt="10000">$10,000</button>
+      </div>
+      <div class="result" id="wif-out"><p>Reading the prices&hellip;</p></div>
+      <p class="note" id="wif-asof"></p>
+      <p class="note">That is the past. Not a promise. Spread the buys out instead? <a href="#how" style="color:var(--gold);font-weight:700">See what a little each week did</a>.</p>
     </div>
     <div class="lab-honest">
       <p><strong>How to read this chart.</strong></p>
@@ -511,7 +576,7 @@ window.FLEET_CFG = {
       <div class="gcard"><h3>Coins already out</h3><p class="big" id="n-supply">&hellip;</p><p>Of the 21 million that will ever exist.</p><p id="n-supply-note"></p></div>
       <div class="gcard"><h3>Computing power (hashrate)</h3><p class="big" id="n-hash">&hellip;</p><p>Quintillions of guesses per second, spent guarding the ledger.</p><p id="n-hash-note"></p></div>
       <div class="gcard"><h3>Fees right now</h3><p class="big" id="n-fees">&hellip;</p><p>What one payment pays to jump the line.</p><p id="n-fees-note"></p></div>
-      <div class="gcard"><h3>Fear &amp; Greed</h3><p class="big" id="n-fg">&hellip;</p><p>A 0-to-100 mood score for the whole market.</p><p id="n-fg-note"></p></div>
+      <div class="gcard"><h3>Fear &amp; Greed</h3><p class="big" id="n-fg">&hellip;</p><p>A 0-to-100 mood score for the whole market.</p><p id="n-fg-note"></p><p class="fgsrc">Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/">Alternative.me</a></p></div>
       <div class="gcard"><h3>Bitcoin's share</h3><p class="big" id="n-dom">&hellip;</p><p id="n-dom-note"></p></div>
     </div>
   </section>
@@ -641,9 +706,40 @@ window.FLEET_CFG = {
     </div>
   </section>
 
+  <section class="block" id="method">
+    <p class="kicker">Step 12</p>
+    <h2>Sources &amp; method.</h2>
+    <p class="growth-note">How do we know? Every number on this page, where it came from, and what it cannot do.</p>
+    <div class="mrow">
+      <h3>The model</h3>
+      <p>Rainbow model, our own fit, version 1. One line fit to every daily close on record:</p>
+      <p><code id="m-equation">ln(price) = a + b &times; ln(days since Jan 3, 2009)</code></p>
+      <p id="m-fitline">Reading the fit&hellip;</p>
+      <p>Nine bands stack on the line. Each band is the same step wide: 0.3 in log terms, about 1.35 times the price below it. The ladder runs from 0.47 times the line to 7.03 times it.</p>
+      <p class="fine">The first rainbow was drawn by azop in 2014, on a growth line by trolololo. Blockchain Center made it famous. The fit here is our own, on the same public prices. A fit describes the past. It is not a law, and it is not a forecast.</p>
+    </div>
+    <div class="mrow">
+      <h3>Where each part comes from</h3>
+      <div id="m-sources"><p>Reading the sources&hellip;</p></div>
+      <p class="fine" id="m-computed"></p>
+    </div>
+    <div class="mrow">
+      <h3>What to watch for</h3>
+      <p>Prices here are daily closes. A swing inside one day can be bigger than the day shows. In June 2011, one exchange flashed to one cent for a few minutes. The daily closes say that fall was 93%. Both are true, of different things.</p>
+      <p>The fit score (R&#178;) grades how well the line hugs the past. It says nothing about next year.</p>
+      <p>Bitcoin's share of all crypto depends on who counts the coins. Sites disagree by a point or two. Ours comes from CoinGecko, named on the card.</p>
+      <p>The Fear &amp; Greed score is one outside index, made by Alternative.me. We show it with its maker's name next to it, and we do not fold it into any other number here.</p>
+      <p>The model explorer stretches the model's own lines forward. Those lines are labelled as the model's, never as a forecast.</p>
+    </div>
+    <div class="mrow">
+      <h3>The standing line</h3>
+      <p>This is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe. When a source is quiet, its card says so instead of showing an old number as new.</p>
+    </div>
+  </section>
+
   <footer>
     <p>This is analysis and education, not financial advice.</p>
-    <p><a href="/analysis">Today's read — the archive</a> &middot; <a href="#gauges">The gauges</a> &middot; <a href="#network">The network</a></p>
+    <p><a href="/analysis">Today's read — the archive</a> &middot; <a href="#gauges">The gauges</a> &middot; <a href="#network">The network</a> &middot; <a href="#method">Sources &amp; method</a></p>
     <p><a href="/bitcoin-rainbow-chart-explained">Rainbow chart</a> &middot; <a href="/what-is-bitcoin-in-plain-english">What is bitcoin</a> &middot; <a href="/bitcoin-dca-calculator">DCA</a> &middot; <a href="/bitcoin-halving-in-plain-english">Halving</a> &middot; <a href="/ask">Ask</a></p>
     <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
     <p>The rainbow chart: first drawn by azop in 2014. The growth line is by trolololo. Blockchain Center made the chart famous.</p>
@@ -1271,12 +1367,14 @@ load();
   const svg = document.getElementById("chart");
   const sTitle = document.getElementById("scrub-title");
   const sBody = document.getElementById("scrub-body");
+  const scrubEl = document.getElementById("chart-scrub");
   if (svg && sTitle && sBody) {
     const NS = "http://www.w3.org/2000/svg";
     let layer = null, line = null, dot = null, map = null, tries = 0;
     function select(ts) {
       const i = nearestIdx(ts);
       const dts = pts[i][0], p = pts[i][1];
+      if (scrubEl) scrubEl.value = (i / (pts.length - 1) * 100).toFixed(2);
       const X = (t) => map.L + (t - map.t0) / (map.t1 - map.t0) * (map.W - map.L - map.R);
       const Y = (v) => map.T + (map.yMax - Math.log(v)) / (map.yMax - map.yMin) * (map.H - map.T - map.B);
       line.setAttribute("x1", X(dts)); line.setAttribute("x2", X(dts)); line.setAttribute("opacity", "1");
@@ -1322,6 +1420,11 @@ load();
       };
       svg.addEventListener("pointerdown", fromEvent);
       svg.addEventListener("pointermove", (e) => { if (e.pointerType === "mouse" || e.buttons) fromEvent(e); });
+      if (scrubEl) scrubEl.addEventListener("input", () => {
+        if (window.pingChart) window.pingChart();
+        const i = Math.round(Number(scrubEl.value) / 100 * (pts.length - 1));
+        select(pts[Math.max(0, Math.min(pts.length - 1, i))][0]);
+      });
     }
     init();
   }
@@ -1330,6 +1433,119 @@ load();
 <script src="snapshot-data.js"></script>
 <script src="daily-series.js"></script>
 <script src="evo.js"></script>
+<script>
+(function(){
+  "use strict";
+  // ===== Wave 1: "What if you'd bought?" + Sources & method fill =====
+  var raw = window.BTC_DAILY || [];
+  var rows = raw.map(function(r){
+    var s = String(r[0]);
+    return { ts: Date.UTC(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8)) / 1000,
+             iso: s.slice(0,4) + "-" + s.slice(4,6) + "-" + s.slice(6,8), p: r[1] };
+  });
+  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+  function fmtD(iso){
+    return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US",
+      { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  }
+  var out = document.getElementById("wif-out");
+  if (rows.length && out) {
+    var first = rows[0], last = rows[rows.length - 1];
+    var dateEl = document.getElementById("wif-date");
+    var amtEl = document.getElementById("wif-amt");
+    dateEl.min = first.iso; dateEl.max = last.iso;
+    function closeOnOrBefore(ts){
+      var lo = 0, hi = rows.length - 1, ans = 0;
+      while (lo <= hi) { var m = (lo + hi) >> 1; if (rows[m].ts <= ts) { ans = m; lo = m + 1; } else hi = m - 1; }
+      return rows[ans];
+    }
+    var defRow = closeOnOrBefore(last.ts - 5 * 365.25 * 86400);
+    dateEl.value = defRow.iso;
+    function render(){
+      var amt = parseFloat(amtEl.value);
+      if (!(amt > 0)) { out.innerHTML = "<p>Put in a sum above zero to see the past.</p>"; return; }
+      var pts = dateEl.value ? Date.parse(dateEl.value + "T00:00:00Z") / 1000 : NaN;
+      if (!isFinite(pts)) { out.innerHTML = "<p>Pick a day to see the past.</p>"; return; }
+      var row = closeOnOrBefore(pts);
+      var btc = amt / row.p;
+      var worth = btc * last.p;
+      var chg = (last.p / row.p - 1) * 100;
+      var chgTxt = (chg >= 0 ? "up " : "down ") +
+        Math.abs(chg).toLocaleString("en-US", { maximumFractionDigits: chg >= 1000 ? 0 : 1 }) + "%";
+      out.innerHTML = "";
+      var p1 = document.createElement("p");
+      p1.textContent = "On " + fmtD(row.iso) + ", one bitcoin cost " + fmt$(row.p) +
+        ". Your " + fmt$(amt) + " bought " +
+        btc.toLocaleString("en-US", { maximumFractionDigits: 4 }) + " bitcoin.";
+      var p2 = document.createElement("p");
+      p2.className = "worth";
+      p2.textContent = "At the last close, that is worth " + fmt$(worth) + " — " + chgTxt + ".";
+      out.appendChild(p1); out.appendChild(p2);
+      if (pts < first.ts) {
+        var p3 = document.createElement("p");
+        p3.textContent = "The record starts " + fmtD(first.iso) + ", so that first day is the one used.";
+        out.appendChild(p3);
+      }
+      document.getElementById("wif-asof").textContent =
+        "Last close: " + fmt$(last.p) + " on " + fmtD(last.iso) +
+        ". Daily closes from blockchain.info. No fees or taxes counted. A real buy would have paid both.";
+      document.querySelectorAll("#wif-chips .chip").forEach(function(c){
+        c.classList.toggle("on", Number(c.getAttribute("data-wamt")) === amt);
+      });
+    }
+    dateEl.addEventListener("change", render);
+    amtEl.addEventListener("input", render);
+    document.querySelectorAll("#wif-chips .chip").forEach(function(c){
+      c.addEventListener("click", function(){ amtEl.value = c.getAttribute("data-wamt"); render(); });
+    });
+    render();
+  } else if (out) {
+    out.innerHTML = "<p>The price record is not available right now.</p>";
+  }
+
+  // ===== Sources & method: the model's own numbers, from the page's data =====
+  var L = window.BTC_LAB;
+  if (L && L.fit && rows.length) {
+    var a = L.fit.a, b = L.fit.b, GEN = L.genesisTs;
+    var eq = document.getElementById("m-equation");
+    if (eq) eq.textContent = "ln(price) = \u2212" + Math.abs(a).toFixed(2) + " + " +
+      b.toFixed(2) + " \u00d7 ln(days since Jan 3, 2009)";
+    var ssr = 0, sst = 0, ys = [];
+    for (var i = 0; i < rows.length; i++) ys.push(Math.log(rows[i].p));
+    var my = ys.reduce(function(s, v){ return s + v; }, 0) / ys.length;
+    for (var j = 0; j < rows.length; j++) {
+      var x = Math.log((rows[j].ts - GEN) / 86400);
+      var f = a + b * x;
+      ssr += (ys[j] - f) * (ys[j] - f);
+      sst += (ys[j] - my) * (ys[j] - my);
+    }
+    var r2 = 1 - ssr / sst;
+    var fl = document.getElementById("m-fitline");
+    if (fl) fl.textContent =
+      "Fit window: " + fmtD(L.first.date) + " to " + fmtD(L.last.date) + " — " +
+      L.fit.n.toLocaleString("en-US") + " daily closes in all. " +
+      "Fit score (R\u00b2): " + r2.toFixed(2) + ", in log terms. " +
+      "That score grades the fit to the past. It is not a promise about the future.";
+  }
+  // If the snapshot never arrives, still name the sources (without as-of).
+  setTimeout(function(){
+    var ms = document.getElementById("m-sources");
+    if (ms && !ms.getAttribute("data-done")) {
+      ms.innerHTML = "";
+      [["The chart, the gauges, and the falls", "Daily closes from blockchain.info, the full record since 2010. The live price is from Coinbase."],
+       ["The network", "Block height, hashrate, and fees from mempool.space. Supply is checked against blockchain.info."],
+       ["Fear & Greed", "The Fear & Greed Index by Alternative.me, shown with its maker's name next to the number."],
+       ["Bitcoin's share", "CoinGecko's count of the whole crypto market."]]
+      .forEach(function(r){
+        var p = document.createElement("p");
+        var s = document.createElement("strong"); s.textContent = r[0] + ". ";
+        p.appendChild(s); p.appendChild(document.createTextNode(r[1]));
+        ms.appendChild(p);
+      });
+    }
+  }, 8000);
+})();
+</script>
 <script>
 (function(){
   "use strict";

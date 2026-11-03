@@ -130,6 +130,45 @@
         (dead.length ? " Quiet right now: " + dead.join(", ") + " — its cards say so." : "");
     }
 
+    // ---- Wave 1: Sources & method — per-section sources with as-of,
+    // rendered from this snapshot's own source list.
+    var msEl = $("m-sources");
+    if (msEl && (S.sources || []).length) {
+      var asOfTxt = function (s) {
+        if (!s.as_of) return "";
+        if (String(s.as_of).length === 10) return fmtDate(s.as_of);
+        var d = new Date(s.as_of);
+        return isFinite(d) ? d.toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : String(s.as_of);
+      };
+      var srcLine = function (s) {
+        return s.name + (s.as_of ? ", as of " + asOfTxt(s) : "") + (s.ok ? "" : " — quiet right now; its card says so");
+      };
+      var pickSrc = function (re) {
+        return (S.sources || []).filter(function (s) { return re.test(s.name); });
+      };
+      var groups = [
+        ["The chart, the gauges, and the falls", pickSrc(/blockchain\.info market-price|Coinbase/)],
+        ["The network", pickSrc(/mempool\.space|blockchain\.info stats/)],
+        ["Fear & Greed", pickSrc(/alternative\.me/)],
+        ["Bitcoin's share", pickSrc(/CoinGecko/)]
+      ];
+      msEl.innerHTML = "";
+      groups.forEach(function (grp) {
+        if (!grp[1].length) return;
+        var p = document.createElement("p");
+        var st = document.createElement("strong");
+        st.textContent = grp[0] + ". ";
+        p.appendChild(st);
+        p.appendChild(document.createTextNode(grp[1].map(srcLine).join(". ") + "."));
+        msEl.appendChild(p);
+      });
+      msEl.setAttribute("data-done", "1");
+      var mc = $("m-computed");
+      if (mc) mc.textContent = "This set of readings was computed " + whenTxt +
+        (saved ? " (saved copy)" : "") +
+        ". The readings refresh through the day. The price record itself is daily closes, so it moves once a day.";
+    }
+
     window.RB_SNAPSHOT = S;
     initForecast(S);
     initCrashes(S);
@@ -181,6 +220,56 @@
       box.appendChild(b);
       if (i === crashes.length - 1) { b.classList.add("on"); drawCrash(c); }
     });
+
+    // ---- Wave 1: the same seven falls as one computed table.
+    // Same snapshot objects the chips draw from, so the table and the
+    // explorer can never disagree. Days to recover counts from the top
+    // (peak) to the first close back at or above it — the pipeline's
+    // days_to_recover, matching BTC_LAB's daysPeakToRecovery.
+    var tbody = $("crash-tbody");
+    if (tbody) {
+      tbody.innerHTML = "";
+      crashes.forEach(function (c, i) {
+        var tr = document.createElement("tr");
+        if (i === crashes.length - 1) tr.className = "on";
+        tr.setAttribute("tabindex", "0");
+        tr.setAttribute("role", "button");
+        tr.setAttribute("aria-label", "Draw the " + c.label + " fall above");
+        function cell(main, sub, cls) {
+          var td = document.createElement("td");
+          if (cls) td.className = cls;
+          td.appendChild(document.createTextNode(main));
+          if (sub) {
+            var s = document.createElement("span");
+            s.className = "sub"; s.textContent = sub;
+            td.appendChild(s);
+          }
+          return td;
+        }
+        tr.appendChild(cell(c.label, c.open ? "still open" : "", "cfall"));
+        tr.appendChild(cell(fmtUSD(c.peak_price), fmtDate(c.peak_date), "cnum"));
+        tr.appendChild(cell(fmtUSD(c.bottom_price), fmtDate(c.bottom_date), "cnum"));
+        tr.appendChild(cell(fmtPct(-Math.abs(c.drop_pct)), "", "cnum"));
+        tr.appendChild(cell(c.days_down.toLocaleString("en-US"), "", "cnum"));
+        tr.appendChild(c.recovery_date
+          ? cell(c.days_to_recover.toLocaleString("en-US") + " days", fmtDate(c.recovery_date), "cnum")
+          : cell("Not yet", "still below that top", "cnum"));
+        function pick() {
+          track("crash-table");
+          tbody.querySelectorAll("tr").forEach(function (x) { x.classList.remove("on"); });
+          tr.classList.add("on");
+          var chip = box.children[i];
+          if (chip) chip.click();
+          var out2 = $("crash-out");
+          if (out2) out2.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        tr.addEventListener("click", pick);
+        tr.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); }
+        });
+        tbody.appendChild(tr);
+      });
+    }
 
     function drawCrash(c) {
       var t0 = Date.parse(c.peak_date + "T00:00:00Z") / 1000;
