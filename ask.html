@@ -4,9 +4,15 @@
      into site/, change the fallback script src below from
      "fallback-data.js" to "fallback-data.js", and add ONE link
      to /ask on index.html. Nothing else on the site changes.
-     Answers are deterministic: ask-engine.mjs routes the words to the
-     same chart data the site and the MCP tools use. No LLM is called.
-     The only network writes are count pings: one intent word, no text. -->
+     Ask rebuild (2026-11-03): the page now POSTs the question to the
+     ask worker (POST /api/ask on the counts base). There, numbers are
+     computed deterministically from the same chart data the site and
+     the MCP tools use, and a model (Llama 3.3 70B, Workers AI) composes
+     wording for dated, comparison and off-menu questions over those
+     computed facts, grounding-checked. The in-page engine
+     (ask-engine.mjs) remains as the fallback if the worker cannot be
+     reached. Question text is never saved; the worker counts asks by
+     kind only (one intent word, no text). -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -251,7 +257,7 @@ window.FLEET_CFG = {
     <p class="asof" id="answer-asof"></p>
   </div>
 
-  <p class="privacy">Nothing you type is saved. We count asks by kind. Just a number. No words. No names.</p>
+  <p class="privacy">Your question goes to the site's helper to answer. Nothing you type is saved. We count asks by kind. Just a number. No names.</p>
   <a class="back" href="index.html" id="back-link">Back to the chart</a>
 
   <footer>
@@ -287,6 +293,8 @@ const KIND_LABELS = {
   halving: "The halving clock", hashrate: "Hashrate",
   fees: "Fees right now", feargreed: "Fear and greed",
   dominance: "Share of crypto", forecast: "The model's lines",
+  dated: "On that day", compare: "Side by side", history: "In the past",
+  identity: "Who I am", model: "Answer",
 };
 
 let chartData = null;
@@ -329,7 +337,22 @@ function showAnswer(ans, savedCopy){
 }
 
 let usedSavedCopy = false;
-function ask(question){
+let lastExchange = null; // {q, text} of the previous answer, for follow-ups
+
+function localAsk(q){
+  // The in-page engine: the fallback if the ask worker cannot be
+  // reached. Crash answers use the same daily-close fall table the
+  // homepage lab chart draws (data-daily.js).
+  if (window.BTC_LAB && window.BTC_LAB.drawdowns && chartData && !chartData.drawdowns) {
+    chartData.drawdowns = window.BTC_LAB.drawdowns;
+  }
+  const ans = routeAskV2(chartData, snapshot, q);
+  showAnswer(ans, usedSavedCopy);
+  pingCount(ans.intent);
+  lastExchange = { q, text: ans.text };
+}
+
+async function ask(question){
   const q = (question || "").trim();
   if (!q) {
     showAnswer({ intent: "none", text: "Type a question first. Or tap one below." }, usedSavedCopy);
@@ -339,14 +362,33 @@ function ask(question){
     showAnswer({ intent: "none", text: "The chart is still loading. Try again in a moment." }, false);
     return;
   }
-  // Crash answers use the same daily-close fall table the homepage
-  // lab chart draws (data-daily.js). Merge it into the chart data.
-  if (window.BTC_LAB && window.BTC_LAB.drawdowns && !chartData.drawdowns) {
-    chartData.drawdowns = window.BTC_LAB.drawdowns;
+  // Primary path: the ask worker. Numbers are computed there from the
+  // same chart data; a model composes dated, comparison and off-menu
+  // answers over those facts. The previous exchange rides along so
+  // follow-ups ("why?", "say it simpler") have context. It is used in
+  // memory only and never stored.
+  $("answer-kind").textContent = "Working on it";
+  $("answer-text").textContent = "Reading the chart...";
+  $("answer-asof").textContent = "";
+  $("answer").classList.add("show");
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 30000);
+    const resp = await fetch(COUNTS_BASE + "/api/ask", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(lastExchange ? { q, prev: lastExchange } : { q }),
+      signal: ctl.signal,
+    });
+    clearTimeout(timer);
+    if (!resp.ok) throw new Error("bad status");
+    const ans = await resp.json();
+    if (!ans || !ans.text) throw new Error("bad answer");
+    showAnswer(ans, usedSavedCopy);
+    lastExchange = { q, text: ans.text };
+  } catch (e) {
+    localAsk(q);
   }
-  const ans = routeAskV2(chartData, snapshot, q);
-  showAnswer(ans, usedSavedCopy);
-  pingCount(ans.intent);
 }
 
 $("ask-form").addEventListener("submit", (e) => {
