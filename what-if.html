@@ -519,7 +519,7 @@ window.FLEET_CFG = {
         <p class="note">That is the past. Not a promise.</p>
       </div>
     </div>
-    <p class="source" id="dca-source">Past prices: blockchain.info. Live price: Coinbase.</p>
+    <p class="source" id="dca-source">Past prices: blockchain.info through Oct 29, 2026, then Coinbase. Live price: Coinbase.</p>
   </section>
 
   <section class="block" id="model">
@@ -547,8 +547,8 @@ window.FLEET_CFG = {
   </section>
 
   <section class="block" id="case">
-    <h2>Why we think it climbs on. A belief, not a fact.</h2>
-    <p class="growth-note" id="case-note">Pick any start day: four years on, the price stood higher. Every time, so far. Counted from the daily closes through Nov 2, 2026: 4,460 start days checked, no exceptions. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.</p>
+    <h2>Four years on: higher every time, so far.</h2>
+    <p class="growth-note" id="case-note">Pick any start day: four years on, the price stood higher. Every time, so far. Counted from the daily closes through Nov 2, 2026: 4,460 start days checked, no exceptions.</p>
   </section>
 
   <section class="block" id="next">
@@ -1277,7 +1277,7 @@ load();
         ? "; the worst start (" + fmtD(rec.worst.iso) + ") ended " +
           Math.abs(Math.round(rec.worst.chg * 100)) + "% down four years on"
         : ", no exceptions") +
-      ". Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.";
+      ".";
   }
 
   var yrs = 5, scen = "line";
