@@ -64,28 +64,32 @@
       if (noteId) { var n = $(noteId); if (n) n.textContent = note || ""; }
     };
     g("g-rsi", ind.rsi14 == null ? null : String(Math.round(ind.rsi14)), "g-rsi-note",
-      ind.rsi14 == null ? "" : (ind.rsi14 >= 70 ? "High. Past 70, bitcoin has often been running hot." :
-        ind.rsi14 <= 30 ? "Low. Past 30, it has often been washed out." : "In the middle. Not hot, not washed out."));
-    g("g-mayer", ind.mayer == null ? null : ind.mayer.toFixed(2), "g-mayer-note",
-      ind.mayer == null ? "" : (ind.mayer >= 2.4 ? "Far above the 200-day line. It has rarely stayed this high for long." :
-        ind.mayer < 1 ? "Below the 200-day line. The price sits under its own long-run average." :
-        "Above the 200-day line, inside the range it has mostly lived in."));
+      ind.rsi14 == null ? "" : (ind.rsi14 >= 70 ? "Running hot." :
+        ind.rsi14 <= 30 ? "Washed out." : "In the middle. Not hot, not washed out."));
+    g("g-mayer", ind.mayer == null ? null : ind.mayer.toFixed(2) + "\u00d7", "g-mayer-note",
+      ind.mayer == null ? "" : (ind.mayer >= 2.4 ? "Far above the average." :
+        ind.mayer > 1 ? "Above the average." :
+        ind.mayer === 1 ? "Right on the average." : "Below the average."));
     var crossTxt = null, crossNote = "";
     if (ind.ma50 && ind.ma200) {
       crossTxt = fmtUSD(ind.ma50) + " / " + fmtUSD(ind.ma200);
-      crossNote = ind.last_cross ?
-        ("Last cross: a " + ind.last_cross.type + " cross on " + fmtDate(ind.last_cross.date) + ". " +
-          (ind.ma50 >= ind.ma200 ? "The 50-day line sits above the 200-day line now." : "The 50-day line sits below the 200-day line now.")) :
-        "The two lines have not crossed in the data window.";
+      crossNote = (ind.ma50 >= ind.ma200 ? "50-day on top." : "200-day on top.") +
+        (ind.last_cross ?
+          (" Last cross: " + ind.last_cross.type + " cross, " + fmtDate(ind.last_cross.date) + ".") :
+          " No cross in the data window.");
     }
     g("g-ma", crossTxt, "g-ma-note", crossNote);
-    g("g-dd", ind.drawdown_pct == null ? null : fmtPct(ind.drawdown_pct) + " from the top", "g-dd-note",
-      (ind.ath && ind.ath.price) ? ("Top close: " + fmtUSD(ind.ath.price) + ", " + fmtDate(ind.ath.date) + ".") : "");
+    g("g-dd", ind.drawdown_pct == null ? null : fmtPct(ind.drawdown_pct), "g-dd-note",
+      (ind.ath && ind.ath.price) ? ("The top was " + fmtUSD(ind.ath.price) + ", " + fmtDate(ind.ath.date) + ".") : "");
     var volTxt = (ind.vol30_pct == null) ? null : (ind.vol30_pct.toFixed(2) + "% a day");
-    g("g-vol", volTxt, "g-vol-note",
-      ind.vol90_pct == null ? "" : ("Over 90 days: " + ind.vol90_pct.toFixed(2) + "% a day. Bigger means wilder swings."));
-    g("g-dist", rb.pct_vs_trend == null ? null : fmtPct(rb.pct_vs_trend, 0) + " vs the line", "g-dist-note",
-      rb.band_name ? ("The price sits in the " + rb.band_name + " band. The line reads " + fmtUSD(rb.trend_today) + " today.") : "");
+    var volNote = "";
+    if (ind.vol30_pct != null) {
+      var wild = ind.vol90_pct ? ind.vol30_pct / ind.vol90_pct : 1;
+      volNote = wild >= 1.25 ? "Wild for bitcoin." : wild <= 0.8 ? "Calm for bitcoin." : "Typical for bitcoin.";
+    }
+    g("g-vol", volTxt, "g-vol-note", volNote);
+    g("g-dist", rb.pct_vs_trend == null ? null : fmtPct(rb.pct_vs_trend, 0), "g-dist-note",
+      rb.band_name ? ("In the " + rb.band_name + " band. The line reads " + fmtUSD(rb.trend_today) + " today.") : "");
 
     // ---- network
     g("n-supply", fun.supply_issued_pct == null ? null : fun.supply_issued_pct.toFixed(2) + "% out", "n-supply-note",
@@ -143,6 +147,18 @@
   }
 
   // ================= TAP-A-CRASH =================
+  // One short story per fall: what happened in the world, in plain words.
+  // Keyed by the snapshot's crash id. The 2025–26 fall is still open, so
+  // its story sticks to what this page's own record shows and names no cause.
+  var CRASH_STORIES = {
+    "crash-2011-06-11": "Bitcoin's first bubble. In the spring of 2011 the price ran from about a dollar to over thirty in a few weeks. Then hackers broke into Mt. Gox, the one big exchange, and for a few minutes its price showed one cent. Faith in the young market drained away, and the price slid for months.",
+    "crash-2013-04-10": "The spring bubble of 2013. New buyers rushed in faster than the plumbing could take. Mt. Gox, where most of the world traded, slowed to a crawl under the load and shut down trading for a day to cool off. In the panic that followed, the price lost most of its value in a week.",
+    "crash-2013-12-05": "The top came the same day China barred its banks from touching bitcoin. Two months later Mt. Gox, the world's biggest exchange, stopped all withdrawals, then admitted some 850,000 bitcoins were gone. With the biggest door shut and the coins missing, the price ground down for over a year.",
+    "crash-2017-12-17": "The coin-offering mania. Through 2017, brand-new coins were sold to the public by the hundred, and bitcoin rode the fever to nearly $20,000. Then the fever broke: the new coins collapsed, regulators moved in, and the big ad platforms banned crypto ads. The price bled for a full year.",
+    "crash-2021-04-14": "Three blows in three months. Tesla stopped taking bitcoin for cars, saying its mining burned too much dirty energy. China then banned mining outright, and about half the world's mining power went dark. Borrowed bets unwound all at once, and the price halved by summer.",
+    "crash-2021-11-09": "First the world turned, then the rot showed. Central banks raised interest rates, and every risky bet fell together. Inside crypto, the Terra coin collapsed in May, big lenders fell over the summer, and in November the giant FTX exchange was exposed as a fraud. The bottom came days after FTX fell.",
+    "crash-2025-10-07": "This one is still unfolding. The price topped in October 2025 and slid for nine months into the summer of 2026, and it has not climbed back to that top yet. Why it fell is still argued about. The record so far names no single cause."
+  };
   var crashInit = false;
   function initCrashes(S) {
     if (crashInit) return;
@@ -195,6 +211,10 @@
       lines.forEach(function (tx) {
         var p = document.createElement("p"); p.textContent = tx; out.appendChild(p);
       });
+      var story = CRASH_STORIES[c.id];
+      if (story) {
+        var sp = document.createElement("p"); sp.className = "crash-story"; sp.textContent = story; out.appendChild(sp);
+      }
     }
   }
 

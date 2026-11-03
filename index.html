@@ -72,20 +72,24 @@
   .buybox p{margin:0 0 6px;font-size:17.5px}
   .buybox p:last-child{margin-bottom:0}
   .buybox a{color:var(--gold);font-weight:700}
-  .bands{display:flex;flex-direction:column;gap:8px;margin:0 0 6px}
-  .band-row{display:grid;grid-template-columns:16px 1fr auto;column-gap:10px;row-gap:5px;
+  .bands{display:flex;flex-direction:column;gap:6px;margin:0 0 6px}
+  .bands-cap{color:var(--soft);font-size:15px;margin:0 2px 8px}
+  .band-row{display:grid;grid-template-columns:16px 1fr auto auto;column-gap:9px;
     align-items:center;background:var(--panel);border:1px solid var(--line);
-    border-radius:12px;padding:10px 12px;cursor:pointer;min-height:52px;
+    border-radius:12px;padding:8px 12px;cursor:pointer;min-height:48px;
     -webkit-tap-highlight-color:transparent}
-  .band-row .sw{width:16px;height:16px;border-radius:5px;grid-row:1}
-  .bname{font-weight:700;font-size:17px;display:flex;align-items:center;gap:7px}
-  .todaydot{width:9px;height:9px;border-radius:50%;background:var(--gold);display:inline-block;flex:none}
-  .brange{color:var(--soft);font-size:16px;text-align:right}
-  .bsub{grid-column:2/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .dots{display:inline-flex;gap:3px}
-  .dots i{width:8px;height:8px;border-radius:50%;background:var(--dot-off);display:block}
-  .bkid{font-size:16.5px}
+  .band-row .sw{width:16px;height:16px;border-radius:5px}
+  .bname{font-weight:700;font-size:16.5px;display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .bnow{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--gold);
+    border:1px solid var(--gold);border-radius:999px;padding:2px 7px}
+  .brange{color:var(--soft);font-size:15px;text-align:right;white-space:nowrap}
+  .bmult{color:var(--soft);font-size:15px;text-align:right;white-space:nowrap}
   .band-row.active{border-color:var(--gold);background:var(--panel2)}
+  @media (max-width:420px){
+    .band-row{column-gap:7px;padding:8px 10px}
+    .bname{font-size:16px}
+    .brange,.bmult{font-size:14px}
+  }
   .today-panel{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
     padding:18px 20px 12px;margin:14px 0 0}
   .today-panel p{font-size:22px;margin:0 0 8px}
@@ -382,6 +386,7 @@ window.FLEET_CFG = {
       <h3 id="scrub-title">Touch the chart.</h3>
       <p id="scrub-body">Drag across the rainbow. Any day since 2010: its price, its band, and the year that came next.</p>
     </div>
+    <p class="bands-cap">Nine bands, low to high. Dollar prices are today&rsquo;s. Last number: times the line.</p>
     <div class="bands" id="bands"></div>
     <div class="read-panel" id="band-panel" aria-live="polite">
       <h3 id="band-title">What the colors mean.</h3>
@@ -829,40 +834,31 @@ function drawHero(data){
   }
 }
 
-// What each band means, in one line: how far from the line it sits.
-// (Site copy. The worker's band data still carries the short labels;
-// these lines are computed from the band edges themselves.)
-const BAND_LINES = [
-  "36% to 53% under the line.",
-  "14% to 36% under the line.",
-  "Hugs the line, 14% under to 16% over.",
-  "16% to 57% over the line.",
-  "57% over, up to about double.",
-  "About 2 to 3 times the line.",
-  "About 3 to 4 times the line.",
-  "About 4 to 5 times the line.",
-  "About 5 to 7 times the line."
-];
-
+// One measure for every band, in one format: the band's edges as
+// multiples of the line itself. Computed from the pipeline's own
+// ladder constants (bandBottom / bandWidth, the same numbers
+// rainbow-core.mjs fits with), so the list can never drift from the
+// chart: band k runs from exp(bandBottom + bandWidth*k) to
+// exp(bandBottom + bandWidth*(k+1)) times the line.
 function buildRows(data){
   const box = $("bands");
   const todayK = data.today.bandIndex;
+  const bw = data.bandWidth || 0.3, bb = data.bandBottom || -0.75;
+  const edgeX = (k) => Math.exp(bb + bw * k);
+  const fmtX = (v) => (Math.round(v * 100) / 100).toFixed(2) + "×";
   box.innerHTML = data.bands.map((b, k) => {
     const st = data.bandStats[k];
-    const filled = Math.max(0, Math.min(10, Math.round(st.pct / 10)));
-    let dots = "";
-    for (let i = 0; i < 10; i++) {
-      dots += `<i style="background:${i < filled ? b.color : "var(--dot-off)"}"></i>`;
-    }
     const per100 = Math.round(st.pct);
     const aria = `${b.name} band. ${fmtShort(st.lo)} to ${fmtShort(st.hi)} today. ` +
-      `About ${per100} of 100 days sat here. ${BAND_LINES[k]}`;
+      `${fmtX(edgeX(k))} to ${fmtX(edgeX(k + 1))} the line. ` +
+      `About ${per100} of 100 days sat here.` +
+      (k === todayK ? " The price sits in this band today." : "");
     return `<div class="band-row" data-band="${k}" tabindex="0" role="button" aria-label="${aria}">` +
       `<i class="sw" style="background:${b.color}"></i>` +
-      `<span class="bname">${k === todayK ? '<i class="todaydot"></i>' : ""}${b.name}</span>` +
+      `<span class="bname">${b.name}` +
+      `${k === todayK ? '<span class="bnow">TODAY</span>' : ""}</span>` +
       `<span class="brange">${fmtShort(st.lo)}-${fmtShort(st.hi)}</span>` +
-      `<span class="bsub"><span class="dots" aria-hidden="true">${dots}</span>` +
-      `<span class="bkid">${BAND_LINES[k]}</span></span></div>`;
+      `<span class="bmult">${fmtX(edgeX(k))}–${fmtX(edgeX(k + 1))}</span></div>`;
   }).join("");
   box.querySelectorAll(".band-row").forEach((row) => {
     const k = Number(row.getAttribute("data-band"));
