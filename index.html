@@ -166,6 +166,13 @@
   .gcard h3{margin:0 0 4px;font-size:17px;color:var(--soft);text-transform:uppercase;letter-spacing:.05em}
   .gcard .big{font-size:26px;font-weight:800;color:var(--gold);margin:0 0 3px;line-height:1.15}
   .gcard p{margin:0;font-size:16px;color:var(--soft)}
+  .glist{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 16px;margin:12px 0 4px}
+  .grow{display:grid;grid-template-columns:1fr auto;column-gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .grow:last-child{border-bottom:none}
+  .gname{font-weight:700;font-size:17px;align-self:center}
+  .gval{font-size:19px;font-weight:800;color:var(--gold);text-align:right;align-self:center;white-space:nowrap}
+  .gverd{grid-column:1/-1;color:var(--soft);font-size:16px;margin-top:2px}
+  #crash-out .crash-story{color:var(--soft)}
   .halvbar{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0 4px}
   .halvbar .track{background:var(--panel2);border:1px solid var(--line);border-radius:999px;height:22px;overflow:hidden;margin:0 0 8px}
   .halvbar .fill{background:var(--gold);height:100%;width:0%}
@@ -421,7 +428,7 @@ window.FLEET_CFG = {
       <div class="lab-dd" id="r-dd"></div>
     </div>
     <h3 class="lab-h3" id="crashes">Tap a crash.</h3>
-    <p class="growth-note">Every big fall, measured from the daily prices. Tap one to see its shape.</p>
+    <p class="growth-note">Every big fall, measured from the daily prices. Tap one to see its shape, and what happened.</p>
     <div class="chips" id="crash-chips"></div>
     <div class="crash-wrap">
       <svg id="crash-chart" viewBox="0 0 1000 300" role="img" aria-label="The picked fall, drawn from daily prices"></svg>
@@ -481,13 +488,13 @@ window.FLEET_CFG = {
     <p class="kicker">Step 3</p>
     <h2>The gauges.</h2>
     <p class="growth-note">The readings traders watch, computed from the same daily prices.</p>
-    <div class="cards">
-      <div class="gcard"><h3>RSI — heat gauge</h3><p class="big" id="g-rsi">&hellip;</p><p>It scores the last two weeks of moves, from 0 to 100.</p><p id="g-rsi-note"></p></div>
-      <div class="gcard"><h3>Mayer Multiple</h3><p class="big" id="g-mayer">&hellip;</p><p>Today's price, divided by its 200-day average.</p><p id="g-mayer-note"></p></div>
-      <div class="gcard"><h3>50-day / 200-day lines</h3><p class="big" id="g-ma">&hellip;</p><p>Two price averages. When the short one crosses the long one, traders call it golden (up) or death (down).</p><p id="g-ma-note"></p></div>
-      <div class="gcard"><h3>Below the top</h3><p class="big" id="g-dd">&hellip;</p><p id="g-dd-note"></p></div>
-      <div class="gcard"><h3>Swing size, 30 days</h3><p class="big" id="g-vol">&hellip;</p><p>How big the typical one-day move is.</p><p id="g-vol-note"></p></div>
-      <div class="gcard"><h3>Vs the rainbow line</h3><p class="big" id="g-dist">&hellip;</p><p id="g-dist-note"></p></div>
+    <div class="glist">
+      <div class="grow"><span class="gname">Heat, last two weeks</span><span class="gval" id="g-rsi">&hellip;</span><span class="gverd" id="g-rsi-note"></span></div>
+      <div class="grow"><span class="gname">Price vs its 200-day average</span><span class="gval" id="g-mayer">&hellip;</span><span class="gverd" id="g-mayer-note"></span></div>
+      <div class="grow"><span class="gname">Trend lines</span><span class="gval" id="g-ma">&hellip;</span><span class="gverd" id="g-ma-note"></span></div>
+      <div class="grow"><span class="gname">From the top</span><span class="gval" id="g-dd">&hellip;</span><span class="gverd" id="g-dd-note"></span></div>
+      <div class="grow"><span class="gname">Daily swing</span><span class="gval" id="g-vol">&hellip;</span><span class="gverd" id="g-vol-note"></span></div>
+      <div class="grow"><span class="gname">Price vs the rainbow line</span><span class="gval" id="g-dist">&hellip;</span><span class="gverd" id="g-dist-note"></span></div>
     </div>
     <p class="asofline" id="snap-asof">Reading the gauges&hellip;</p>
   </section>
