@@ -104,7 +104,7 @@
         (fun.fees.mempool_count.toLocaleString("en-US") + " payments are waiting in line right now.") : "";
     }
     g("n-fees", feeTxt, "n-fees-note", feeNote);
-    g("n-fg", fun.fear_greed ? (fun.fear_greed.value + " — " + fun.fear_greed.label) : null, "n-fg-note",
+    g("n-fg", fun.fear_greed ? (fun.fear_greed.value + ": " + fun.fear_greed.label) : null, "n-fg-note",
       "A mood ring, not a measure of value.");
     g("n-dom", fun.dominance_btc_pct == null ? null : fun.dominance_btc_pct.toFixed(1) + "% of all crypto", "n-dom-note",
       fun.total_mcap_usd ? ("All of crypto together: about " + fmtBig(fun.total_mcap_usd) + ".") : "");
@@ -116,7 +116,7 @@
         cyc.pct_through_cycle.toFixed(1) + "% of the way to the next halving. " +
         (cyc.blocks_remaining != null ? cyc.blocks_remaining.toLocaleString("en-US") + " blocks to go. " : "") +
         (cyc.days_since_halving != null ? cyc.days_since_halving.toLocaleString("en-US") + " days since the last one (" + fmtDate(cyc.last_halving_date) + "). " : "") +
-        (cyc.next_halving_est_date ? "The next lands near " + fmtDate(cyc.next_halving_est_date) + " — an estimate; blocks, not calendars, set the day." : "");
+        (cyc.next_halving_est_date ? "The next lands near " + fmtDate(cyc.next_halving_est_date) + ". An estimate; blocks, not calendars, set the day." : "");
     }
 
     // ---- as-of / source honesty line
@@ -127,7 +127,7 @@
       var dead = (S.sources || []).filter(function (s) { return !s.ok; }).map(function (s) { return s.name; });
       asof.textContent = (saved ? "Saved copy. Computed " : "Computed ") + whenTxt +
         " from blockchain.info, Coinbase, mempool.space, alternative.me, and CoinGecko." +
-        (dead.length ? " Quiet right now: " + dead.join(", ") + " — its cards say so." : "");
+        (dead.length ? " Quiet right now: " + dead.join(", ") + ". Its cards say so." : "");
     }
 
     // ---- Wave 1: Sources & method — per-section sources with as-of,
@@ -141,7 +141,7 @@
         return isFinite(d) ? d.toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : String(s.as_of);
       };
       var srcLine = function (s) {
-        return s.name + (s.as_of ? ", as of " + asOfTxt(s) : "") + (s.ok ? "" : " — quiet right now; its card says so");
+        return s.name + (s.as_of ? ", as of " + asOfTxt(s) : "") + (s.ok ? "" : ". Quiet right now; its card says so");
       };
       var pickSrc = function (re) {
         return (S.sources || []).filter(function (s) { return re.test(s.name); });
@@ -294,7 +294,7 @@
         "Top: " + fmtUSD(c.peak_price) + " (" + fmtDate(c.peak_date) + "). Bottom: " + fmtUSD(c.bottom_price) + " (" + fmtDate(c.bottom_date) + ").",
         "The fall: " + fmtPct(-Math.abs(c.drop_pct)) + ", over " + c.days_down.toLocaleString("en-US") + " days down.",
         c.recovery_date ?
-          "Back to that top on " + fmtDate(c.recovery_date) + " — " + c.days_to_recover.toLocaleString("en-US") + " days after the top." :
+          "Back to that top on " + fmtDate(c.recovery_date) + ": " + c.days_to_recover.toLocaleString("en-US") + " days after the top." :
           "Not back to that top yet. This fall is still open."
       ];
       lines.forEach(function (tx) {
@@ -330,7 +330,7 @@
       var pickName = scenario === "bottom" ? "the bottom band's middle" : scenario === "top" ? "the top band's middle" : "the growth line itself";
       out.innerHTML = "";
       var rows = [
-        ["On", dateTxt + " — " + (years === Math.round(years) ? years : years.toFixed(1)) + " years out"],
+        ["On", dateTxt + ": " + (years === Math.round(years) ? years : years.toFixed(1)) + " years out"],
         ["If the price followed " + pickName, fmtUSD(pick)],
         ["The full ladder that day", fmtUSD(trend(ts) * Math.exp(BB)) + " (bottom edge) to " + fmtUSD(trend(ts) * Math.exp(BB + BW * 9)) + " (top edge)"]
       ];
@@ -386,7 +386,7 @@
   function fillNote(note, saved) {
     var box = $("read-note"), dateEl = $("read-date");
     if (!box || !note) return;
-    if (dateEl) dateEl.textContent = (saved ? "Saved copy — " : "") + ((note.headline || note.title || ("Read for " + fmtDate(note.date))));
+    if (dateEl) dateEl.textContent = (saved ? "Saved copy. " : "") + ((note.headline || note.title || ("Read for " + fmtDate(note.date))));
     box.innerHTML = "";
     (note.paragraphs || []).forEach(function (tx) {
       var p = document.createElement("p"); p.textContent = tx; box.appendChild(p);

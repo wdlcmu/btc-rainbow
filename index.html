@@ -145,6 +145,8 @@
   /* Wave 1 (Nov 2, 2026): main-chart day slider, bought calculator,
      crash table, sources & method. */
   #chart-scrub{width:100%;margin:10px 0 2px;accent-color:var(--gold);min-height:44px}
+  #fc-slider{width:100%;accent-color:var(--gold);min-height:44px}
+  #lab-scrub,#plain-scrub{min-height:44px}
   .wif-inputs{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:0 0 4px}
   .wif-field{display:flex;flex-direction:column;gap:5px}
   .wif-field label{color:var(--soft);font-size:15.5px;font-weight:700}
@@ -218,6 +220,34 @@
   .notebox .fine{color:var(--soft);font-size:15.5px}
   .lab-togs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
   .asofline{color:var(--soft);font-size:15.5px;margin:10px 2px 0}
+  /* Simplify pass (Nov 2, 2026): tap-to-open details, hero fact card, hero day slider. */
+  details.more{margin:12px 0 0}
+  details.more>summary{display:flex;align-items:center;gap:8px;min-height:48px;
+    padding:10px 16px;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;cursor:pointer;font-weight:700;font-size:17px;color:var(--gold);
+    list-style:none;-webkit-tap-highlight-color:transparent}
+  details.more>summary::-webkit-details-marker{display:none}
+  details.more>summary::after{content:"+";margin-left:auto;font-size:24px;line-height:1;font-weight:400}
+  details.more[open]>summary::after{transform:rotate(45deg)}
+  details.more>summary.goldsum{border-color:var(--gold)}
+  .more-body{padding:10px 2px 0}
+  .more-body p{margin:0 0 6px;font-size:17px}
+  .more-body p:last-child{margin-bottom:0}
+  .more-body.soft p{color:var(--soft);font-size:15.5px}
+  .more-body .fine{color:var(--soft);font-size:15.5px}
+  .factcard{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px 14px;margin:0 auto 14px;max-width:560px}
+  .fact-k{color:var(--soft);font-size:15px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;margin:0}
+  .fact-big{font-size:54px;font-weight:800;line-height:1.05;margin:4px 0 6px}
+  .fact-bandline{font-size:21px;font-weight:700;margin:0 0 2px;display:flex;
+    align-items:center;justify-content:center;gap:8px}
+  .fact-vs{font-size:19px;color:var(--soft);margin:0}
+  .fact-asof{color:var(--soft);font-size:14.5px;margin:8px 0 0}
+  .hero-scrub{max-width:640px;margin:6px auto 0;text-align:left}
+  .hero-scrub-label{display:block;font-size:16.5px;font-weight:700;margin:0 2px 2px}
+  #hero-scrub{width:100%;margin:6px 0 2px;accent-color:var(--gold);min-height:44px}
+  .hero-read{font-size:18px;margin:4px 2px 0;min-height:27px}
   footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:17px}
   footer p{margin:4px 0}
   footer a{color:var(--soft)}
@@ -232,7 +262,7 @@ window.FLEET_CFG = {
     { sel: "#plain-scrub", on: "input", surface: "plain-chart" },
     { sel: "#crash-chips .chip", surface: "crash-explorer" },
     { sel: "#fc-years .chip", surface: "model-explorer" },
-    { sel: ".hero-chips a", surface: "gauges" }
+    { sel: "#hero-scrub", on: "input", surface: "rainbow-explorer" }
   ],
   completes: [
     { sel: "#read-note", surface: "todays-read", minText: 60 }
@@ -383,26 +413,31 @@ window.FLEET_CFG = {
 <body>
 <div class="wrap">
   <header>
-    <h1>The Bitcoin Rainbow in plain words.</h1>
-    <p class="sub">Sixteen years of climbs and crashes, in words anyone can read.</p>
-    <p class="todayline" id="hero-today">Today: reading the chart&hellip;</p>
+    <h1>The Bitcoin Rainbow</h1>
+    <p class="sub">Sixteen years of bitcoin's price on one chart, in plain words.</p>
+    <div class="factcard" id="today-fact">
+      <p class="fact-k">One bitcoin today</p>
+      <p class="fact-big" id="fact-price">&hellip;</p>
+      <p class="fact-bandline"><span class="bandchip" id="fact-chip" style="width:16px;height:16px;border-radius:5px"></span><span id="fact-band">Reading the chart&hellip;</span></p>
+      <p class="fact-vs" id="fact-vs"></p>
+      <p class="fact-asof" id="fact-asof"></p>
+    </div>
     <div class="chartbox herochart">
       <svg id="hero-chart" viewBox="0 0 1000 400" role="img"
         aria-label="Bitcoin rainbow chart. Nine colored bands around bitcoin's long-run growth line, and the price line of every week since 2010. Today the price sits in the Deep Blue band."></svg>
     </div>
-    <div class="hero-chips" aria-label="Today's gauges">
-      <a class="chip" href="#gauges" id="chip-rsi">RSI: &hellip;</a>
-      <a class="chip" href="#gauges" id="chip-mayer">Mayer: &hellip;</a>
-      <a class="chip" href="#network" id="chip-fg">Fear &amp; Greed: &hellip;</a>
+    <div class="hero-scrub">
+      <label class="hero-scrub-label" for="hero-scrub">Pick any day since 2010. Guess first: above or below the line?</label>
+      <input type="range" id="hero-scrub" min="0" max="100" value="100" step="0.01"
+        aria-label="Pick a day on the rainbow chart">
+      <p class="hero-read" id="hero-read" aria-live="polite">Slide, and see that day's price, its band, and the year that came next.</p>
     </div>
-    <p class="herocap"><a href="#now">Open the full chart</a>: drag it, tap a color, pick any day.</p>
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
   <section class="block chapter-head" id="ch1">
     <p class="kicker">Chapter 1 &middot; The long-run model</p>
     <h2>Where does the price sit in its long story?</h2>
-    <p class="growth-note">A price alone says little. Against its own sixteen-year line, today has a place. This chapter finds it.</p>
   </section>
 
   <section class="block" id="what">
@@ -412,11 +447,7 @@ window.FLEET_CFG = {
 
   <section class="block" id="now">
     <h2>Where are we now?</h2>
-    <p class="growth-note" id="rainbow-note">It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. That is the past. Not a promise.</p>
-    <div class="today-panel">
-      <p id="today-text">One moment. We are reading the chart.</p>
-      <p class="asof" id="asof"></p>
-    </div>
+    <p class="growth-note" id="rainbow-note">Nine colored bands stack around one line: bitcoin's long-run growth, fit to every daily price on record. Low bands: far under its own past growth. High bands: far over it.</p>
     <div class="chartbox">
       <svg id="chart" viewBox="0 0 1000 540" role="img"
         aria-label="Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
@@ -427,20 +458,22 @@ window.FLEET_CFG = {
     <div class="read-panel" id="scrub-panel">
       <h3 id="scrub-title">Touch the chart.</h3>
       <p id="scrub-body">Drag across the rainbow. Any day since 2010: its price, its band, and the year that came next.</p>
-      <p class="fine">Then try it with money: <a href="#bought" style="color:var(--gold);font-weight:700">what if you'd bought that day?</a> Or <a href="/ask" style="color:var(--gold);font-weight:700">ask about this day</a>.</p>
+      <p class="fine">Then try it with money: <a href="#bought" style="color:var(--gold);font-weight:700">what if you'd bought that day?</a></p>
     </div>
-    <p class="bands-cap">Nine bands, low to high. Dollar prices are today&rsquo;s. Last number: times the line.</p>
+    <p class="bands-cap">Nine bands, low to high. Prices are today&rsquo;s.</p>
     <div class="bands" id="bands"></div>
     <div class="read-panel" id="band-panel" aria-live="polite">
       <h3 id="band-title">What the colors mean.</h3>
       <p id="band-body">Tap a color on the chart, or a band in the list. Each band tells you how far from the line it sits, how many days the price has lived there, and what the next year did.</p>
     </div>
-    <div class="buybox" id="buy">
-      <h3>So, does this mean buy?</h3>
-      <p>No. The chart shows where the price sits inside its own past pattern. It cannot say buy, and it cannot say skip. No chart can.</p>
-      <p>What it can do: show what happened the other times the price sat where it sits now — the band panel above, the scrubber below.</p>
-      <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is analysis and education, not financial advice.</p>
-    </div>
+    <details class="more" id="buy">
+      <summary class="goldsum">So, does this mean buy?</summary>
+      <div class="more-body">
+        <p>No. The chart shows where the price sits inside its own past pattern. It cannot say buy, and it cannot say skip. No chart can.</p>
+        <p>What it can do: show what happened the other times the price sat where it sits now. See the band list above, or scrub the chart.</p>
+        <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is analysis and education, not financial advice.</p>
+      </div>
+    </details>
   </section>
 
   <section class="block" id="case">
@@ -450,7 +483,7 @@ window.FLEET_CFG = {
 
   <section class="block" id="model">
     <h2>What the model draws ahead.</h2>
-    <p class="growth-note">Drag the years. Pick a band. These are the model's lines, stretched forward — <strong>not a forecast</strong>.</p>
+    <p class="growth-note">Drag the years. Pick a band. These are the model's lines stretched forward. <strong>Not a forecast</strong>.</p>
     <div class="sim">
       <span class="tag">The model explorer</span>
       <p class="lab"><strong>1. How far out?</strong> <span id="fc-years-label">5 years out</span></p>
@@ -475,12 +508,11 @@ window.FLEET_CFG = {
   <section class="block chapter-head" id="ch2">
     <p class="kicker">Chapter 2 &middot; Days like today</p>
     <h2>What happened the other times it sat here?</h2>
-    <p class="growth-note">Today is one day. Thousands of past days sat where it sits. This chapter checks what they did next.</p>
   </section>
 
   <section class="block" id="times">
     <h3 class="lab-h3" id="lab" style="margin-top:0">Every day, on one chart.</h3>
-    <p class="growth-note">Guess a day's band before you look. Then scrub to it, and see its price, its band, and the year that came next.</p>
+    <p class="growth-note">Guess its band first. Then scrub to any day and see its price, its band, and the year that came next.</p>
     <div class="lab-card">
       <div class="lab-togs" role="group" aria-label="Chart layers">
         <button type="button" class="chip on" data-tog="bands">Bands</button>
@@ -503,7 +535,7 @@ window.FLEET_CFG = {
     </div>
 
     <h3 class="lab-h3" id="bought">What if you'd bought?</h3>
-    <p class="growth-note">Pick a day and a sum. Guess first: up, or down? Then see what that buy is worth at the last close.</p>
+    <p class="growth-note">Pick a day and a sum. Guess first: up, or down?</p>
     <div class="sim">
       <span class="tag">One buy, one day</span>
       <div class="wif-inputs">
@@ -525,14 +557,16 @@ window.FLEET_CFG = {
       <p class="note" id="wif-asof"></p>
       <p class="note">That is the past. Not a promise. Spread the buys out instead? <a href="#how" style="color:var(--gold);font-weight:700">See what a little each week did</a>.</p>
     </div>
-    <div class="lab-honest">
-      <p><strong>How to read this chart.</strong></p>
+    <details class="more">
+      <summary>How to read this chart</summary>
+      <div class="more-body soft">
       <p id="h-method"></p>
       <p>The bands are a ruler, not a road. Bitcoin has sat in every band, and it has fallen hard from high bands and mid bands alike.</p>
       <p><strong>A model, not prophecy.</strong> This line shows the past. It does not know the future. No one does. Past prices never promise future ones.</p>
             <p id="h-source"></p>
       <p><strong>Where this chart comes from.</strong> The rainbow is a public chart: azop drew the first one in 2014, on trolololo's growth line. Blockchain Center made it famous. The line here is our own fit, on the same public prices.</p>
-    </div>
+      </div>
+    </details>
     <div class="sharecard">
       <img src="postcard.png" alt="Postcard of ten-year windows. Worst, middle, and best paths, side by side." width="1200" height="630" loading="lazy">
       <p>Ten years at a time: the worst path, the middle path, and the best.</p>
@@ -543,7 +577,7 @@ window.FLEET_CFG = {
     <p class="kicker">The same prices, plain</p>
     <h2>The plain chart.</h2>
     <p class="growth-note" id="plain-lead">Reading the daily prices&hellip;</p>
-    <p class="growth-note">No colors. No bands. Just the price, day by day, since 2010. Two lines ride along with it. One averages the last 50 days. The other averages the last 200. Drag across the chart to read any day.</p>
+    <p class="growth-note">No colors. No bands. Just the price, day by day, since 2010. Drag across it to read any day.</p>
     <div class="lab-card">
       <div class="plain-togs" role="group" aria-label="Time range">
         <button type="button" class="chip" data-range="2y">Last 2 years</button>
@@ -554,7 +588,6 @@ window.FLEET_CFG = {
         aria-label="Bitcoin price chart, plain. The price line, its 50-day average, and its 200-day average."></svg>
       <input type="range" id="plain-scrub" min="0" max="100" value="100" step="1"
         aria-label="Scrub through the plain price chart by date">
-      <p class="lab-hint">Every number here comes from the same real daily prices as the rainbow.</p>
       <div class="lab-readout">
         <div class="lab-stat"><div class="k">Date</div><div class="v" id="plain-date">&hellip;</div><div class="n">The day you picked</div></div>
         <div class="lab-stat"><div class="k">Price that day</div><div class="v" id="plain-price">&hellip;</div><div class="n">Daily close</div></div>
@@ -576,7 +609,6 @@ window.FLEET_CFG = {
 
   <section class="block" id="gauges">
     <h2>The gauges.</h2>
-    <p class="growth-note">The readings traders watch, computed from the same daily prices.</p>
     <div class="glist">
       <div class="grow"><span class="gname">Heat, last two weeks</span><span class="gval" id="g-rsi">&hellip;</span><span class="gverd" id="g-rsi-note"></span></div>
       <div class="grow"><span class="gname">Price vs its 200-day average</span><span class="gval" id="g-mayer">&hellip;</span><span class="gverd" id="g-mayer-note"></span></div>
@@ -618,7 +650,7 @@ window.FLEET_CFG = {
 
   <section class="block" id="read">
     <h2>Today's read.</h2>
-    <p class="growth-note" id="read-date">The day's analysis, written from the numbers on this page — and from nothing else.</p>
+    <p class="growth-note" id="read-date">The day's analysis, written only from the numbers on this page.</p>
     <div class="notebox" id="read-note"><p>Reading today&hellip;</p></div>
     <p class="source">Past reads are kept. <a href="/analysis">Read the archive</a>. This is analysis and education, not financial advice.</p>
   </section>
@@ -626,7 +658,6 @@ window.FLEET_CFG = {
   <section class="block chapter-head" id="ch3">
     <p class="kicker">Chapter 3 &middot; The network itself</p>
     <h2>Is Bitcoin itself healthy?</h2>
-    <p class="growth-note">Price and health are two different things. This chapter reads the numbers the network itself reports.</p>
   </section>
 
   <section class="block" id="network">
@@ -649,19 +680,18 @@ window.FLEET_CFG = {
   <section class="block chapter-head" id="ch4">
     <p class="kicker">Chapter 4 &middot; The big falls</p>
     <h2>Why did it crash those times?</h2>
-    <p class="growth-note">The falls look alike on a chart. Each one had its own cause. This chapter tells all seven.</p>
   </section>
 
   <section class="block" id="falls">
     <h3 class="lab-h3" id="crashes" style="margin-top:0">Tap a crash.</h3>
-    <p class="growth-note">Every big fall, measured from the daily prices. Tap one to see its shape, and what happened.</p>
+    <p class="growth-note">Measured from daily prices. Tap one to see its shape and its story.</p>
     <div class="chips" id="crash-chips"></div>
     <div class="crash-wrap">
       <svg id="crash-chart" viewBox="0 0 1000 300" role="img" aria-label="The picked fall, drawn from daily prices"></svg>
       <div id="crash-out" aria-live="polite"><p>Reading the falls&hellip;</p></div>
     </div>
     <h3 class="lab-h3" id="crash-table-h">Every big fall, in one table.</h3>
-    <p class="growth-note">The same seven falls, measured from the same daily closes. Tap a row to see that fall drawn above.</p>
+    <p class="growth-note">Tap a row to draw that fall above.</p>
     <div class="lab-tablewrap">
       <table class="ctable" id="crash-table">
         <thead><tr>
@@ -671,7 +701,12 @@ window.FLEET_CFG = {
         <tbody id="crash-tbody"><tr><td colspan="6">Reading the falls&hellip;</td></tr></tbody>
       </table>
     </div>
-    <p class="source" id="crash-method">How each fall is measured: the top is a daily close. The fall runs to the lowest daily close after it. Days back to the top counts from the top to the first close at or above it again. Daily closes can miss a swing inside one day, so a fall here can read smaller than the worst hour of it.</p>
+    <details class="more">
+      <summary>How each fall is measured</summary>
+      <div class="more-body soft">
+        <p id="crash-method">The top is a daily close. The fall runs to the lowest daily close after it. Days back to the top counts from the top to the first close at or above it again. Daily closes can miss a swing inside one day, so a fall here can read smaller than the worst hour of it.</p>
+      </div>
+    </details>
   </section>
 
   <section class="block" id="risk">
@@ -684,7 +719,6 @@ window.FLEET_CFG = {
   <section class="block chapter-head" id="ch5">
     <p class="kicker">Chapter 5 &middot; Sources &amp; method</p>
     <h2>How do we know any of this?</h2>
-    <p class="growth-note">Every number above came from somewhere. This chapter shows the sources, the math, and the limits.</p>
   </section>
 
   <section class="block" id="method">
@@ -694,26 +728,32 @@ window.FLEET_CFG = {
       <p>Rainbow model, our own fit, version 1. One line fit to every daily close on record:</p>
       <p><code id="m-equation">ln(price) = a + b &times; ln(days since Jan 3, 2009)</code></p>
       <p id="m-fitline">Reading the fit&hellip;</p>
-      <p>Nine bands stack on the line. Each band is the same step wide: 0.3 in log terms, about 1.35 times the price below it. The ladder runs from 0.47 times the line to 7.03 times it.</p>
-      <p class="fine">The first rainbow was drawn by azop in 2014, on a growth line by trolololo. Blockchain Center made it famous. The fit here is our own, on the same public prices. A fit describes the past. It is not a law, and it is not a forecast.</p>
+      <p>Nine bands stack on the line. Each is the same step wide: about 1.35 times the price below it. The ladder runs from 0.47 to 7.03 times the line.</p>
+      <p class="fine">First drawn by azop in 2014, on trolololo's growth line. Blockchain Center made it famous. This fit is our own, on the same public prices. A fit describes the past. It is not a forecast.</p>
     </div>
-    <div class="mrow">
-      <h3>Where each part comes from</h3>
-      <div id="m-sources"><p>Reading the sources&hellip;</p></div>
-      <p class="fine" id="m-computed"></p>
-    </div>
-    <div class="mrow">
-      <h3>What to watch for</h3>
+    <details class="more">
+      <summary>Where each part comes from</summary>
+      <div class="more-body">
+        <div id="m-sources"><p>Reading the sources&hellip;</p></div>
+        <p class="fine" id="m-computed"></p>
+      </div>
+    </details>
+    <details class="more">
+      <summary>What to watch for</summary>
+      <div class="more-body">
       <p>Prices here are daily closes. A swing inside one day can be bigger than the day shows. In June 2011, one exchange flashed to one cent for a few minutes. The daily closes say that fall was 93%. Both are true, of different things.</p>
       <p>The fit score (R&#178;) grades how well the line hugs the past. It says nothing about next year.</p>
       <p>Bitcoin's share of all crypto depends on who counts the coins. Sites disagree by a point or two. Ours comes from CoinGecko, named on the card.</p>
       <p>The Fear &amp; Greed score is one outside index, made by Alternative.me. We show it with its maker's name next to it, and we do not fold it into any other number here.</p>
       <p>The model explorer stretches the model's own lines forward. Those lines are labelled as the model's, never as a forecast.</p>
-    </div>
-    <div class="mrow">
-      <h3>The standing line</h3>
-      <p>This is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe. When a source is quiet, its card says so instead of showing an old number as new.</p>
-    </div>
+      </div>
+    </details>
+    <details class="more">
+      <summary>The standing line</summary>
+      <div class="more-body">
+        <p>This is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe. When a source is quiet, its card says so instead of showing an old number as new.</p>
+      </div>
+    </details>
   </section>
 
   <section class="block" id="where">
@@ -765,7 +805,7 @@ window.FLEET_CFG = {
 
   <footer>
     <p>This is analysis and education, not financial advice.</p>
-    <p><a href="/analysis">Today's read — the archive</a></p>
+    <p><a href="/analysis">Today's read: the archive</a></p>
     <p><a href="#ch1">The long story</a> &middot; <a href="#ch2">Days like today</a> &middot; <a href="#ch3">Network health</a> &middot; <a href="#ch4">The big falls</a> &middot; <a href="#ch5">Sources &amp; method</a></p>
     <p><a href="/bitcoin-rainbow-chart-explained">Rainbow chart</a> &middot; <a href="/what-is-bitcoin-in-plain-english">What is bitcoin</a> &middot; <a href="/bitcoin-dca-calculator">DCA</a> &middot; <a href="/bitcoin-halving-in-plain-english">Halving</a> &middot; <a href="/ask">Ask</a></p>
     <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
@@ -1006,47 +1046,25 @@ function fill(data, savedCopy){
   drawHero(data);
   buildRows(data);
   renderSim();
-  // Today panel, composed on the site from the engine's own fields:
-  // distance from the line + how rare this band is. (The MCP tool
-  // keeps todayText's growth-chart wording; the panel speaks bands.)
+  // Hero fact card (simplify pass, Nov 2, 2026): the one big fact on
+  // screen one, composed from the engine's own fields. Price, band,
+  // distance from the line. The band-rarity line now lives one tap
+  // down, in the band panel under the main chart.
   const t = data.today;
-  if (t.band && t.bandIndex >= 0 && t.bandIndex < 9 && data.bandStats && data.bandStats[t.bandIndex]) {
-    const st = data.bandStats[t.bandIndex];
-    const mid = t.pct === 0 ? "right on its long-run line"
-      : `${Math.abs(t.pct)}% ${t.pct < 0 ? "below" : "above"} its long-run line`;
-    $("today-text").textContent =
-      `One bitcoin costs ${fmtUSD(t.price)} today. ` +
-      `It sits in the ${t.band.name} band, ${mid}. ` +
-      `The price has spent ${st.days.toLocaleString("en-US")} days in this band — ` +
-      `about ${Math.round(st.pct)} of every 100 days on record.`;
-  } else {
-    $("today-text").textContent = data.todayText;
-  }
-  // Hero fact line: the one number a first screen owes the visitor,
-  // composed from the same fields as the today panel below.
-  const heroEl = $("hero-today");
-  if (heroEl) {
-    const ht = data.today;
-    if (ht.band) {
-      const mid = ht.pct === 0 ? "right on its long-run line"
-        : `${Math.abs(ht.pct)}% ${ht.pct < 0 ? "below" : "above"} its long-run line`;
-      heroEl.innerHTML = "";
-      heroEl.appendChild(document.createTextNode("Today: one bitcoin costs "));
-      const b = document.createElement("b");
-      b.textContent = fmtUSD(ht.price);
-      heroEl.appendChild(b);
-      heroEl.appendChild(document.createTextNode(`. It sits in the ${ht.band.name} band, ${mid}.`));
-    } else {
-      heroEl.textContent = "Today: one bitcoin costs " + fmtUSD(data.spot.price) + ".";
-    }
-  }
+  const midTxt = t.pct === 0 ? "Right on its long-run line"
+    : `${Math.abs(t.pct)}% ${t.pct < 0 ? "below" : "above"} its long-run line`;
+  const fpEl = $("fact-price"); if (fpEl) fpEl.textContent = fmtUSD(t.price);
+  const fbEl = $("fact-band");
+  if (fbEl) fbEl.textContent = t.band ? `${t.band.name} band` : "Outside every band";
+  const fcEl = $("fact-chip");
+  if (fcEl && t.band) fcEl.style.background = t.band.color;
+  const fvEl = $("fact-vs"); if (fvEl) fvEl.textContent = midTxt + ".";
+  const faEl = $("fact-asof");
+  if (faEl) faEl.textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtDate(data.spot.ts) + ".";
   $("price-big").textContent = fmtUSD(data.spot.price);
   $("price-text").textContent = data.strip.price;
   $("technical-text").textContent = data.strip.technical;
   $("fundamental-text").textContent = data.strip.fundamental;
-  // The under-chart note is static site copy (words pass, Nov 1):
-  // data.texts.rainbow still feeds the tools, not this page.
-  $("asof").textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtDate(data.spot.ts) + ".";
   if (data.today.bandIndex >= 0 && data.today.bandIndex < 9) highlight(data.today.bandIndex, false);
   const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
   $("chart").setAttribute("aria-label",
@@ -1065,7 +1083,7 @@ async function load(){
     fill(await resp.json(), false);
   }catch(e){
     if(window.FALLBACK_CHART) fill(window.FALLBACK_CHART, true);
-    else $("today-text").textContent = "The chart is resting. Please come back soon.";
+    else { const fe = $("fact-band"); if (fe) fe.textContent = "The chart is resting. Please come back soon."; }
   }
 }
 // Hero first paint: draw from the saved copy now so the chart is on
@@ -1242,8 +1260,8 @@ load();
       let j = nearestIdx(target);
       const chg = (pts[j][1] / p - 1) * 100;
       nx.textContent = fmt$(pts[j][1]);
-      nn.textContent = "On " + fmtDate(pts[j][0]) + " \u2014 " +
-        (chg >= 0 ? "up " : "down ") + Math.abs(chg).toFixed(1) + "% in that year";
+      nn.textContent = "On " + fmtDate(pts[j][0]) + ". " +
+        (chg >= 0 ? "Up " : "Down ") + Math.abs(chg).toFixed(1) + "% in that year";
     }
     // what $100 that day is worth at the last close (evo)
     const e100 = document.getElementById("r-100"), e100n = document.getElementById("r-100note");
@@ -1302,7 +1320,7 @@ load();
     (open.recoveredDate === null
       ? " That is still " + Math.abs(Math.round((last.price / open.peakPrice - 1) * 100)) +
         "% below the " + open.peakDate + " top of " + fmt$(open.peakPrice) +
-        " \u2014 the current fall is not over on this chart's own terms."
+        ". The current fall is not over on this chart's own terms."
       : "");
 })();
 </script>
@@ -1371,10 +1389,10 @@ load();
     chip.style.background = band.color;
     chip.style.width = "16px"; chip.style.height = "16px"; chip.style.borderRadius = "5px";
     titleEl.appendChild(chip);
-    titleEl.appendChild(document.createTextNode(band.name + " \u2014 what this color means"));
+    titleEl.appendChild(document.createTextNode(band.name + ": what this color means"));
     const per100 = Math.round(f.days / pts.length * 100);
     let html = `<p>Prices in this band sit ${DIST[k]}.</p>`;
-    html += `<p>Bitcoin has spent ${f.days.toLocaleString("en-US")} days here \u2014 about ${per100} of every 100 days since 2010.</p>`;
+    html += `<p>Bitcoin has spent ${f.days.toLocaleString("en-US")} days here: about ${per100} of every 100 days since 2010.</p>`;
     if (f.n > 0) {
       html += `<p>The price has come into this band ${f.visits} times. One year after each visit began, it had moved between ${pctFmt(f.worst.pct)} and ${pctFmt(f.best.pct)}. It ended that year higher ${f.up} of ${f.n} times. The middle visit ended at ${pctFmt(f.median)}.</p>`;
       const pend = f.visits - f.n;
@@ -1417,7 +1435,7 @@ load();
       else {
         const j = nearestIdx(target);
         const chg = (pts[j][1] / p - 1) * 100;
-        txt += `One year later: ${fmt$(pts[j][1])} \u2014 ${chg >= 0 ? "up" : "down"} ${Math.abs(chg).toFixed(1)}% in that year.`;
+        txt += `One year later: ${fmt$(pts[j][1])}. ${chg >= 0 ? "Up" : "Down"} ${Math.abs(chg).toFixed(1)}% in that year.`;
       }
       sBody.textContent = txt;
     }
@@ -1506,7 +1524,7 @@ load();
         btc.toLocaleString("en-US", { maximumFractionDigits: 4 }) + " bitcoin.";
       var p2 = document.createElement("p");
       p2.className = "worth";
-      p2.textContent = "At the last close, that is worth " + fmt$(worth) + " — " + chgTxt + ".";
+      p2.textContent = "At the last close, that is worth " + fmt$(worth) + ": " + chgTxt + ".";
       out.appendChild(p1); out.appendChild(p2);
       if (pts < first.ts) {
         var p3 = document.createElement("p");
@@ -1549,7 +1567,7 @@ load();
     var r2 = 1 - ssr / sst;
     var fl = document.getElementById("m-fitline");
     if (fl) fl.textContent =
-      "Fit window: " + fmtD(L.first.date) + " to " + fmtD(L.last.date) + " — " +
+      "Fit window: " + fmtD(L.first.date) + " to " + fmtD(L.last.date) + ". " +
       L.fit.n.toLocaleString("en-US") + " daily closes in all. " +
       "Fit score (R\u00b2): " + r2.toFixed(2) + ", in log terms. " +
       "That score grades the fit to the past. It is not a promise about the future.";
@@ -1813,6 +1831,56 @@ load();
     });
   });
   render();
+})();
+</script>
+
+<script>
+(function(){
+  "use strict";
+  // Simplify pass (Nov 2, 2026): the hero day slider. Same daily series
+  // and same fit math as the main chart's scrubber below, so the two
+  // readouts can never disagree. Readout only: nothing computed here
+  // feeds any other part of the page.
+  var D = window.BTC_LAB;
+  if (!D || !D.points || !D.points.length) return;
+  var pts = D.points, fit = D.fit, GEN = D.genesisTs;
+  var lastTs = pts[pts.length - 1][0], YEAR = 365.25 * 86400;
+  function trendAt(ts){ return Math.exp(fit.a + fit.b * Math.log((ts - GEN) / 86400)); }
+  function bandIdxAt(p, ts){ return Math.floor((Math.log(p) - Math.log(trendAt(ts)) - D.bandBottom) / D.bandWidth); }
+  function nearestIdx(ts){
+    var lo = 0, hi = pts.length - 1;
+    while (hi - lo > 1) { var m = (lo + hi) >> 1; (pts[m][0] < ts) ? lo = m : hi = m; }
+    return (ts - pts[lo][0] <= pts[hi][0] - ts) ? lo : hi;
+  }
+  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+  function fmtDate(ts){ return new Date(ts * 1000).toLocaleDateString("en-US",
+    { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }); }
+  var slider = document.getElementById("hero-scrub");
+  var out = document.getElementById("hero-read");
+  if (!slider || !out) return;
+  var started = false;
+  function show(i){
+    var dts = pts[i][0], p = pts[i][1];
+    var bi = bandIdxAt(p, dts);
+    var pct = Math.round((p / trendAt(dts) - 1) * 100);
+    var where = bi < 0 ? "below every band" : bi > 8 ? "above every band" : "in the " + D.bands[bi].name + " band";
+    var dist = pct === 0 ? "right on the line" : Math.abs(pct) + "% " + (pct < 0 ? "below" : "above") + " the line";
+    var txt = fmtDate(dts) + ": " + fmt$(p) + ", " + where + ", " + dist + ". ";
+    var target = dts + YEAR;
+    if (target > lastTs) txt += "A full year has not passed since this day.";
+    else {
+      var j = nearestIdx(target);
+      var chg = (pts[j][1] / p - 1) * 100;
+      txt += "One year later: " + fmt$(pts[j][1]) + ". " + (chg >= 0 ? "Up " : "Down ") +
+        Math.abs(chg).toFixed(1) + "% in that year.";
+    }
+    out.textContent = txt;
+  }
+  slider.addEventListener("input", function(){
+    if (!started) { started = true; try { if (window.FA && FA.track) FA.track("tool_start", { surface: "rainbow-explorer" }); } catch(e){} }
+    var i = Math.round(Number(slider.value) / 100 * (pts.length - 1));
+    show(Math.max(0, Math.min(pts.length - 1, i)));
+  });
 })();
 </script>
 </body>

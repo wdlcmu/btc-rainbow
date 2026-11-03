@@ -2,27 +2,31 @@
 
 > Full text and data facts from https://thebitcoinrainbow.com/
 > Bitcoin Rainbow is a free site in plain words. It tells what bitcoin is, shows where the price sits next to its own past growth, and makes the author's case for the long run, crashes shown plainly.
-> Its tools only measure: a chart readout and a replay of small weekly buys on real past prices. No ads. No accounts.
+> Its tools only measure: chart explorers for any day since 2010, a what-if-you'd-bought calculator, a replay of small weekly buys, and a model explorer, all on real past prices. No ads. No accounts.
 > Past prices: blockchain.info. Live price: Coinbase.
-> Facts below are as of Oct 31, 2026, unless a date is shown. Live facts change each day. Since Nov 1, 2026 the homepage also carries live computed gauges (RSI, Mayer Multiple, the 50/200-day lines, drawdown, swing size), network readings (halving clock, supply issued, hashrate, fees, Fear and Greed, dominance), a tap-a-crash explorer, a model explorer with the model's track record, and a daily read kept at /analysis — all computed from the same public data, none of it financial advice.
+> Facts below are as of Oct 31, 2026, unless a date is shown. Live facts change each day. Since Nov 1, 2026 the homepage also carries live computed gauges (RSI, Mayer Multiple, the 50/200-day lines, drawdown, swing size), network readings (halving clock, supply issued, hashrate, fees, Fear and Greed, dominance), a tap-a-crash explorer, a model explorer with the model's track record, and a daily read kept at /analysis, all computed from the same public data, none of it financial advice.
 > That is the past. Not a promise.
 
 ## Home (https://thebitcoinrainbow.com/)
 
-The Bitcoin Rainbow in plain words.
-Sixteen years of climbs and crashes, in words anyone can read.
+The Bitcoin Rainbow.
+Sixteen years of bitcoin's price on one chart, in plain words.
 
-### Step 1: What bitcoin is
+Screen one shows today's fact: the price, the band it sits in, and how far it sits from its long-run line. A slider under the chart picks any day since 2010 and shows that day's price, its band, and the year that came next. The full chart, with the band list, is in Chapter 1.
 
-Bitcoin is money for the internet. No company runs it, and no boss can print more: only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.
+The page is five chapters, each one a question.
 
-### Step 2: Where are we now?
+### Chapter 1: Where does the price sit in its long story?
 
-It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. Today one bitcoin costs $77,495, sitting in the Deep Blue band, way below the line. A Reddit user, azop, drew the first rainbow in 2014, on a growth line by trolololo, a forum user. Blockchain Center made the chart famous. The line here is our own fit of the same public prices. That is the past. Not a promise.
+What bitcoin is: Bitcoin is money for the internet. No company runs it, and no boss can print more: only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.
+
+It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. A Reddit user, azop, drew the first rainbow in 2014, on a growth line by trolololo, a forum user. Blockchain Center made the chart famous. The line here is our own fit of the same public prices. That is the past. Not a promise.
 
 Think of the marks on a wall for a child. The chart does the same for price. One line shows the growth path. Bands sit above and below the line.
 
-On Oct 31, 2026: Bitcoin is short for its age. One bitcoin costs $77,471 today. It sits in the Deep Blue band.
+Tap a band in the list and the page tells you how far from the line that band sits, how many days the price has lived there, and what the next year did after past visits.
+
+The chapter ends with a model explorer: pick how far out (1, 5, or 10 years) and which line the price follows (the bottom band, the growth line, or the top band), and see the model's own lines stretched forward. Not a forecast.
 
 ### How the chart is made
 
@@ -56,22 +60,22 @@ Each row shows the price range for that band on Oct 31, 2026, and the share of a
 - 2021 top: $67,562 (Nov 9, 2021 close in this data set).
 - 2022 low: $15,760 (Nov 22, 2022 close in this data set).
 
-### Every day, on one chart
+### Chapter 2: What happened the other times it sat here?
 
-- The home page also shows every daily close, Aug 18, 2010 to Oct 29, 2026. Last close in that set: $81,275 on Oct 29, 2026.
+Every day, on one chart: a second explorer over every daily close, with the bands, the 50-day and 200-day lines, and the halvings marked. Scrub to any day to see its price, its band, and the year that came next.
+
+- The home page shows every daily close, Aug 18, 2010 to Oct 29, 2026. Last close in that set: $81,275 on Oct 29, 2026.
 - Falls of 40% or more, top to bottom, in that set: 2011 crash, down 93.2%. The 2013 to 2015 fall, down 84.9%. The 2018 fall, down 83.2%. The 2021 to 2022 fall, down 76.7%.
 - The fall from the Oct 7, 2025 top ($124,777) is still open in that set. Its low so far there: $58,534 on Jul 1, 2026, down 53.1%.
 - A share card on the home page shows the worst, middle, and best ten-year paths. Its line: "That is the past. Not a promise."
 
-### Step 3: Why we think it climbs on. A belief, not a fact
+What if you'd bought? Pick a day and a sum, and the tool shows what that buy is worth at the last close. From the record: $1,000 on Dec 5, 2013 bought 0.8796 bitcoin, worth $71,489 at the Oct 29, 2026 close. No fees or taxes counted. That is the past. Not a promise.
 
-Its line climbs for 16 years. It fell hard, many times. It climbed back each time. Pick any start day. Four years on, the price stood higher. Every time, so far.
+The plain chart: the same prices with no colors and no bands, plus the 50-day and 200-day averages, and the ceiling and floor levels the price keeps meeting.
 
-Why might it go on? Only 21 million will ever exist. Most are already out. New coins come slower every four years. The last cut was in 2024. Big funds sell it in stock accounts. That is the case: a belief, not a fact. This is learning, not financial advice.
+The gauges: six readings computed from the same daily prices. Heat over the last two weeks (RSI). Price vs its 200-day average (the Mayer Multiple). The trend lines. How far the price sits from its top. The daily swing. And the price vs the rainbow line.
 
-### Step 4: A little, every week
-
-Like an allowance, in reverse. A little, every week.
+A little, every week: like an allowance, in reverse.
 
 This is called DCA. It means you buy a set sum on a set day, week by week.
 
@@ -96,19 +100,39 @@ Results as of Oct 31, 2026 (live price $77,471). Past only.
 
 That is the past. Not a promise.
 
-### Step 5: It swings hard. We could be wrong
+Today's read closes the chapter: a short daily analysis written only from the numbers on the page. Past reads are kept at /analysis.
 
-Since 2011, it fell by half or more. Seven times. In 2022, it fell by about three fourths. It can do that again. A total loss should sting, not sink you.
+### Chapter 3: Is Bitcoin itself healthy?
+
+The network itself, in numbers the network reports. The halving clock: how far the blocks stand between the last halving (Apr 20, 2024) and the next one. Coins already out, of the 21 million that will ever exist. Computing power (hashrate): quintillions of guesses per second, spent guarding the ledger. Fees right now: what one payment pays to jump the line. Fear & Greed: a 0-to-100 mood score for the whole market, the Fear & Greed Index by Alternative.me, shown with its maker's name next to the number. Bitcoin's share of the whole crypto market's value, counted by CoinGecko.
+
+### Chapter 4: Why did it crash those times?
+
+Tap a crash: seven big falls, each drawn from the daily prices, with its top, its bottom, its size, and its story. One table holds all seven: the top, the bottom, the fall, the days down, and the days back to the top, all measured from the same daily closes. The top is a daily close; the fall runs to the lowest daily close after it; days back to the top counts to the first close at or above the top again. Daily closes can miss a swing inside one day, so a fall here can read smaller than the worst hour of it.
+
+Six of the seven have named causes on the page, from the Mt. Gox hack and collapse, to China's bank and mining bans, the ICO mania bursting, the Terra/Luna and FTX contagion, and the 2021 Tesla reversal. The newest fall, 2025 to now, down 53% so far, is still unfolding. The record so far names no single cause for it, and the site says so rather than inventing one.
+
+It swings hard. We could be wrong: since 2011, it fell by half or more. Seven times. In 2022, it fell by about three fourths. It can do that again. A total loss should sting, not sink you.
 
 It could fall and stay down. New laws could hurt it. The climb is a pattern, not a law. Many fans keep 5 to 10 in 100 saved. The bold end is 10 to 20 in 100. Only money you will not need for years. This is learning, not financial advice.
 
-### Step 6: The two ways people hold it
+### Chapter 5: How do we know any of this?
+
+Sources & method. The model: rainbow model, our own fit, version 1. ln(price) = -37.28 + 5.60 x ln(days since Jan 3, 2009). Fit window Aug 18, 2010 to Oct 29, 2026: 5,917 daily closes. Fit score (R-squared): 0.96, in log terms. That score grades how well the line hugs the past. It says nothing about next year.
+
+Where each part comes from: the chart, the gauges, and the falls use daily closes from blockchain.info, the full record since 2010; the live price is from Coinbase. The network numbers (block height, hashrate, fees) come from mempool.space; supply is checked against blockchain.info. Fear & Greed is the Fear & Greed Index by Alternative.me. Bitcoin's share comes from CoinGecko.
+
+What to watch for: prices here are daily closes. A swing inside one day can be bigger than the day shows. In June 2011, one exchange flashed to one cent for a few minutes. The daily closes say that fall was 93%. Both are true, of different things. Bitcoin's share of all crypto depends on who counts the coins; sites disagree by a point or two. The model explorer stretches the model's own lines forward; those lines are labelled as the model's, never as a forecast. When a source is quiet, its card says so instead of showing an old number as new.
+
+The standing line: this is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe.
+
+### The two ways people hold it
 
 - IBIT: in a stock account, like a stock. You do not hold the coins.
 - Exchange app: you hold real bitcoin. You keep the keys.
 - Fees: both charge fees. IBIT: yearly. Apps: per buy.
 
-### Step 7: Learn the words
+### Learn the words
 
 - Price: price is the tag at the store. It changes every day.
 - Technical: watching the line. Up, down, or flat?
