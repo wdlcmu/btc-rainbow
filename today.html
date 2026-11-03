@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today's Read — The Bitcoin Rainbow</title>
+<meta name="description" content="One short read a day, written only from today's computed numbers: the rainbow band, the gauges traders watch, and the health of the network. Past reads are kept in the archive.">
+<link rel="canonical" href="https://thebitcoinrainbow.com/today">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Today's Read — The Bitcoin Rainbow">
+<meta property="og:description" content="One short read a day, written only from today's computed numbers: the rainbow band, the gauges traders watch, and the health of the network. Past reads are kept in the archive.">
+<meta property="og:url" content="https://thebitcoinrainbow.com/today">
+<meta property="og:image" content="https://thebitcoinrainbow.com/postcard.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Bitcoin Rainbow — sixteen years of climbs and crashes, in words anyone can read">
+<meta name="twitter:description" content="Sixteen years of climbs and crashes, in words anyone can read. The rainbow chart, the live gauges traders watch (RSI, the Mayer Multiple, the 200-day line), and the health of the network itself — every number computed from real data, in plain words. Analysis and education, not financial advice.">
+<meta name="twitter:image" content="https://thebitcoinrainbow.com/postcard.png">
+<meta name="theme-color" content="#0d1330">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌈</text></svg>">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Bitcoin Rainbow","url":"https://thebitcoinrainbow.com/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Sixteen years of climbs and crashes, in words anyone can read. What bitcoin is, the rainbow chart of every climb and crash since 2010, what going wrong would look like, and the two ways people hold it. In plain words."}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the Bitcoin rainbow chart?","acceptedAnswer":{"@type":"Answer","text":"One line through the middle is bitcoin's long-run growth, fit to every daily price on record. Nine colored bands stack around it. Low bands: the price sits far under its own past growth. High bands: far over it. That is the past. Not a promise."}},
+{"@type":"Question","name":"What does DCA mean on this site?","acceptedAnswer":{"@type":"Answer","text":"You buy a set sum on a set day, week by week. Like an allowance, in reverse."}},
+{"@type":"Question","name":"Does this site give financial advice?","acceptedAnswer":{"@type":"Answer","text":"No. This is learning, not financial advice. That is the past. Not a promise."}}]}
+</script>
+<style>
+  :root{
+    --bg:#0d1330; --panel:#16204a; --panel2:#1b2757; --ink:#f4f6ff; --soft:#b9c2e8;
+    --gold:#ffd94d; --line:#2c3a75; --dot-off:#39477f;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:19px;line-height:1.45}
+  .wrap{max-width:960px;margin:0 auto;padding:20px 16px 8px}
+  header{text-align:center;padding:26px 0 4px}
+  h1{font-size:40px;line-height:1.1;margin:0 0 10px;font-weight:800;letter-spacing:-.5px}
+  .sub{font-size:21px;color:var(--soft);margin:0 auto 16px;max-width:34em}
+  .todayline{font-size:20px;font-weight:700;margin:0 auto 16px;max-width:34em}
+  .todayline b{color:var(--gold)}
+  .herochart{max-width:780px;margin:2px auto 10px}
+  #hero-chart{touch-action:pan-y}
+  .herocap{font-size:16.5px;color:var(--soft);margin:0 auto 2px}
+  .herocap a{color:var(--gold);font-weight:700;display:inline-flex;align-items:center;
+    min-height:44px;padding:0 6px}
+  .btn{display:inline-block;background:var(--gold);color:#221a00;font-weight:700;
+    padding:13px 22px;border-radius:999px;text-decoration:none;font-size:19px;min-height:48px}
+  section.block{margin:30px 0 0}
+  .kicker{color:var(--gold);font-weight:800;letter-spacing:2px;font-size:14px;
+    text-transform:uppercase;margin:0 0 6px}
+  h2{font-size:27px;margin:0 0 10px}
+  section.chapter-head{margin-top:48px}
+  .chapter-head h2{font-size:31px;line-height:1.15}
+  .growth-note{font-size:21px;margin:2px 0 10px}
+  .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:10px 6px 6px;margin:0 0 12px}
+  svg{display:block;width:100%;height:auto}
+  #chart polygon.band-poly{cursor:pointer}
+  #chart{touch-action:pan-y;cursor:crosshair}
+  .read-panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;margin:0 0 12px}
+  .read-panel h3{margin:0 0 6px;font-size:20px;display:flex;align-items:center;gap:8px}
+  .read-panel p{margin:0 0 6px;font-size:17.5px}
+  .read-panel p:last-child{margin-bottom:0}
+  .read-panel .fine{color:var(--soft);font-size:15.5px}
+  .buybox{background:var(--panel);border:1px solid var(--gold);border-radius:14px;
+    padding:14px 16px;margin:14px 0 6px}
+  .buybox h3{margin:0 0 6px;font-size:21px}
+  .buybox p{margin:0 0 6px;font-size:17.5px}
+  .buybox p:last-child{margin-bottom:0}
+  .buybox a{color:var(--gold);font-weight:700}
+  .bands{display:flex;flex-direction:column;gap:6px;margin:0 0 6px}
+  .bands-cap{color:var(--soft);font-size:15px;margin:0 2px 8px}
+  .band-row{display:grid;grid-template-columns:16px 1fr auto auto;column-gap:9px;
+    align-items:center;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:8px 12px;cursor:pointer;min-height:48px;
+    -webkit-tap-highlight-color:transparent}
+  .band-row .sw{width:16px;height:16px;border-radius:5px}
+  .bname{font-weight:700;font-size:16.5px;display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .bnow{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--gold);
+    border:1px solid var(--gold);border-radius:999px;padding:2px 7px}
+  .brange{color:var(--soft);font-size:15px;text-align:right;white-space:nowrap}
+  .bmult{color:var(--soft);font-size:15px;text-align:right;white-space:nowrap}
+  .band-row.active{border-color:var(--gold);background:var(--panel2)}
+  @media (max-width:420px){
+    .band-row{column-gap:7px;padding:8px 10px}
+    .bname{font-size:16px}
+    .brange,.bmult{font-size:14px}
+  }
+  .today-panel{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px 12px;margin:14px 0 0}
+  .today-panel p{font-size:22px;margin:0 0 8px}
+  .today-panel .asof{color:var(--soft);font-size:16px;margin:0}
+  .dca-line{font-size:21px;margin:2px 0 12px}
+  .sim{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+  .sim .tag{display:inline-block;font-weight:800;letter-spacing:2px;font-size:14px;color:var(--gold);
+    border:1px solid var(--gold);border-radius:999px;padding:3px 10px;margin:0 0 12px}
+  .sim .lab{color:var(--soft);font-size:16.5px;margin:10px 0 7px}
+  .sim .lab:first-of-type{margin-top:0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+    padding:10px 18px;font-size:17.5px;font-weight:700;min-height:46px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent}
+  .chip.on{background:var(--gold);color:#221a00;border-color:var(--gold)}
+  .sim .result{margin:16px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .sim .result p{margin:0 0 6px;font-size:20px}
+  .sim .result .worth{font-size:23px;font-weight:800;color:var(--gold)}
+  .sim .note{color:var(--soft);font-size:16.5px;margin:8px 0 0}
+  .source{color:var(--soft);font-size:16px;margin:10px 2px 0}
+  .wrow{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:14px 18px;margin:0 0 10px}
+  .wrow h3{margin:0 0 4px;font-size:20px}
+  .wrow p{margin:0}
+  .strip{display:grid;grid-template-columns:1fr;gap:10px}
+  @media (min-width:760px){.strip{grid-template-columns:1fr 1fr 1fr}}
+  .scard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .scard .icon{width:36px;height:36px;margin:0 0 4px}
+  .scard h3{margin:0 0 4px;font-size:19px}
+  .scard p{margin:0;font-size:17px}
+  .scard .big{font-size:24px;font-weight:800;color:var(--gold);margin:0 0 2px}
+
+  .asklink{font-size:18px;color:var(--soft);margin:14px 0 0}
+  .asklink a{color:var(--gold);font-weight:700}
+  .lab-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0 0}
+  #lab-chart{width:100%;height:auto;display:block;touch-action:pan-y;cursor:crosshair}
+  .lab-readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+  .lab-stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .lab-stat .k{font-size:13px;color:var(--soft);text-transform:uppercase;letter-spacing:.06em}
+  .lab-stat .v{font-size:19px;font-weight:700;margin-top:3px}
+  .lab-stat .n{font-size:14px;color:var(--soft);margin-top:2px}
+  .bandchip{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .lab-card input[type=range]{width:100%;margin:14px 0 2px;accent-color:var(--gold);min-height:32px}
+  .lab-hint{font-size:14px;color:var(--soft);margin:4px 0 0}
+  .lab-dd{margin-top:10px;background:#3a1630;border:1px solid #7a2d52;border-radius:10px;padding:10px 12px;font-size:15px;display:none}
+  .lab-h3{font-size:21px;margin:22px 0 8px}
+  .lab-tablewrap{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px;overflow-x:auto}
+  .lab-tablewrap table{width:100%;border-collapse:collapse;font-size:15px}
+  .lab-tablewrap th,.lab-tablewrap td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  .lab-tablewrap th{color:var(--soft);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+  /* Wave 1 (Nov 2, 2026): main-chart day slider, bought calculator,
+     crash table, sources & method. */
+  #chart-scrub{width:100%;margin:10px 0 2px;accent-color:var(--gold);min-height:44px}
+  #fc-slider{width:100%;accent-color:var(--gold);min-height:44px}
+  #lab-scrub,#plain-scrub{min-height:44px}
+  .wif-inputs{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:0 0 4px}
+  .wif-field{display:flex;flex-direction:column;gap:5px}
+  .wif-field label{color:var(--soft);font-size:15.5px;font-weight:700}
+  .wif-field input{background:var(--panel2);color:var(--ink);border:1px solid var(--line);
+    border-radius:10px;padding:10px 12px;font-size:18px;min-height:48px;font-family:inherit}
+  .ctable{width:100%;border-collapse:collapse;font-size:15.5px}
+  .ctable th,.ctable td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  .ctable th{color:var(--soft);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+  .ctable tbody tr{cursor:pointer}
+  .ctable tbody tr:hover,.ctable tbody tr.on{background:var(--panel2)}
+  .ctable .cfall{font-weight:800;white-space:nowrap}
+  .ctable .cnum{white-space:nowrap}
+  .ctable td span.sub{display:block;color:var(--soft);font-size:13.5px}
+  .mrow{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px}
+  .mrow h3{margin:0 0 5px;font-size:20px}
+  .mrow p{margin:0 0 6px;font-size:17px}
+  .mrow p:last-child{margin-bottom:0}
+  .mrow .fine{color:var(--soft);font-size:15.5px}
+  .mrow code{font-size:16px;background:var(--panel2);padding:2px 7px;border-radius:6px}
+  .fgsrc{color:var(--soft);font-size:14px;margin:6px 0 0}
+  .fgsrc a{color:var(--soft)}
+  .lab-honest{background:var(--panel);border:1px solid var(--gold);border-radius:14px;padding:14px 16px;margin-top:18px}
+  .lab-honest p{margin:6px 0;font-size:15px;color:var(--soft)}
+  .lab-honest p strong{color:var(--ink)}
+  .lab-ddlabel{font-size:11px;fill:#ffb3c8;font-weight:700}
+  .lab-axislab{font-size:11px;fill:#b9c2e8}
+  #plain-chart{width:100%;height:auto;display:block;touch-action:pan-y;cursor:crosshair}
+  .plain-togs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+  .plain-sr-lab{font-size:13px;font-weight:800}
+  .lab-card input[type=range]#plain-scrub{margin-top:10px}
+  .sharecard{margin:18px 0 0;text-align:center}
+  .sharecard img{max-width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+  .sharecard p{font-size:19px;font-weight:700;margin:10px 0 0}
+  .learnlinks{margin:14px 0 0;display:flex;flex-direction:column;gap:8px}
+  .learnlinks a{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);text-decoration:none;font-weight:700;min-height:48px}
+  .learnlinks a span{color:var(--soft);font-weight:400}
+
+  .evoline{font-size:19px;color:var(--ink);margin:0 auto 14px;max-width:34em}
+  .evoline b{color:var(--gold)}
+  .hero-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px auto 4px}
+  .hero-chips a.chip{text-decoration:none;display:inline-flex;align-items:center}
+  .cards{display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0 4px}
+  @media (min-width:760px){.cards{grid-template-columns:1fr 1fr 1fr}}
+  .gcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .gcard h3{margin:0 0 4px;font-size:17px;color:var(--soft);text-transform:uppercase;letter-spacing:.05em}
+  .gcard .big{font-size:26px;font-weight:800;color:var(--gold);margin:0 0 3px;line-height:1.15}
+  .gcard p{margin:0;font-size:16px;color:var(--soft)}
+  .glist{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 16px;margin:12px 0 4px}
+  .grow{display:grid;grid-template-columns:1fr auto;column-gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .grow:last-child{border-bottom:none}
+  .gname{font-weight:700;font-size:17px;align-self:center}
+  .gval{font-size:19px;font-weight:800;color:var(--gold);text-align:right;align-self:center;white-space:nowrap}
+  .gverd{grid-column:1/-1;color:var(--soft);font-size:16px;margin-top:2px}
+  #crash-out .crash-story{color:var(--soft)}
+  .halvbar{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0 4px}
+  .halvbar .track{background:var(--panel2);border:1px solid var(--line);border-radius:999px;height:22px;overflow:hidden;margin:0 0 8px}
+  .halvbar .fill{background:var(--gold);height:100%;width:0%}
+  .halvbar p{margin:0;font-size:16.5px}
+  .fc-k{color:var(--soft)}
+  .fc-bar-row{display:flex;align-items:center;gap:10px;margin:4px 0;font-size:15.5px}
+  .fc-bar-name{width:96px;flex:none}
+  .fc-bar{flex:1;background:var(--panel2);border-radius:6px;height:14px;position:relative;display:block}
+  .fc-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;display:block}
+  .fc-bar-val{width:52px;flex:none;text-align:right;color:var(--soft)}
+  .crash-wrap{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0 0}
+  .crash-wrap svg{width:100%;height:auto;display:block}
+  #crash-out p{margin:0 0 5px;font-size:17.5px}
+  #crash-out{margin-top:10px}
+  .notebox{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:18px 20px 10px;margin:12px 0 0}
+  .notebox p{font-size:18.5px;margin:0 0 9px}
+  .notebox .fine{color:var(--soft);font-size:15.5px}
+  .lab-togs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+  .asofline{color:var(--soft);font-size:15.5px;margin:10px 2px 0}
+  /* Simplify pass (Nov 2, 2026): tap-to-open details, hero fact card, hero day slider. */
+  details.more{margin:12px 0 0}
+  details.more>summary{display:flex;align-items:center;gap:8px;min-height:48px;
+    padding:10px 16px;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;cursor:pointer;font-weight:700;font-size:17px;color:var(--gold);
+    list-style:none;-webkit-tap-highlight-color:transparent}
+  details.more>summary::-webkit-details-marker{display:none}
+  details.more>summary::after{content:"+";margin-left:auto;font-size:24px;line-height:1;font-weight:400}
+  details.more[open]>summary::after{transform:rotate(45deg)}
+  details.more>summary.goldsum{border-color:var(--gold)}
+  .more-body{padding:10px 2px 0}
+  .more-body p{margin:0 0 6px;font-size:17px}
+  .more-body p:last-child{margin-bottom:0}
+  .more-body.soft p{color:var(--soft);font-size:15.5px}
+  .more-body .fine{color:var(--soft);font-size:15.5px}
+  .factcard{background:var(--panel2);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px 14px;margin:0 auto 14px;max-width:560px}
+  .fact-k{color:var(--soft);font-size:15px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;margin:0}
+  .fact-big{font-size:54px;font-weight:800;line-height:1.05;margin:4px 0 6px}
+  .fact-bandline{font-size:21px;font-weight:700;margin:0 0 2px;display:flex;
+    align-items:center;justify-content:center;gap:8px}
+  .fact-vs{font-size:19px;color:var(--soft);margin:0}
+  .fact-asof{color:var(--soft);font-size:14.5px;margin:8px 0 0}
+  .hero-scrub{max-width:640px;margin:6px auto 0;text-align:left}
+  .hero-scrub-label{display:block;font-size:16.5px;font-weight:700;margin:0 2px 2px}
+  #hero-scrub{width:100%;margin:6px 0 2px;accent-color:var(--gold);min-height:44px}
+  .hero-read{font-size:18px;margin:4px 2px 0;min-height:27px}
+  footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:17px}
+  footer p{margin:4px 0}
+  footer a{color:var(--soft)}
+
+  .crumb{margin:0 0 4px}
+  .crumb a{color:var(--gold);font-weight:700;text-decoration:none}
+  .doors{display:grid;gap:12px;margin-top:14px}
+  .door{display:block;background:#131b3f;border:1px solid #2c3766;border-radius:16px;padding:18px;color:#eef1ff;text-decoration:none}
+  .door-k{display:block;color:var(--gold);font-weight:800;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+  .door-t{display:block;font-size:24px;font-weight:800;line-height:1.2;margin:6px 0}
+  .door-s{display:block;color:#c6cdea;font-size:16px;line-height:1.45}
+</style>
+<script>
+window.FLEET_CFG = {
+  site: "bitcoin-rainbow",
+  starts: [
+    { sel: "#chart-scrub", on: "input", surface: "rainbow-explorer" },
+    { sel: "#wif-date", on: "change", surface: "bought-calculator" },
+    { sel: "#lab-scrub", on: "input", surface: "history-explorer" },
+    { sel: "#plain-scrub", on: "input", surface: "plain-chart" },
+    { sel: "#crash-chips .chip", surface: "crash-explorer" },
+    { sel: "#fc-years .chip", surface: "model-explorer" },
+    { sel: "#hero-scrub", on: "input", surface: "rainbow-explorer" }
+  ],
+  completes: [
+    { sel: "#read-note", surface: "todays-read", minText: 60 }
+  ]
+};
+</script>
+<!-- Fleet analytics — shared instrumentation (Nov 1, 2026; taxonomy:
+     ~/workspace/chief-of-staff/fleet-instrumentation-taxonomy-2026-11-01.md).
+     PostHog project 624507. Anonymous metadata only: event names + enum
+     properties. Never sends typed text, names, emails, pairings, or
+     tokens. Session recording off, autocapture off.
+     Per site: set window.FLEET_CFG (site slug + hooks) in a small script
+     block BEFORE this block. Internal rule (fleet-wide): ?internal=1
+     once on a device sets a localStorage flag; every event from that
+     device carries internal:true; funnel queries filter it out. -->
+<script>
+(function(){
+  var CFG = window.FLEET_CFG || {};
+  var SITE = CFG.site || "unknown";
+  var KEY = "phc_t9dkHXAZR5VEjPFm3K5JDzGKFsNNxKcwSxxcEBEeLbS7";
+  var _int = null;
+  function isInternal(){
+    if (_int !== null) return _int;
+    var flag = false;
+    try {
+      var q = location.search || "";
+      if (/[?&]internal=1(?:&|$)/.test(q)) { try { localStorage.setItem("fleet_internal", "1"); } catch(e){} flag = true; }
+      else if (/[?&]internal=0(?:&|$)/.test(q)) { try { localStorage.removeItem("fleet_internal"); } catch(e){} }
+      else if (/[?&](probe|sim)=/.test(q)) { flag = true; }
+      else { try { flag = localStorage.getItem("fleet_internal") === "1"; } catch(e){} }
+    } catch(e2){}
+    _int = flag;
+    return flag;
+  }
+  var Q = [];
+  function track(name, props){
+    props = props || {};
+    props.site = SITE;
+    try { if (isInternal()) props.internal = true; } catch(e){}
+    try {
+      if (window.posthog && posthog.capture) posthog.capture(name, props);
+      else { Q.push([name, props]); if (Q.length > 100) Q.shift(); }
+    } catch(e){}
+  }
+  window.FA = { track: track };
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://us.i.posthog.com/static/array.js";
+  s.onload = function(){
+    try {
+      if (window.posthog && posthog.init) {
+        posthog.init(KEY, {api_host: "https://us.i.posthog.com", autocapture: false, capture_pageview: true, disable_session_recording: true});
+        try { posthog.register({site: SITE, internal: isInternal()}); } catch(e){}
+        try { if (isInternal() && posthog.people && posthog.people.set) posthog.people.set({fleet_internal: true}); } catch(e){}
+        while (Q.length) { var e0 = Q.shift(); try { posthog.capture(e0[0], e0[1]); } catch(e){} }
+      }
+    } catch(e){}
+  };
+  document.head.appendChild(s);
+
+  function onReady(fn){ if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn); else fn(); }
+  function vis(el){
+    if (!el) return false;
+    var cs = getComputedStyle(el);
+    if (cs.display === "none" || cs.visibility === "hidden") return false;
+    return !!(el.offsetWidth || el.offsetHeight || (el.getClientRects && el.getClientRects().length));
+  }
+  function txt(el){ return ((el && el.textContent) || "").replace(/\s+/g, " ").trim(); }
+
+  onReady(function(){
+    try {
+      var started = {};
+      (CFG.starts || []).forEach(function(st){
+        Array.prototype.forEach.call(document.querySelectorAll(st.sel), function(el){
+          el.addEventListener(st.on || "click", function(){
+            var k = st.surface || "tool";
+            if (started[k]) return;
+            started[k] = true;
+            track("tool_start", {surface: k});
+          });
+        });
+      });
+      (CFG.completes || []).forEach(function(cp){
+        var done = false;
+        function check(){
+          if (done) return;
+          var el = document.querySelector(cp.sel);
+          if (el && vis(el) && txt(el).length >= (cp.minText || 1)) {
+            done = true;
+            track("tool_complete", {surface: cp.surface || "tool"});
+          }
+        }
+        /* Observe the body and re-resolve the selector on every batch:
+           some tools replace the result node instead of filling it. */
+        new MutationObserver(check).observe(document.body, {childList: true, subtree: true, characterData: true, attributes: true});
+        check();
+      });
+      if (CFG.ask) {
+        var A = CFG.ask;
+        var go = A.goSel ? document.querySelector(A.goSel) : null;
+        if (go) go.addEventListener("click", function(){ track("ask_asked", {surface: "ask"}); });
+        var ans = A.answerSel ? document.querySelector(A.answerSel) : null;
+        if (ans) {
+          var lastText = "", completed = false;
+          var checkA = function(){
+            var el = document.querySelector(A.answerSel);
+            if (!el) return;
+            var t = txt(el);
+            if (!t || t === lastText) return;
+            lastText = t;
+            var fb = null;
+            (A.fallbacks || []).some(function(f){ if (f.re.test(t)) { fb = f; return true; } return false; });
+            if (fb) { track("ask_fallback", {surface: "ask", missing: fb.missing}); return; }
+            var props = {surface: "ask"};
+            (A.kinds || []).some(function(k){ if (k.re.test(t)) { props.outcome = k.outcome; return true; } return false; });
+            if (!props.outcome && A.defaultOutcome) props.outcome = A.defaultOutcome;
+            track("ask_answered", props);
+            if (A.completeOnAnswer && !completed) { completed = true; track("tool_complete", {surface: "ask"}); }
+          };
+          new MutationObserver(checkA).observe(document.body, {childList: true, subtree: true, characterData: true});
+        }
+      }
+      (CFG.specials || []).forEach(function(sp){
+        try {
+          if (sp.on === "click") {
+            Array.prototype.forEach.call(document.querySelectorAll(sp.sel), function(el){
+              el.addEventListener("click", function(){ track(sp.name, sp.props || {}); });
+            });
+          } else if (sp.on === "appear") {
+            var fired = false;
+            var chk = function(){
+              if (fired) return;
+              var el = document.querySelector(sp.sel);
+              if (el && vis(el) && txt(el).length) { fired = true; track(sp.name, sp.props || {}); }
+            };
+            new MutationObserver(chk).observe(document.body, {childList: true, subtree: true, characterData: true, attributes: true});
+            chk();
+          } else if (sp.on === "loadmatch") {
+            if (sp.re.test(location.href)) track(sp.name, sp.props || {});
+          }
+        } catch(e){}
+      });
+    } catch(e){}
+  });
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header class="pagehead">
+    <p class="crumb"><a href="/">&larr; The Bitcoin Rainbow</a></p>
+    <h1>Today, in numbers.</h1>
+    <p class="sub">The day's read, the gauges, and the network, computed for today.</p>
+  </header>
+
+  <section class="block" id="read">
+    <h2>Today's read.</h2>
+    <p class="growth-note" id="read-date">The day's analysis, written only from the numbers on this page.</p>
+    <div class="notebox" id="read-note"><p>Reading today&hellip;</p></div>
+    <p class="source">Past reads are kept. <a href="/analysis">Read the archive</a>. This is analysis and education, not financial advice.</p>
+  </section>
+
+  <section class="block" id="gauges">
+    <h2>The gauges.</h2>
+    <div class="glist">
+      <div class="grow"><span class="gname">Heat, last two weeks</span><span class="gval" id="g-rsi">&hellip;</span><span class="gverd" id="g-rsi-note"></span></div>
+      <div class="grow"><span class="gname">Price vs its 200-day average</span><span class="gval" id="g-mayer">&hellip;</span><span class="gverd" id="g-mayer-note"></span></div>
+      <div class="grow"><span class="gname">Trend lines</span><span class="gval" id="g-ma">&hellip;</span><span class="gverd" id="g-ma-note"></span></div>
+      <div class="grow"><span class="gname">From the top</span><span class="gval" id="g-dd">&hellip;</span><span class="gverd" id="g-dd-note"></span></div>
+      <div class="grow"><span class="gname">Daily swing</span><span class="gval" id="g-vol">&hellip;</span><span class="gverd" id="g-vol-note"></span></div>
+      <div class="grow"><span class="gname">Price vs the rainbow line</span><span class="gval" id="g-dist">&hellip;</span><span class="gverd" id="g-dist-note"></span></div>
+    </div>
+    <p class="asofline" id="snap-asof">Reading the gauges&hellip;</p>
+  </section>
+
+  <section class="block" id="network">
+    <h2>The network itself.</h2>
+    <div class="halvbar">
+      <div class="track"><div class="fill" id="halv-fill"></div></div>
+      <p id="halv-text">Reading the blocks&hellip;</p>
+    </div>
+    <div class="cards">
+      <div class="gcard"><h3>Coins already out</h3><p class="big" id="n-supply">&hellip;</p><p>Of the 21 million that will ever exist.</p><p id="n-supply-note"></p></div>
+      <div class="gcard"><h3>Computing power (hashrate)</h3><p class="big" id="n-hash">&hellip;</p><p>Quintillions of guesses per second, spent guarding the ledger.</p><p id="n-hash-note"></p></div>
+      <div class="gcard"><h3>Fees right now</h3><p class="big" id="n-fees">&hellip;</p><p>What one payment pays to jump the line.</p><p id="n-fees-note"></p></div>
+      <div class="gcard"><h3>Fear &amp; Greed</h3><p class="big" id="n-fg">&hellip;</p><p>A 0-to-100 mood score for the whole market.</p><p id="n-fg-note"></p><p class="fgsrc">Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/">Alternative.me</a></p></div>
+      <div class="gcard"><h3>Bitcoin's share</h3><p class="big" id="n-dom">&hellip;</p><p id="n-dom-note"></p></div>
+    </div>
+  </section>
+
+  <section class="block" id="next">
+    <div class="doors">
+      <a class="door" href="/"><span class="door-k">Back to the start</span><span class="door-t">Where does the price sit in its long story?</span><span class="door-s">The chart, today's verdict, and the rest of the story.</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <p>This is analysis and education, not financial advice.</p>
+    <p><a href="/today">Today's read</a> &middot; <a href="/analysis">The archive</a></p>
+    <p><a href="/">The long story</a> &middot; <a href="/crashes">The falls</a> &middot; <a href="/what-if">What if it was you</a> &middot; <a href="/method">How we know</a> &middot; <a href="/today">Today</a></p>
+    <p><a href="/bitcoin-rainbow-chart-explained">Rainbow chart</a> &middot; <a href="/what-is-bitcoin-in-plain-english">What is bitcoin</a> &middot; <a href="/bitcoin-dca-calculator">DCA</a> &middot; <a href="/bitcoin-halving-in-plain-english">Halving</a> &middot; <a href="/ask">Ask</a></p>
+    <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+    <p>The rainbow chart: first drawn by azop in 2014. The growth line is by trolololo. Blockchain Center made the chart famous.</p>
+    <p>Built with Muse.</p>
+  </footer>
+</div>
+
+<script src="fallback-data.js"></script>
+<script src="data-daily.js"></script>
+<script src="snapshot-data.js"></script>
+<script src="daily-series.js"></script>
+<script src="evo.js"></script>
+</body>
+</html>

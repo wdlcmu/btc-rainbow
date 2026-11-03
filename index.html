@@ -18,7 +18,7 @@
 <meta name="theme-color" content="#0d1330">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌈</text></svg>">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"Bitcoin Rainbow","url":"https://thebitcoinrainbow.com/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Sixteen years of climbs and crashes, in words anyone can read. What bitcoin is, the rainbow chart of every climb and crash since 2010, what going wrong would look like, and the two ways people hold it. In plain words."}
+{"@context":"https://schema.org","@type":"WebApplication","name":"Bitcoin Rainbow","url":"https://thebitcoinrainbow.com/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Sixteen years of climbs and crashes, in words anyone can read. What bitcoin is, the rainbow chart of every climb and crash since 2010, the seven big falls, the what-if tools, and how every number is made. In plain words."}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -251,6 +251,14 @@
   footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:17px}
   footer p{margin:4px 0}
   footer a{color:var(--soft)}
+
+  .crumb{margin:0 0 4px}
+  .crumb a{color:var(--gold);font-weight:700;text-decoration:none}
+  .doors{display:grid;gap:12px;margin-top:14px}
+  .door{display:block;background:#131b3f;border:1px solid #2c3766;border-radius:16px;padding:18px;color:#eef1ff;text-decoration:none}
+  .door-k{display:block;color:var(--gold);font-weight:800;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+  .door-t{display:block;font-size:24px;font-weight:800;line-height:1.2;margin:6px 0}
+  .door-s{display:block;color:#c6cdea;font-size:16px;line-height:1.45}
 </style>
 <script>
 window.FLEET_CFG = {
@@ -440,373 +448,37 @@ window.FLEET_CFG = {
     <h2>Where does the price sit in its long story?</h2>
   </section>
 
-  <section class="block" id="what">
-    <h2>What bitcoin is.</h2>
-    <p class="growth-note">Bitcoin is money for the internet. No company runs it, and no boss can print more: only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.</p>
-  </section>
-
   <section class="block" id="now">
-    <h2>Where are we now?</h2>
+    <h2>What the colors mean.</h2>
     <p class="growth-note" id="rainbow-note">Nine colored bands stack around one line: bitcoin's long-run growth, fit to every daily price on record. Low bands: far under its own past growth. High bands: far over it.</p>
-    <div class="chartbox">
-      <svg id="chart" viewBox="0 0 1000 540" role="img"
-        aria-label="Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits in the Deep Blue band. Bitcoin is short for its age."></svg>
-    </div>
-    <input type="range" id="chart-scrub" min="0" max="100" value="100" step="0.01"
-      aria-label="Pick a day on the rainbow chart">
-    <p class="lab-hint" style="margin:0 2px 10px">Pick a day since 2010. First, guess: above or below the line? Then slide, or drag on the chart, and see.</p>
-    <div class="read-panel" id="scrub-panel">
-      <h3 id="scrub-title">Touch the chart.</h3>
-      <p id="scrub-body">Drag across the rainbow. Any day since 2010: its price, its band, and the year that came next.</p>
-      <p class="fine">Then try it with money: <a href="#bought" style="color:var(--gold);font-weight:700">what if you'd bought that day?</a></p>
-    </div>
     <p class="bands-cap">Nine bands, low to high. Prices are today&rsquo;s.</p>
     <div class="bands" id="bands"></div>
     <div class="read-panel" id="band-panel" aria-live="polite">
       <h3 id="band-title">What the colors mean.</h3>
       <p id="band-body">Tap a color on the chart, or a band in the list. Each band tells you how far from the line it sits, how many days the price has lived there, and what the next year did.</p>
     </div>
-    <details class="more" id="buy">
-      <summary class="goldsum">So, does this mean buy?</summary>
-      <div class="more-body">
-        <p>No. The chart shows where the price sits inside its own past pattern. It cannot say buy, and it cannot say skip. No chart can.</p>
-        <p>What it can do: show what happened the other times the price sat where it sits now. See the band list above, or scrub the chart.</p>
-        <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is analysis and education, not financial advice.</p>
-      </div>
-    </details>
   </section>
 
-  <section class="block" id="case">
-    <h2>Why we think it climbs on. A belief, not a fact.</h2>
-    <p class="growth-note">Pick any start day: four years on, the price stood higher. Every time, so far. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.</p>
-  </section>
-
-  <section class="block" id="model">
-    <h2>What the model draws ahead.</h2>
-    <p class="growth-note">Drag the years. Pick a band. These are the model's lines stretched forward. <strong>Not a forecast</strong>.</p>
-    <div class="sim">
-      <span class="tag">The model explorer</span>
-      <p class="lab"><strong>1. How far out?</strong> <span id="fc-years-label">5 years out</span></p>
-      <input type="range" id="fc-slider" min="1" max="10" value="5" step="1" aria-label="Years into the future">
-      <div class="chips" id="fc-years">
-        <button type="button" class="chip" data-yrs="1">+1 year</button>
-        <button type="button" class="chip on" data-yrs="5">+5 years</button>
-        <button type="button" class="chip" data-yrs="10">+10 years</button>
-      </div>
-      <p class="lab"><strong>2. Which line does the price follow?</strong></p>
-      <div class="chips" id="fc-scen">
-        <button type="button" class="chip" data-scen="bottom">Bottom band</button>
-        <button type="button" class="chip on" data-scen="line">The growth line</button>
-        <button type="button" class="chip" data-scen="top">Top band</button>
-      </div>
-      <div class="result" id="fc-out"><p>Reading the model&hellip;</p></div>
-      <div class="result" id="fc-record"></div>
-      <p class="note">The model draws lines. It does not know the future.</p>
-    </div>
-  </section>
-
-  <section class="block chapter-head" id="ch2">
-    <p class="kicker">Chapter 2 &middot; Days like today</p>
-    <h2>What happened the other times it sat here?</h2>
-  </section>
-
-  <section class="block" id="times">
-    <h3 class="lab-h3" id="lab" style="margin-top:0">Every day, on one chart.</h3>
-    <p class="growth-note">Guess its band first. Then scrub to any day and see its price, its band, and the year that came next.</p>
-    <div class="lab-card">
-      <div class="lab-togs" role="group" aria-label="Chart layers">
-        <button type="button" class="chip on" data-tog="bands">Bands</button>
-        <button type="button" class="chip on" data-tog="ma50">50-day line</button>
-        <button type="button" class="chip on" data-tog="ma200">200-day line</button>
-        <button type="button" class="chip on" data-tog="marks">Halvings + top</button>
-      </div>
-      <svg id="lab-chart" role="img" aria-label="Bitcoin rainbow chart, full history, every day since 2010"></svg>
-      <input type="range" id="lab-scrub" min="0" max="100" value="100" step="0.01"
-        aria-label="Scrub through Bitcoin price history by date">
-      <p class="lab-hint">Every number below comes from real daily prices.</p>
-      <div class="lab-readout">
-        <div class="lab-stat"><div class="k">Date</div><div class="v" id="r-date">&hellip;</div><div class="n" id="r-age"></div></div>
-        <div class="lab-stat"><div class="k">Price that day</div><div class="v" id="r-price">&hellip;</div><div class="n">Daily close</div></div>
-        <div class="lab-stat"><div class="k">Band</div><div class="v" id="r-band">&hellip;</div><div class="n" id="r-bandnote"></div></div>
-        <div class="lab-stat"><div class="k">One year later</div><div class="v" id="r-next">&hellip;</div><div class="n" id="r-nextnote"></div></div>
-        <div class="lab-stat"><div class="k">$100 that day</div><div class="v" id="r-100">&hellip;</div><div class="n" id="r-100note"></div></div>
-      </div>
-      <div class="lab-dd" id="r-dd"></div>
-    </div>
-
-    <h3 class="lab-h3" id="bought">What if you'd bought?</h3>
-    <p class="growth-note">Pick a day and a sum. Guess first: up, or down?</p>
-    <div class="sim">
-      <span class="tag">One buy, one day</span>
-      <div class="wif-inputs">
-        <div class="wif-field">
-          <label for="wif-date">1. The day you buy</label>
-          <input type="date" id="wif-date">
-        </div>
-        <div class="wif-field">
-          <label for="wif-amt">2. The sum, in dollars</label>
-          <input type="number" id="wif-amt" min="1" step="any" value="1000" inputmode="decimal">
-        </div>
-      </div>
-      <div class="chips" id="wif-chips" style="margin-top:6px">
-        <button type="button" class="chip" data-wamt="100">$100</button>
-        <button type="button" class="chip on" data-wamt="1000">$1,000</button>
-        <button type="button" class="chip" data-wamt="10000">$10,000</button>
-      </div>
-      <div class="result" id="wif-out"><p>Reading the prices&hellip;</p></div>
-      <p class="note" id="wif-asof"></p>
-      <p class="note">That is the past. Not a promise. Spread the buys out instead? <a href="#how" style="color:var(--gold);font-weight:700">See what a little each week did</a>.</p>
-    </div>
-    <details class="more">
-      <summary>How to read this chart</summary>
-      <div class="more-body soft">
-      <p id="h-method"></p>
-      <p>The bands are a ruler, not a road. Bitcoin has sat in every band, and it has fallen hard from high bands and mid bands alike.</p>
-      <p><strong>A model, not prophecy.</strong> This line shows the past. It does not know the future. No one does. Past prices never promise future ones.</p>
-            <p id="h-source"></p>
-      <p><strong>Where this chart comes from.</strong> The rainbow is a public chart: azop drew the first one in 2014, on trolololo's growth line. Blockchain Center made it famous. The line here is our own fit, on the same public prices.</p>
-      </div>
-    </details>
-    <div class="sharecard">
-      <img src="postcard.png" alt="Postcard of ten-year windows. Worst, middle, and best paths, side by side." width="1200" height="630" loading="lazy">
-      <p>Ten years at a time: the worst path, the middle path, and the best.</p>
-    </div>
-  </section>
-
-  <section class="block" id="plain">
-    <p class="kicker">The same prices, plain</p>
-    <h2>The plain chart.</h2>
-    <p class="growth-note" id="plain-lead">Reading the daily prices&hellip;</p>
-    <p class="growth-note">No colors. No bands. Just the price, day by day, since 2010. Drag across it to read any day.</p>
-    <div class="lab-card">
-      <div class="plain-togs" role="group" aria-label="Time range">
-        <button type="button" class="chip" data-range="2y">Last 2 years</button>
-        <button type="button" class="chip on" data-range="5y">Last 5 years</button>
-        <button type="button" class="chip" data-range="all">All 16 years</button>
-      </div>
-      <svg id="plain-chart" viewBox="0 0 1000 460" role="img"
-        aria-label="Bitcoin price chart, plain. The price line, its 50-day average, and its 200-day average."></svg>
-      <input type="range" id="plain-scrub" min="0" max="100" value="100" step="1"
-        aria-label="Scrub through the plain price chart by date">
-      <div class="lab-readout">
-        <div class="lab-stat"><div class="k">Date</div><div class="v" id="plain-date">&hellip;</div><div class="n">The day you picked</div></div>
-        <div class="lab-stat"><div class="k">Price that day</div><div class="v" id="plain-price">&hellip;</div><div class="n">Daily close</div></div>
-        <div class="lab-stat"><div class="k">50-day average</div><div class="v" id="plain-ma50">&hellip;</div><div class="n">Gold line</div></div>
-        <div class="lab-stat"><div class="k">200-day average</div><div class="v" id="plain-ma200">&hellip;</div><div class="n">Pink line</div></div>
-      </div>
-      <div class="plain-togs" role="group" aria-label="Chart layers" style="margin:12px 0 0">
-        <button type="button" class="chip on" data-tog="sr">Ceiling + floor</button>
-        <button type="button" class="chip on" data-tog="ma50">50-day average</button>
-        <button type="button" class="chip on" data-tog="ma200">200-day average</button>
-      </div>
-    </div>
-    <div class="read-panel" id="sr-panel" style="margin-top:12px">
-      <h3>Ceilings and floors.</h3>
-      <p id="sr-body">Reading the tops and bottoms&hellip;</p>
-      <p class="fine" id="sr-method"></p>
-    </div>
-  </section>
-
-  <section class="block" id="gauges">
-    <h2>The gauges.</h2>
-    <div class="glist">
-      <div class="grow"><span class="gname">Heat, last two weeks</span><span class="gval" id="g-rsi">&hellip;</span><span class="gverd" id="g-rsi-note"></span></div>
-      <div class="grow"><span class="gname">Price vs its 200-day average</span><span class="gval" id="g-mayer">&hellip;</span><span class="gverd" id="g-mayer-note"></span></div>
-      <div class="grow"><span class="gname">Trend lines</span><span class="gval" id="g-ma">&hellip;</span><span class="gverd" id="g-ma-note"></span></div>
-      <div class="grow"><span class="gname">From the top</span><span class="gval" id="g-dd">&hellip;</span><span class="gverd" id="g-dd-note"></span></div>
-      <div class="grow"><span class="gname">Daily swing</span><span class="gval" id="g-vol">&hellip;</span><span class="gverd" id="g-vol-note"></span></div>
-      <div class="grow"><span class="gname">Price vs the rainbow line</span><span class="gval" id="g-dist">&hellip;</span><span class="gverd" id="g-dist-note"></span></div>
-    </div>
-    <p class="asofline" id="snap-asof">Reading the gauges&hellip;</p>
-  </section>
-
-  <section class="block" id="how">
-    <h2>A little, every week.</h2>
-    <p class="dca-line">Like an allowance, in reverse.</p>
-    <div class="sim">
-      <span class="tag">Weekly buys</span>
-      <p class="lab"><strong>1. Pick an amount.</strong> It goes in each week.</p>
-      <div class="chips" id="amt-chips">
-        <button type="button" class="chip" data-amt="10">$10</button>
-        <button type="button" class="chip" data-amt="25">$25</button>
-        <button type="button" class="chip" data-amt="50">$50</button>
-        <button type="button" class="chip" data-amt="100">$100</button>
-      </div>
-      <p class="lab"><strong>2. Pick a span.</strong> One, three, or five years.</p>
-      <div class="chips" id="yrs-chips">
-        <button type="button" class="chip" data-yrs="1">1 year</button>
-        <button type="button" class="chip" data-yrs="3">3 years</button>
-        <button type="button" class="chip" data-yrs="5">5 years</button>
-      </div>
-      <div class="result">
-        <p class="lab"><strong>3. See the past.</strong></p>
-        <p id="dca-put">You would have put in &hellip;</p>
-        <p class="worth" id="dca-worth">It would be worth &hellip; today.</p>
-        <p class="note">That is the past. Not a promise.</p>
-      </div>
-    </div>
-    <p class="source">Past prices: blockchain.info. Live price: Coinbase.</p>
-  </section>
-
-  <section class="block" id="read">
+  <section class="block" id="read-door">
     <h2>Today's read.</h2>
-    <p class="growth-note" id="read-date">The day's analysis, written only from the numbers on this page.</p>
-    <div class="notebox" id="read-note"><p>Reading today&hellip;</p></div>
-    <p class="source">Past reads are kept. <a href="/analysis">Read the archive</a>. This is analysis and education, not financial advice.</p>
+    <p class="growth-note">One short read a day, written only from today's numbers: the band, the gauges, the network.</p>
+    <p><a class="btn" href="/today">Read today's read</a></p>
+    <p class="source">Past reads are kept. <a href="/analysis">Read the archive</a>.</p>
   </section>
 
-  <section class="block chapter-head" id="ch3">
-    <p class="kicker">Chapter 3 &middot; The network itself</p>
-    <h2>Is Bitcoin itself healthy?</h2>
-  </section>
-
-  <section class="block" id="network">
-    <h2>The network itself.</h2>
-    <div class="halvbar">
-      <div class="track"><div class="fill" id="halv-fill"></div></div>
-      <p id="halv-text">Reading the blocks&hellip;</p>
-    </div>
-    <div class="cards">
-      <div class="gcard"><h3>Coins already out</h3><p class="big" id="n-supply">&hellip;</p><p>Of the 21 million that will ever exist.</p><p id="n-supply-note"></p></div>
-      <div class="gcard"><h3>Computing power (hashrate)</h3><p class="big" id="n-hash">&hellip;</p><p>Quintillions of guesses per second, spent guarding the ledger.</p><p id="n-hash-note"></p></div>
-      <div class="gcard"><h3>Fees right now</h3><p class="big" id="n-fees">&hellip;</p><p>What one payment pays to jump the line.</p><p id="n-fees-note"></p></div>
-      <div class="gcard"><h3>Fear &amp; Greed</h3><p class="big" id="n-fg">&hellip;</p><p>A 0-to-100 mood score for the whole market.</p><p id="n-fg-note"></p><p class="fgsrc">Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/">Alternative.me</a></p></div>
-      <div class="gcard"><h3>Bitcoin's share</h3><p class="big" id="n-dom">&hellip;</p><p id="n-dom-note"></p></div>
-    </div>
-  </section>
-
-
-
-  <section class="block chapter-head" id="ch4">
-    <p class="kicker">Chapter 4 &middot; The big falls</p>
-    <h2>Why did it crash those times?</h2>
-  </section>
-
-  <section class="block" id="falls">
-    <h3 class="lab-h3" id="crashes" style="margin-top:0">Tap a crash.</h3>
-    <p class="growth-note">Measured from daily prices. Tap one to see its shape and its story.</p>
-    <div class="chips" id="crash-chips"></div>
-    <div class="crash-wrap">
-      <svg id="crash-chart" viewBox="0 0 1000 300" role="img" aria-label="The picked fall, drawn from daily prices"></svg>
-      <div id="crash-out" aria-live="polite"><p>Reading the falls&hellip;</p></div>
-    </div>
-    <h3 class="lab-h3" id="crash-table-h">Every big fall, in one table.</h3>
-    <p class="growth-note">Tap a row to draw that fall above.</p>
-    <div class="lab-tablewrap">
-      <table class="ctable" id="crash-table">
-        <thead><tr>
-          <th scope="col">Fall</th><th scope="col">Top</th><th scope="col">Bottom</th>
-          <th scope="col">Fall</th><th scope="col">Days down</th><th scope="col">Back to the top</th>
-        </tr></thead>
-        <tbody id="crash-tbody"><tr><td colspan="6">Reading the falls&hellip;</td></tr></tbody>
-      </table>
-    </div>
-    <details class="more">
-      <summary>How each fall is measured</summary>
-      <div class="more-body soft">
-        <p id="crash-method">The top is a daily close. The fall runs to the lowest daily close after it. Days back to the top counts from the top to the first close at or above it again. Daily closes can miss a swing inside one day, so a fall here can read smaller than the worst hour of it.</p>
-      </div>
-    </details>
-  </section>
-
-  <section class="block" id="risk">
-    <h2>It swings hard. We could be wrong.</h2>
-    <p class="growth-note">It has fallen by half or more seven times since 2011. It could fall and stay down. The climb is a pattern, not a law.</p>
-    <p><a class="btn" href="#crashes">Tap a crash and see for yourself</a></p>
-    <p class="growth-note">Only money you will not need for years. A total loss should sting, not sink you.</p>
-  </section>
-
-  <section class="block chapter-head" id="ch5">
-    <p class="kicker">Chapter 5 &middot; Sources &amp; method</p>
-    <h2>How do we know any of this?</h2>
-  </section>
-
-  <section class="block" id="method">
-    <h2>Sources &amp; method.</h2>
-    <div class="mrow">
-      <h3>The model</h3>
-      <p>Rainbow model, our own fit, version 1. One line fit to every daily close on record:</p>
-      <p><code id="m-equation">ln(price) = a + b &times; ln(days since Jan 3, 2009)</code></p>
-      <p id="m-fitline">Reading the fit&hellip;</p>
-      <p>Nine bands stack on the line. Each is the same step wide: about 1.35 times the price below it. The ladder runs from 0.47 to 7.03 times the line.</p>
-      <p class="fine">First drawn by azop in 2014, on trolololo's growth line. Blockchain Center made it famous. This fit is our own, on the same public prices. A fit describes the past. It is not a forecast.</p>
-    </div>
-    <details class="more">
-      <summary>Where each part comes from</summary>
-      <div class="more-body">
-        <div id="m-sources"><p>Reading the sources&hellip;</p></div>
-        <p class="fine" id="m-computed"></p>
-      </div>
-    </details>
-    <details class="more">
-      <summary>What to watch for</summary>
-      <div class="more-body">
-      <p>Prices here are daily closes. A swing inside one day can be bigger than the day shows. In June 2011, one exchange flashed to one cent for a few minutes. The daily closes say that fall was 93%. Both are true, of different things.</p>
-      <p>The fit score (R&#178;) grades how well the line hugs the past. It says nothing about next year.</p>
-      <p>Bitcoin's share of all crypto depends on who counts the coins. Sites disagree by a point or two. Ours comes from CoinGecko, named on the card.</p>
-      <p>The Fear &amp; Greed score is one outside index, made by Alternative.me. We show it with its maker's name next to it, and we do not fold it into any other number here.</p>
-      <p>The model explorer stretches the model's own lines forward. Those lines are labelled as the model's, never as a forecast.</p>
-      </div>
-    </details>
-    <details class="more">
-      <summary>The standing line</summary>
-      <div class="more-body">
-        <p>This is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe. When a source is quiet, its card says so instead of showing an old number as new.</p>
-      </div>
-    </details>
-  </section>
-
-  <section class="block" id="where">
-    <h2>The two ways people hold it.</h2>
-    <div class="wrow">
-      <h3>IBIT (a stock fund)</h3>
-      <p>In a stock account, like a stock. You do not hold the coins.</p>
-    </div>
-    <div class="wrow">
-      <h3>Exchange app</h3>
-      <p>You hold real bitcoin. You keep the keys.</p>
-    </div>
-    <div class="wrow">
-      <h3>Fees</h3>
-      <p>Both charge fees. IBIT: yearly. Apps: per buy.</p>
-    </div>
-  </section>
-
-  <section class="block" id="learn">
-    <h2>Learn the words.</h2>
-    <div class="strip">
-      <div class="scard">
-        <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 9h13l17 17-13 13L9 22z" fill="#ffd94d"/><circle cx="16" cy="16" r="3.5" fill="#16204a"/></svg>
-        <h3>Price</h3>
-        <p class="big" id="price-big">&hellip;</p>
-        <p id="price-text">Price is the tag at the store.</p>
-      </div>
-      <div class="scard">
-        <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><polyline points="5,34 16,22 24,28 42,11" fill="none" stroke="#35b6c9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="42" cy="11" r="3.5" fill="#35b6c9"/></svg>
-        <h3>Technical</h3>
-        <p id="technical-text">Technical means watching the line.</p>
-      </div>
-      <div class="scard">
-        <svg class="icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="13" r="9" fill="#3fae5a"/><circle cx="15" cy="18" r="6" fill="#3fae5a"/><circle cx="33" cy="18" r="6" fill="#3fae5a"/><path d="M24 21v8" stroke="#b07a3f" stroke-width="4" stroke-linecap="round"/><path d="M24 29c-2 4-5 6-9 8M24 29c0 4-1 7-2 10M24 29c2 4 5 6 9 8" stroke="#b07a3f" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
-        <h3>Fundamental</h3>
-        <p id="fundamental-text">Fundamental means a health check.</p>
-      </div>
-    </div>
-    <div class="learnlinks">
-      <a href="/bitcoin-rainbow-chart-explained">The rainbow chart, in plain words. <span>One line. Nine bands.</span></a>
-      <a href="/what-is-bitcoin-in-plain-english">What is bitcoin? <span>Cash for the web.</span></a>
-      <a href="/bitcoin-dca-calculator">DCA, in plain words. <span>Small buys, each week.</span></a>
-      <a href="/bitcoin-halving-in-plain-english">The halving, in plain words. <span>New coins, cut in half.</span></a>
-      <a href="/should-i-buy-bitcoin">Should I buy bitcoin? <span>No chart can say. The past can speak.</span></a>
-      <a href="/has-bitcoin-ever-lost-money-over-4-years">Lost money over 4 years? <span>Not once, so far.</span></a>
-      <a href="/what-happens-after-bitcoin-crashes">After a crash, what then? <span>Years back to the top.</span></a>
+  <section class="block" id="doors">
+    <h2>The rest of the story.</h2>
+    <div class="doors">
+      <a class="door" href="/crashes"><span class="door-k">Chapter 3 &middot; The big falls</span><span class="door-t">Why did it crash those times?</span><span class="door-s">Every crash felt like the end. None of them were. Seven falls, each with its cause.</span></a>
+      <a class="door" href="/what-if"><span class="door-k">Chapter 4 &middot; Days like today</span><span class="door-t">What would it have meant for you?</span><span class="door-s">Pick any day since 2010. See its price, its band, and what a buy that day would have done.</span></a>
+      <a class="door" href="/method"><span class="door-k">Chapter 5 &middot; Sources &amp; method</span><span class="door-t">How do we know any of this?</span><span class="door-s">The model, the fit, and where every number comes from. In the open.</span></a>
     </div>
   </section>
 
   <footer>
     <p>This is analysis and education, not financial advice.</p>
-    <p><a href="/analysis">Today's read: the archive</a></p>
-    <p><a href="#ch1">The long story</a> &middot; <a href="#ch2">Days like today</a> &middot; <a href="#ch3">Network health</a> &middot; <a href="#ch4">The big falls</a> &middot; <a href="#ch5">Sources &amp; method</a></p>
+    <p><a href="/today">Today's read</a> &middot; <a href="/analysis">The archive</a></p>
+    <p><a href="/">The long story</a> &middot; <a href="/crashes">The falls</a> &middot; <a href="/what-if">What if it was you</a> &middot; <a href="/method">How we know</a> &middot; <a href="/today">Today</a></p>
     <p><a href="/bitcoin-rainbow-chart-explained">Rainbow chart</a> &middot; <a href="/what-is-bitcoin-in-plain-english">What is bitcoin</a> &middot; <a href="/bitcoin-dca-calculator">DCA</a> &middot; <a href="/bitcoin-halving-in-plain-english">Halving</a> &middot; <a href="/ask">Ask</a></p>
     <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
     <p>The rainbow chart: first drawn by azop in 2014. The growth line is by trolololo. Blockchain Center made the chart famous.</p>
@@ -835,6 +507,7 @@ let simAmt = 25, simYrs = 3;
 
 function renderSim(){
   if (!chartData) return;
+  if (!$("dca-put")) return;
   const u = (chartData.dca || []).find((x) => x.years === simYrs);
   if (!u) return;
   const put = simAmt * u.buys;
@@ -879,6 +552,7 @@ function highlight(k, scroll){
 
 function draw(data){
   const svg = $("chart");
+  if (!svg) return;
   const W=1000,H=540, L=64, R=16, T=14, B=36;
   const iw=W-L-R, ih=H-T-B;
   const t0=data.historyFirst.ts, t1=data.spot.ts + 45*86400;
@@ -1012,6 +686,7 @@ function drawHero(data){
 // exp(bandBottom + bandWidth*(k+1)) times the line.
 function buildRows(data){
   const box = $("bands");
+  if (!box) return;
   const todayK = data.today.bandIndex;
   const bw = data.bandWidth || 0.3, bb = data.bandBottom || -0.75;
   const edgeX = (k) => Math.exp(bb + bw * k);
@@ -1061,13 +736,13 @@ function fill(data, savedCopy){
   const fvEl = $("fact-vs"); if (fvEl) fvEl.textContent = midTxt + ".";
   const faEl = $("fact-asof");
   if (faEl) faEl.textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtDate(data.spot.ts) + ".";
-  $("price-big").textContent = fmtUSD(data.spot.price);
-  $("price-text").textContent = data.strip.price;
-  $("technical-text").textContent = data.strip.technical;
-  $("fundamental-text").textContent = data.strip.fundamental;
+  const pbEl = $("price-big"); if (pbEl) pbEl.textContent = fmtUSD(data.spot.price);
+  const ptEl = $("price-text"); if (ptEl) ptEl.textContent = data.strip.price;
+  const ttEl = $("technical-text"); if (ttEl) ttEl.textContent = data.strip.technical;
+  const ftEl = $("fundamental-text"); if (ftEl) ftEl.textContent = data.strip.fundamental;
   if (data.today.bandIndex >= 0 && data.today.bandIndex < 9) highlight(data.today.bandIndex, false);
   const bandName = data.today.band ? data.today.band.name : (data.today.bandIndex < 0 ? "below Deep Blue" : "above Red");
-  $("chart").setAttribute("aria-label",
+  if ($("chart")) $("chart").setAttribute("aria-label",
     "Bitcoin growth chart. One line is Bitcoin's own growth, fit to every price so far. Today it sits " +
     (data.today.band ? "in the " + bandName + " band, " + Math.abs(data.today.pct) + "% " +
       (data.today.pct < 0 ? "below" : "above") + " the line" : bandName) + ".");
@@ -1093,237 +768,6 @@ if (window.FALLBACK_CHART) { try { drawHero(window.FALLBACK_CHART); } catch(e){}
 load();
 </script>
 <script src="data-daily.js"></script>
-<script>
-(function(){
-  const D = window.BTC_LAB;
-  const pts = D.points; // [ts, price] daily closes
-  const { a, b } = D.fit;
-  const GEN = D.genesisTs;
-  const trendAt = ts => Math.exp(a + b * Math.log((ts - GEN) / 86400));
-  const edgeAt = (ts, k) => trendAt(ts) * Math.exp(D.bandBottom + D.bandWidth * k);
-  const bandIdxAt = (p, ts) => Math.floor((Math.log(p) - Math.log(trendAt(ts)) - D.bandBottom) / D.bandWidth);
-  const fmt$ = x => x >= 1000 ? "$" + Math.round(x).toLocaleString("en-US")
-              : x >= 1 ? "$" + x.toFixed(2) : "$" + x.toFixed(2);
-  const fmtDate = ts => new Date(ts * 1000).toLocaleDateString("en-US",
-    { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
-
-  // ---- geometry: x = time (linear), y = log price
-  const W = 1000, H = 520, PL = 64, PR = 14, PT = 16, PB = 30;
-  const t0 = pts[0][0], t1 = pts[pts.length - 1][0];
-  const yLo = Math.log(0.03), yHi = Math.log(400000);
-  const X = ts => PL + (ts - t0) / (t1 - t0) * (W - PL - PR);
-  const Y = p => PT + (yHi - Math.log(p)) / (yHi - yLo) * (H - PT - PB);
-  const svg = document.getElementById("lab-chart");
-  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  const NS = "http://www.w3.org/2000/svg";
-  const el = (tag, attrs, parent) => {
-    const n = document.createElementNS(NS, tag);
-    for (const k in attrs) n.setAttribute(k, attrs[k]);
-    (parent || svg).appendChild(n); return n;
-  };
-
-  // ---- cycle shading: one soft wash per halving era (evo, Nov 1 2026)
-  const HALVINGS = [["2012-11-28","First halving"],["2016-07-09","Second halving"],["2020-05-11","Third halving"],["2024-04-20","Fourth halving"]];
-  const HALV_TS = HALVINGS.map(h => Date.parse(h[0] + "T00:00:00Z") / 1000);
-  (function(){
-    const eras = [[t0, HALV_TS[0]], [HALV_TS[1], HALV_TS[2]], [HALV_TS[3], t1]];
-    eras.forEach(([s, e]) => {
-      if (e <= t0 || s >= t1) return;
-      el("rect", { x: X(Math.max(s, t0)), y: PT, width: Math.max(0, X(Math.min(e, t1)) - X(Math.max(s, t0))), height: H - PT - PB, fill: "#ffffff", opacity: 0.035 });
-    });
-  })();
-
-  // ---- bands: sample edges every ~30 days
-  const sampleTs = [];
-  for (let ts = t0; ts <= t1; ts += 30 * 86400) sampleTs.push(ts);
-  sampleTs.push(t1);
-  for (let k = 0; k < 9; k++) {
-    let d = "";
-    sampleTs.forEach((ts, i) => { d += (i ? "L" : "M") + X(ts).toFixed(1) + "," + Y(edgeAt(ts, k + 1)).toFixed(1) + " "; });
-    for (let i = sampleTs.length - 1; i >= 0; i--) d += "L" + X(sampleTs[i]).toFixed(1) + "," + Y(edgeAt(sampleTs[i], k)).toFixed(1) + " ";
-    el("path", { d: d + "Z", fill: D.bands[k].color, opacity: 0.85 });
-  }
-  // fit line
-  el("polyline", { fill: "none", stroke: "#ffffff", "stroke-width": 1, "stroke-dasharray": "5 4", opacity: .55,
-    points: sampleTs.map(ts => X(ts).toFixed(1) + "," + Y(trendAt(ts)).toFixed(1)).join(" ") });
-  // price line (daily)
-  el("polyline", { fill: "none", stroke: "#0d1330", "stroke-width": 1.6,
-    points: pts.map(p => X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join(" ") });
-
-  // ---- evo overlays: moving-average lines, halving markers, ATH dot
-  function smaSeries(n) {
-    const out = []; let sum = 0;
-    for (let i = 0; i < pts.length; i++) {
-      sum += pts[i][1]; if (i >= n) sum -= pts[i - n][1];
-      if (i >= n - 1) out.push([pts[i][0], sum / n]);
-    }
-    return out;
-  }
-  function smaPath(series, color, width) {
-    const g = el("g", {});
-    const step = Math.max(1, Math.floor(series.length / 500));
-    const pp = series.filter((_, i) => i % step === 0 || i === series.length - 1);
-    el("polyline", { fill: "none", stroke: color, "stroke-width": width, opacity: 0.9,
-      points: pp.map(p => X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join(" ") }, g);
-    return g;
-  }
-  const gMA50 = smaPath(smaSeries(50), "#ffd94d", 1.6);
-  const gMA200 = smaPath(smaSeries(200), "#ff5d8f", 1.6);
-  const gMarks = el("g", {});
-  HALVINGS.forEach(([d, label], i) => {
-    const ts = HALV_TS[i]; if (ts < t0 || ts > t1) return;
-    el("line", { x1: X(ts), y1: PT, x2: X(ts), y2: H - PB, stroke: "#ffd94d", "stroke-width": 1.2, "stroke-dasharray": "4 4", opacity: 0.55 }, gMarks);
-    const t = el("text", { x: X(ts) + 4, y: PT + 12, class: "lab-axislab", fill: "#ffd94d" }, gMarks); t.textContent = "Halving " + (i + 1);
-  });
-  (function(){
-    let bi = 0; for (let i = 1; i < pts.length; i++) if (pts[i][1] > pts[bi][1]) bi = i;
-    el("circle", { cx: X(pts[bi][0]), cy: Y(pts[bi][1]), r: 5.5, fill: "#ffd94d", stroke: "#0d1330", "stroke-width": 2 }, gMarks);
-    const t = el("text", { x: Math.min(X(pts[bi][0]) - 8, W - 120), y: Y(pts[bi][1]) + 20, class: "lab-ddlabel" }, gMarks);
-    t.textContent = "Top: " + fmt$(pts[bi][1]);
-  })();
-  const bandPaths = Array.prototype.slice.call(svg.querySelectorAll("path")).filter(p => {
-    const f = p.getAttribute("fill") || ""; return D.bands.some(b => b.color === f);
-  });
-  window.RB_labToggle = function (name, on) {
-    const show = on ? "" : "none";
-    if (name === "bands") bandPaths.forEach(p => p.style.display = show);
-    if (name === "ma50") gMA50.style.display = show;
-    if (name === "ma200") gMA200.style.display = show;
-    if (name === "marks") gMarks.style.display = show;
-  };
-  document.querySelectorAll(".lab-togs .chip").forEach(c => {
-    c.addEventListener("click", () => {
-      const on = !c.classList.contains("on");
-      c.classList.toggle("on", on);
-      if (window.RB_labToggle) window.RB_labToggle(c.getAttribute("data-tog"), on);
-    });
-  });
-
-  // ---- axes: years + price gridlines
-  for (let yr = 2011; yr <= 2026; yr++) {
-    const ts = Date.UTC(yr, 0, 1) / 1000;
-    if (ts < t0 || ts > t1) continue;
-    el("line", { x1: X(ts), y1: PT, x2: X(ts), y2: H - PB, stroke: "#ffffff", opacity: .07 });
-    const t = el("text", { x: X(ts) + 3, y: H - 10, class: "lab-axislab" }); t.textContent = yr;
-  }
-  [0.1, 1, 10, 100, 1000, 10000, 100000].forEach(v => {
-    el("line", { x1: PL, y1: Y(v), x2: W - PR, y2: Y(v), stroke: "#ffffff", opacity: .10 });
-    const t = el("text", { x: 6, y: Y(v) + 4, class: "lab-axislab" });
-    t.textContent = v >= 1000 ? "$" + (v / 1000) + "k" : "$" + v;
-  });
-
-  // ---- drawdown labels on chart (the falls >= 70%, plus the open one)
-  const LABEL = { "2011-06-11": "2011 crash", "2013-12-05": "2013\u201315 fall",
-    "2017-12-17": "2018 fall", "2021-11-09": "2021\u201322 fall", "2025-10-07": "2025\u2013now" };
-  D.drawdowns.filter(d => LABEL[d.peakDate]).forEach(d => {
-    const cx = X(d.troughTs), cy = Y(d.troughPrice);
-    el("circle", { cx, cy, r: 4.5, fill: "#ff5d8f", stroke: "#0d1330", "stroke-width": 1.5 });
-    const t = el("text", { x: Math.min(cx + 8, W - 150), y: cy + 16, class: "lab-ddlabel" });
-    t.textContent = `${LABEL[d.peakDate]}: \u2212${d.depthPct}%`;
-  });
-
-  // ---- crosshair + selection
-  const cross = el("line", { y1: PT, y2: H - PB, stroke: "#ffd94d", "stroke-width": 1.4, opacity: 0 });
-  const dot = el("circle", { r: 6, fill: "#ffd94d", stroke: "#0d1330", "stroke-width": 2, opacity: 0 });
-  const scrub = document.getElementById("lab-scrub");
-  function nearestIdx(ts) {
-    let lo = 0, hi = pts.length - 1;
-    while (hi - lo > 1) { const m = (lo + hi) >> 1; (pts[m][0] < ts) ? lo = m : hi = m; }
-    return (ts - pts[lo][0] <= pts[hi][0] - ts) ? lo : hi;
-  }
-  function select(i) {
-    const [ts, p] = pts[i];
-    cross.setAttribute("x1", X(ts)); cross.setAttribute("x2", X(ts)); cross.setAttribute("opacity", 1);
-    dot.setAttribute("cx", X(ts)); dot.setAttribute("cy", Y(p)); dot.setAttribute("opacity", 1);
-    scrub.value = (i / (pts.length - 1) * 100).toFixed(2);
-    document.getElementById("r-date").textContent = fmtDate(ts);
-    document.getElementById("r-age").textContent =
-      "Bitcoin was " + ((ts - GEN) / (365.25 * 86400)).toFixed(1) + " years old";
-    document.getElementById("r-price").textContent = fmt$(p);
-    const bi = bandIdxAt(p, ts);
-    const bandEl = document.getElementById("r-band"), noteEl = document.getElementById("r-bandnote");
-    if (bi < 0) { bandEl.textContent = "Below every band"; noteEl.textContent = "Under the whole ladder."; }
-    else if (bi > 8) { bandEl.textContent = "Above every band"; noteEl.textContent = "Over the whole ladder."; }
-    else {
-      bandEl.innerHTML = "";
-      const chip = document.createElement("span"); chip.className = "bandchip";
-      chip.style.background = D.bands[bi].color; bandEl.appendChild(chip);
-      bandEl.appendChild(document.createTextNode(D.bands[bi].name));
-      const pct = Math.round((p / trendAt(ts) - 1) * 100);
-      noteEl.textContent = D.bands[bi].plain + " (" + (pct >= 0 ? "+" : "") + pct + "% vs the line)";
-    }
-    // what happened next: close nearest +1 year
-    const nx = document.getElementById("r-next"), nn = document.getElementById("r-nextnote");
-    const target = ts + 365.25 * 86400;
-    if (target > t1) { nx.textContent = "Not yet"; nn.textContent = "A full year has not passed since this day."; }
-    else {
-      let j = nearestIdx(target);
-      const chg = (pts[j][1] / p - 1) * 100;
-      nx.textContent = fmt$(pts[j][1]);
-      nn.textContent = "On " + fmtDate(pts[j][0]) + ". " +
-        (chg >= 0 ? "Up " : "Down ") + Math.abs(chg).toFixed(1) + "% in that year";
-    }
-    // what $100 that day is worth at the last close (evo)
-    const e100 = document.getElementById("r-100"), e100n = document.getElementById("r-100note");
-    if (e100 && e100n) {
-      const lastP = pts[pts.length - 1][1];
-      e100.textContent = fmt$(100 / p * lastP);
-      e100n.textContent = "At the last close, " + fmt$(lastP);
-    }
-    // drawdown context
-    const ddEl = document.getElementById("r-dd");
-    const inside = D.drawdowns.find(d => ts >= d.peakTs && (!d.recoveredDate ||
-      ts <= Date.parse(d.recoveredDate + "T00:00:00Z") / 1000));
-    if (inside && inside.depthPct >= 50) {
-      ddEl.style.display = "block";
-      ddEl.textContent = "This day sat inside a big fall. " +
-        "Top: " + fmt$(inside.peakPrice) + ", on " + inside.peakDate + ". " +
-        "Bottom: " + fmt$(inside.troughPrice) + ", on " + inside.troughDate + ". " +
-        "Drop: " + inside.depthPct + "%." +
-        (inside.recoveredDate ? " The price passed that top again on " + inside.recoveredDate + "."
-                               : " It has not passed that top again yet.");
-    } else ddEl.style.display = "none";
-  }
-  function fromEvent(e) {
-    if (window.pingChart) window.pingChart();
-    const r = svg.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width * W;
-    const ts = t0 + (x - PL) / (W - PL - PR) * (t1 - t0);
-    select(nearestIdx(Math.max(t0, Math.min(t1, ts))));
-  }
-  svg.addEventListener("pointermove", fromEvent);
-  svg.addEventListener("pointerdown", fromEvent);
-  scrub.addEventListener("input", () => { if (window.pingChart) window.pingChart(); select(Math.round(scrub.value / 100 * (pts.length - 1))); });
-  select(pts.length - 1);
-
-  // Story pages link here with a set day: /?day=2018-12-16#lab opens the
-  // scrubber on that day (the low of the 2018 fall, for example).
-  const wantDay = new URLSearchParams(location.search).get("day");
-  if (wantDay) {
-    const wts = Date.parse(wantDay + "T00:00:00Z") / 1000;
-    if (isFinite(wts)) select(nearestIdx(Math.max(t0, Math.min(t1, wts))));
-  }
-
-  // (evo, Nov 1 2026: the falls table became the tap-a-crash explorer in evo.js.)
-
-  // ---- honesty text, numbers filled from the data itself
-  const last = D.last, first = D.first;
-  const open = D.drawdowns[D.drawdowns.length - 1];
-  document.getElementById("h-method").innerHTML =
-    "<strong>The model:</strong> one line, fit to every daily close. " +
-    "It uses " + D.fit.n.toLocaleString("en-US") + " closes in all. " +
-    "Nine bands sit on that line. Each band is the same step wide. " +
-    "Each step up is about 1.35 times the price below.";
-  document.getElementById("h-source").innerHTML =
-    "<strong>The data:</strong> daily prices from blockchain.info, " + first.date + " to " +
-    last.date + ". Last close: " + fmt$(last.price) + " (" + last.date + ")." +
-    (open.recoveredDate === null
-      ? " That is still " + Math.abs(Math.round((last.price / open.peakPrice - 1) * 100)) +
-        "% below the " + open.peakDate + " top of " + fmt$(open.peakPrice) +
-        ". The current fall is not over on this chart's own terms."
-      : "");
-})();
-</script>
 <script>
 (function(){
   const D = window.BTC_LAB;
@@ -1475,365 +919,23 @@ load();
   }
 })();
 </script>
-<script src="snapshot-data.js"></script>
-<script src="daily-series.js"></script>
-<script src="evo.js"></script>
 <script>
 (function(){
-  "use strict";
-  // ===== Wave 1: "What if you'd bought?" + Sources & method fill =====
-  var raw = window.BTC_DAILY || [];
-  var rows = raw.map(function(r){
-    var s = String(r[0]);
-    return { ts: Date.UTC(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8)) / 1000,
-             iso: s.slice(0,4) + "-" + s.slice(4,6) + "-" + s.slice(6,8), p: r[1] };
-  });
-  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
-  function fmtD(iso){
-    return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US",
-      { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  var map = {"#what":"/what-is-bitcoin-in-plain-english","#now":"/","#ch1":"/",
+    "#case":"/method#case","#model":"/method#model","#buy":"/method#buy",
+    "#ch2":"/what-if","#times":"/what-if#times","#lab":"/what-if#lab",
+    "#bought":"/what-if#bought","#how":"/what-if#how","#plain":"/what-if#lab",
+    "#gauges":"/today#gauges","#read":"/today#read","#ch3":"/today",
+    "#network":"/today#network","#ch4":"/crashes","#falls":"/crashes#falls",
+    "#crashes":"/crashes#crashes","#risk":"/crashes#risk",
+    "#ch5":"/method","#method":"/method#method","#where":"/","#learn":"/"};
+  var t = map[location.hash];
+  if (t) {
+    var parts = t.split("#");
+    location.replace(parts[0] + location.search + (parts[1] ? "#" + parts[1] : ""));
   }
-  var out = document.getElementById("wif-out");
-  if (rows.length && out) {
-    var first = rows[0], last = rows[rows.length - 1];
-    var dateEl = document.getElementById("wif-date");
-    var amtEl = document.getElementById("wif-amt");
-    dateEl.min = first.iso; dateEl.max = last.iso;
-    function closeOnOrBefore(ts){
-      var lo = 0, hi = rows.length - 1, ans = 0;
-      while (lo <= hi) { var m = (lo + hi) >> 1; if (rows[m].ts <= ts) { ans = m; lo = m + 1; } else hi = m - 1; }
-      return rows[ans];
-    }
-    var defRow = closeOnOrBefore(last.ts - 5 * 365.25 * 86400);
-    dateEl.value = defRow.iso;
-    function render(){
-      var amt = parseFloat(amtEl.value);
-      if (!(amt > 0)) { out.innerHTML = "<p>Put in a sum above zero to see the past.</p>"; return; }
-      var pts = dateEl.value ? Date.parse(dateEl.value + "T00:00:00Z") / 1000 : NaN;
-      if (!isFinite(pts)) { out.innerHTML = "<p>Pick a day to see the past.</p>"; return; }
-      var row = closeOnOrBefore(pts);
-      var btc = amt / row.p;
-      var worth = btc * last.p;
-      var chg = (last.p / row.p - 1) * 100;
-      var chgTxt = (chg >= 0 ? "up " : "down ") +
-        Math.abs(chg).toLocaleString("en-US", { maximumFractionDigits: chg >= 1000 ? 0 : 1 }) + "%";
-      out.innerHTML = "";
-      var p1 = document.createElement("p");
-      p1.textContent = "On " + fmtD(row.iso) + ", one bitcoin cost " + fmt$(row.p) +
-        ". Your " + fmt$(amt) + " bought " +
-        btc.toLocaleString("en-US", { maximumFractionDigits: 4 }) + " bitcoin.";
-      var p2 = document.createElement("p");
-      p2.className = "worth";
-      p2.textContent = "At the last close, that is worth " + fmt$(worth) + ": " + chgTxt + ".";
-      out.appendChild(p1); out.appendChild(p2);
-      if (pts < first.ts) {
-        var p3 = document.createElement("p");
-        p3.textContent = "The record starts " + fmtD(first.iso) + ", so that first day is the one used.";
-        out.appendChild(p3);
-      }
-      document.getElementById("wif-asof").textContent =
-        "Last close: " + fmt$(last.p) + " on " + fmtD(last.iso) +
-        ". Daily closes from blockchain.info. No fees or taxes counted. A real buy would have paid both.";
-      document.querySelectorAll("#wif-chips .chip").forEach(function(c){
-        c.classList.toggle("on", Number(c.getAttribute("data-wamt")) === amt);
-      });
-    }
-    dateEl.addEventListener("change", render);
-    amtEl.addEventListener("input", render);
-    document.querySelectorAll("#wif-chips .chip").forEach(function(c){
-      c.addEventListener("click", function(){ amtEl.value = c.getAttribute("data-wamt"); render(); });
-    });
-    render();
-  } else if (out) {
-    out.innerHTML = "<p>The price record is not available right now.</p>";
-  }
-
-  // ===== Sources & method: the model's own numbers, from the page's data =====
-  var L = window.BTC_LAB;
-  if (L && L.fit && rows.length) {
-    var a = L.fit.a, b = L.fit.b, GEN = L.genesisTs;
-    var eq = document.getElementById("m-equation");
-    if (eq) eq.textContent = "ln(price) = \u2212" + Math.abs(a).toFixed(2) + " + " +
-      b.toFixed(2) + " \u00d7 ln(days since Jan 3, 2009)";
-    var ssr = 0, sst = 0, ys = [];
-    for (var i = 0; i < rows.length; i++) ys.push(Math.log(rows[i].p));
-    var my = ys.reduce(function(s, v){ return s + v; }, 0) / ys.length;
-    for (var j = 0; j < rows.length; j++) {
-      var x = Math.log((rows[j].ts - GEN) / 86400);
-      var f = a + b * x;
-      ssr += (ys[j] - f) * (ys[j] - f);
-      sst += (ys[j] - my) * (ys[j] - my);
-    }
-    var r2 = 1 - ssr / sst;
-    var fl = document.getElementById("m-fitline");
-    if (fl) fl.textContent =
-      "Fit window: " + fmtD(L.first.date) + " to " + fmtD(L.last.date) + ". " +
-      L.fit.n.toLocaleString("en-US") + " daily closes in all. " +
-      "Fit score (R\u00b2): " + r2.toFixed(2) + ", in log terms. " +
-      "That score grades the fit to the past. It is not a promise about the future.";
-  }
-  // If the snapshot never arrives, still name the sources (without as-of).
-  setTimeout(function(){
-    var ms = document.getElementById("m-sources");
-    if (ms && !ms.getAttribute("data-done")) {
-      ms.innerHTML = "";
-      [["The chart, the gauges, and the falls", "Daily closes from blockchain.info, the full record since 2010. The live price is from Coinbase."],
-       ["The network", "Block height, hashrate, and fees from mempool.space. Supply is checked against blockchain.info."],
-       ["Fear & Greed", "The Fear & Greed Index by Alternative.me, shown with its maker's name next to the number."],
-       ["Bitcoin's share", "CoinGecko's count of the whole crypto market."]]
-      .forEach(function(r){
-        var p = document.createElement("p");
-        var s = document.createElement("strong"); s.textContent = r[0] + ". ";
-        p.appendChild(s); p.appendChild(document.createTextNode(r[1]));
-        ms.appendChild(p);
-      });
-    }
-  }, 8000);
 })();
 </script>
-<script>
-(function(){
-  "use strict";
-  var raw = window.BTC_DAILY || [];
-  var leadEl = document.getElementById("plain-lead");
-  var svg = document.getElementById("plain-chart");
-  if (!raw.length || !svg) { if (leadEl) leadEl.textContent = "The price series is not available right now."; return; }
-  var pts = raw.map(function(r){
-    var s = String(r[0]);
-    return [Date.UTC(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8)) / 1000, r[1]];
-  });
-  var lastI = pts.length - 1, lastTs = pts[lastI][0], lastP = pts[lastI][1];
-  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
-  function fmtDate(ts){ return new Date(ts * 1000).toLocaleDateString("en-US",
-    { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }); }
-  function track(){ try { if (window.FA && FA.track) FA.track("tool_start", { surface: "plain-chart" }); } catch(e){} }
-
-  // ---- moving averages over the full history
-  function smaArr(n){
-    var out = new Array(pts.length).fill(null), sum = 0;
-    for (var i = 0; i < pts.length; i++){
-      sum += pts[i][1]; if (i >= n) sum -= pts[i - n][1];
-      if (i >= n - 1) out[i] = sum / n;
-    }
-    return out;
-  }
-  var MA50 = smaArr(50), MA200 = smaArr(200);
-
-  // ---- lead sentence: real numbers, computed from the series now
-  if (leadEl){
-    leadEl.textContent =
-      "Bitcoin's last close was " + fmt$(lastP) + ", on " + fmtDate(lastTs) + ". " +
-      "That is " + (lastP >= MA200[lastI] ? "above" : "below") + " its 200-day average of " + fmt$(MA200[lastI]) + ". " +
-      "It sits " + (lastP >= MA50[lastI] ? "above" : "below") + " its 50-day average of " + fmt$(MA50[lastI]) + ".";
-  }
-
-  // ---- ceilings and floors.
-  // Method: in the last 2 years of daily closes, a swing top is a close
-  // higher than the 10 closes on each side of it; a swing bottom mirrors
-  // it. Tops (or bottoms) within 3% of each other group into one level.
-  // A level needs at least 3 touches. The ceiling is the most-touched
-  // level fully above the last close (ties: the nearest one above); the
-  // floor mirrors that below. If either is missing at 2 years, the
-  // window widens to 3 years and the page says so.
-  function swingLevels(years){
-    var tStart = lastTs - years * 365.25 * 86400, w0 = 0;
-    while (w0 < lastI && pts[w0][0] < tStart) w0++;
-    var W = 10, highs = [], lows = [], k, j;
-    for (k = Math.max(W, w0); k <= lastI - W; k++){
-      var isH = true, isL = true;
-      for (j = k - W; j <= k + W; j++){
-        if (j === k) continue;
-        if (pts[j][1] >= pts[k][1]) isH = false;
-        if (pts[j][1] <= pts[k][1]) isL = false;
-      }
-      if (isH && pts[k][0] >= tStart) highs.push(k);
-      if (isL && pts[k][0] >= tStart) lows.push(k);
-    }
-    function cluster(idxs){
-      var sorted = idxs.slice().sort(function(a, b){ return pts[a][1] - pts[b][1]; });
-      var clusters = [];
-      sorted.forEach(function(idx){
-        var c = clusters[clusters.length - 1];
-        if (c){
-          var med = pts[c[Math.floor(c.length / 2)]][1];
-          if (Math.abs(pts[idx][1] - med) / med <= 0.03){ c.push(idx); return; }
-        }
-        clusters.push([idx]);
-      });
-      return clusters.filter(function(c){ return c.length >= 3; }).map(function(c){
-        var ps = c.map(function(idx){ return pts[idx][1]; });
-        return { touches: c.length, lo: Math.min.apply(null, ps), hi: Math.max.apply(null, ps) };
-      });
-    }
-    return { ceilings: cluster(highs), floors: cluster(lows) };
-  }
-  function pickLevel(list, above){
-    var ok = list.filter(function(c){ return above ? c.lo > lastP : c.hi < lastP; });
-    ok.sort(function(a, b){ return b.touches - a.touches || (above ? a.lo - b.lo : b.hi - a.hi); });
-    return ok[0] || null;
-  }
-  var srYears = 2, SR = swingLevels(2);
-  var ceil = pickLevel(SR.ceilings, true), floor = pickLevel(SR.floors, false);
-  var widened = false;
-  if (!ceil || !floor){
-    var SR3 = swingLevels(3);
-    ceil = pickLevel(SR3.ceilings, true); floor = pickLevel(SR3.floors, false);
-    if (ceil || floor){ srYears = 3; widened = true; }
-  }
-  var yrsTxt = srYears === 2 ? "two" : "three";
-  var srBody = document.getElementById("sr-body"), srMethod = document.getElementById("sr-method");
-  if (srBody){
-    var parts = ["A ceiling is a price bitcoin keeps bumping into. It climbs there, then turns back down.",
-                 "A floor is a price it keeps bouncing off."];
-    if (ceil) parts.push("Ceiling: " + fmt$(ceil.lo) + " to " + fmt$(ceil.hi) + ". Tops hit it " + ceil.touches + " times in the last " + yrsTxt + " years.");
-    if (floor) parts.push("Floor: " + fmt$(floor.lo) + " to " + fmt$(floor.hi) + ". Bottoms bounced off it " + floor.touches + " times.");
-    if (!ceil && !floor) parts.push("No price level earned 3 touches, so this chart draws none.");
-    else if (!ceil) parts.push("No ceiling earned 3 touches, so none is drawn.");
-    else if (!floor) parts.push("No floor earned 3 touches, so none is drawn.");
-    parts.push("That is the past. Not a promise.");
-    srBody.textContent = parts.join(" ");
-  }
-  if (srMethod){
-    srMethod.textContent = "How we pick them. A top is a close higher than the ten closes beside it. " +
-      "Tops within 3% count as one level. A level needs at least 3 touches. Ties go to the level nearest the last close. " +
-      (widened ? "Two years held no full pair of levels, so the window widened to three years. " : "") +
-      "Daily closes from blockchain.info, through " + fmtDate(lastTs) + ".";
-  }
-
-  // ---- the chart
-  var NS = "http://www.w3.org/2000/svg";
-  var W = 1000, H = 460, PL = 64, PR = 14, PT = 16, PB = 30;
-  var scrub = document.getElementById("plain-scrub");
-  var RANGES = { "2y": 2 * 365.25 * 86400, "5y": 5 * 365.25 * 86400, "all": Infinity };
-  var rangeKey = "5y";
-  var show = { sr: true, ma50: true, ma200: true };
-  var view = null, selI = lastI;
-  function el(tag, attrs, parent){
-    var n = document.createElementNS(NS, tag);
-    for (var k in attrs) n.setAttribute(k, attrs[k]);
-    (parent || svg).appendChild(n); return n;
-  }
-  function niceStep(span){
-    var rawStep = span / 4, mag = Math.pow(10, Math.floor(Math.log10(rawStep))), norm = rawStep / mag;
-    return (norm >= 5 ? 10 : norm >= 2 ? 5 : norm >= 1 ? 2 : 1) * mag;
-  }
-  function render(){
-    var span = RANGES[rangeKey], i0 = 0;
-    if (isFinite(span)){
-      var tStart = lastTs - span;
-      while (i0 < lastI && pts[i0][0] < tStart) i0++;
-    }
-    var i1 = lastI, lo = Infinity, hi = -Infinity, i;
-    for (i = i0; i <= i1; i++){ if (pts[i][1] < lo) lo = pts[i][1]; if (pts[i][1] > hi) hi = pts[i][1]; }
-    if (rangeKey !== "all" && show.sr){
-      if (ceil){ lo = Math.min(lo, ceil.lo); hi = Math.max(hi, ceil.hi); }
-      if (floor){ lo = Math.min(lo, floor.lo); hi = Math.max(hi, floor.hi); }
-    }
-    var pad = (hi - lo) * 0.07 || 1;
-    var yLo = Math.max(0, lo - pad), yHi = hi + pad;
-    var t0 = pts[i0][0], t1 = pts[i1][0];
-    var X = function(ts){ return PL + (ts - t0) / (t1 - t0) * (W - PL - PR); };
-    var Y = function(p){ return PT + (yHi - p) / (yHi - yLo) * (H - PT - PB); };
-    view = { i0: i0, i1: i1, X: X, Y: Y };
-    svg.innerHTML = "";
-    // gridlines
-    var step = niceStep(yHi - yLo), gv;
-    for (gv = Math.ceil(yLo / step) * step; gv <= yHi; gv += step){
-      el("line", { x1: PL, y1: Y(gv), x2: W - PR, y2: Y(gv), stroke: "#ffffff", opacity: .10 });
-      var gt = el("text", { x: 6, y: Y(gv) + 4, class: "lab-axislab" });
-      gt.textContent = gv >= 1000 ? "$" + Math.round(gv / 100) / 10 + "k" : "$" + Math.round(gv);
-    }
-    var yr0 = new Date(t0 * 1000).getUTCFullYear(), yr1 = new Date(t1 * 1000).getUTCFullYear();
-    for (var yr = yr0; yr <= yr1; yr++){
-      var yts = Date.UTC(yr, 0, 1) / 1000;
-      if (yts < t0 || yts > t1) continue;
-      el("line", { x1: X(yts), y1: PT, x2: X(yts), y2: H - PB, stroke: "#ffffff", opacity: .07 });
-      var yt = el("text", { x: X(yts) + 3, y: H - 10, class: "lab-axislab" }); yt.textContent = yr;
-    }
-    // ceiling + floor zones
-    if (show.sr){
-      function zone(z, fill, edge, label, labelFill){
-        if (!z) return;
-        var yTop = Y(z.hi), yBot = Y(z.lo);
-        if (yBot < PT || yTop > H - PB) return;
-        el("rect", { x: PL, y: yTop, width: W - PL - PR, height: Math.max(3, yBot - yTop), fill: fill });
-        el("line", { x1: PL, y1: yTop, x2: W - PR, y2: yTop, stroke: edge, "stroke-width": 1.4, opacity: .8 });
-        el("line", { x1: PL, y1: yBot, x2: W - PR, y2: yBot, stroke: edge, "stroke-width": 1.4, opacity: .8 });
-        var t = el("text", { x: PL + 8, y: Math.max(PT + 14, yTop - 6), class: "plain-sr-lab", fill: labelFill });
-        t.textContent = label;
-      }
-      zone(ceil, "rgba(232,93,31,.20)", "#e85d1f", ceil ? "Ceiling " + fmt$(ceil.lo) + "\u2013" + fmt$(ceil.hi) : "", "#ffab7a");
-      zone(floor, "rgba(63,174,90,.20)", "#3fae5a", floor ? "Floor " + fmt$(floor.lo) + "\u2013" + fmt$(floor.hi) : "", "#8fe0a5");
-    }
-    // lines (downsampled to ~700 points)
-    function line(arr, color, width){
-      var idxs = [];
-      for (var i = view.i0; i <= view.i1; i++) if (arr[i] != null) idxs.push(i);
-      var stride = Math.max(1, Math.floor(idxs.length / 700)), pp = [];
-      idxs.forEach(function(idx, n){
-        if (n % stride === 0 || n === idxs.length - 1) pp.push(X(pts[idx][0]).toFixed(1) + "," + Y(arr[idx]).toFixed(1));
-      });
-      el("polyline", { fill: "none", stroke: color, "stroke-width": width, points: pp.join(" ") });
-    }
-    if (show.ma200) line(MA200, "#ff5d8f", 1.8);
-    if (show.ma50) line(MA50, "#ffd94d", 1.8);
-    line(pts.map(function(p){ return p[1]; }), "#f4f6ff", 1.8);
-    // crosshair + dot
-    view.cross = el("line", { y1: PT, y2: H - PB, stroke: "#ffd94d", "stroke-width": 1.4, opacity: 0 });
-    view.dot = el("circle", { r: 6, fill: "#ffd94d", stroke: "#0d1330", "stroke-width": 2, opacity: 0 });
-    scrub.min = 0; scrub.max = view.i1 - view.i0; scrub.step = 1;
-    if (selI < view.i0 || selI > view.i1) selI = view.i1;
-    select(selI);
-    svg.setAttribute("aria-label", "Bitcoin price chart, plain. " +
-      (rangeKey === "all" ? "All 16 years." : rangeKey === "2y" ? "The last 2 years." : "The last 5 years.") +
-      " Last close " + fmt$(lastP) + " on " + fmtDate(lastTs) + ".");
-  }
-  function select(i){
-    selI = i;
-    var p = pts[i];
-    view.cross.setAttribute("x1", view.X(p[0])); view.cross.setAttribute("x2", view.X(p[0]));
-    view.cross.setAttribute("opacity", 1);
-    view.dot.setAttribute("cx", view.X(p[0])); view.dot.setAttribute("cy", view.Y(p[1]));
-    view.dot.setAttribute("opacity", 1);
-    scrub.value = i - view.i0;
-    document.getElementById("plain-date").textContent = fmtDate(p[0]);
-    document.getElementById("plain-price").textContent = fmt$(p[1]);
-    document.getElementById("plain-ma50").textContent = MA50[i] == null ? "No average yet" : fmt$(MA50[i]);
-    document.getElementById("plain-ma200").textContent = MA200[i] == null ? "No average yet" : fmt$(MA200[i]);
-  }
-  function nearestIdx(ts){
-    var lo = view.i0, hi = view.i1;
-    while (hi - lo > 1){ var m = (lo + hi) >> 1; (pts[m][0] < ts) ? lo = m : hi = m; }
-    return (ts - pts[lo][0] <= pts[hi][0] - ts) ? lo : hi;
-  }
-  function fromEvent(e){
-    var r = svg.getBoundingClientRect();
-    var x = (e.clientX - r.left) / r.width * W;
-    var ts = pts[view.i0][0] + (x - PL) / (W - PL - PR) * (pts[view.i1][0] - pts[view.i0][0]);
-    select(nearestIdx(Math.max(pts[view.i0][0], Math.min(pts[view.i1][0], ts))));
-  }
-  svg.addEventListener("pointerdown", fromEvent);
-  svg.addEventListener("pointermove", function(e){ if (e.pointerType === "mouse" || e.buttons) fromEvent(e); });
-  scrub.addEventListener("input", function(){ select(view.i0 + Number(scrub.value)); });
-  document.querySelectorAll("#plain [data-range]").forEach(function(c){
-    c.addEventListener("click", function(){
-      rangeKey = c.getAttribute("data-range");
-      document.querySelectorAll("#plain [data-range]").forEach(function(x){ x.classList.toggle("on", x === c); });
-      track(); render();
-    });
-  });
-  document.querySelectorAll("#plain [data-tog]").forEach(function(c){
-    c.addEventListener("click", function(){
-      var on = !c.classList.contains("on");
-      c.classList.toggle("on", on);
-      show[c.getAttribute("data-tog")] = on;
-      track(); render();
-    });
-  });
-  render();
-})();
-</script>
-
 <script>
 (function(){
   "use strict";
