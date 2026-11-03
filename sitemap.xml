@@ -114,5 +114,11 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://thebitcoinrainbow.com/what-the-rainbow-chart-gets-wrong</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url><loc>https://thebitcoinrainbow.com/analysis</loc></url>
 </urlset>
