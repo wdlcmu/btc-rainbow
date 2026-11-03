@@ -180,9 +180,9 @@
     var t = $("technical-text"), f = $("fundamental-text");
     var ind = S.indicators || {}, fun = S.fundamentals || {}, cyc = S.cycle || {};
     if (t && ind.rsi14 != null && ind.mayer != null)
-      t.textContent = "Watching the line: RSI " + Math.round(ind.rsi14) + ", Mayer " + ind.mayer.toFixed(2) + " today. See the gauges, Step 3.";
+      t.textContent = "Watching the line: RSI " + Math.round(ind.rsi14) + ", Mayer " + ind.mayer.toFixed(2) + " today. See the gauges, Chapter 2.";
     if (f && fun.supply_issued_pct != null && cyc.pct_through_cycle != null)
-      f.textContent = "A health check: " + fun.supply_issued_pct.toFixed(1) + "% of all coins are out, and the next halving is " + cyc.pct_through_cycle.toFixed(0) + "% of the way here. See the network, Step 4.";
+      f.textContent = "A health check: " + fun.supply_issued_pct.toFixed(1) + "% of all coins are out, and the next halving is " + cyc.pct_through_cycle.toFixed(0) + "% of the way here. See the network, Chapter 3.";
   }
 
   // ================= TAP-A-CRASH =================

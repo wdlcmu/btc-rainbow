@@ -54,6 +54,8 @@
   .kicker{color:var(--gold);font-weight:800;letter-spacing:2px;font-size:14px;
     text-transform:uppercase;margin:0 0 6px}
   h2{font-size:27px;margin:0 0 10px}
+  section.chapter-head{margin-top:48px}
+  .chapter-head h2{font-size:31px;line-height:1.15}
   .growth-note{font-size:21px;margin:2px 0 10px}
   .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:18px;
     padding:10px 6px 6px;margin:0 0 12px}
@@ -393,18 +395,22 @@ window.FLEET_CFG = {
       <a class="chip" href="#gauges" id="chip-mayer">Mayer: &hellip;</a>
       <a class="chip" href="#network" id="chip-fg">Fear &amp; Greed: &hellip;</a>
     </div>
-    <p class="herocap"><a href="#now">Open the full chart</a> in Step 2: drag it, tap a color, pick any day.</p>
+    <p class="herocap"><a href="#now">Open the full chart</a>: drag it, tap a color, pick any day.</p>
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
+  <section class="block chapter-head" id="ch1">
+    <p class="kicker">Chapter 1 &middot; The long-run model</p>
+    <h2>Where does the price sit in its long story?</h2>
+    <p class="growth-note">A price alone says little. Against its own sixteen-year line, today has a place. This chapter finds it.</p>
+  </section>
+
   <section class="block" id="what">
-    <p class="kicker">Step 1</p>
     <h2>What bitcoin is.</h2>
     <p class="growth-note">Bitcoin is money for the internet. No company runs it, and no boss can print more: only 21 million will ever exist. It lives on many computers at once. You can own a whole coin, or a small piece.</p>
   </section>
 
   <section class="block" id="now">
-    <p class="kicker">Step 2</p>
     <h2>Where are we now?</h2>
     <p class="growth-note" id="rainbow-note">It is a growth chart for bitcoin's price. Through the middle runs one line: bitcoin's long-run growth, fit to every daily price on record. Around the line stack nine colored bands, Deep Blue at the bottom, Red at the top. The low bands mean the price sits far under its own past growth. The high bands mean far over it. That is the past. Not a promise.</p>
     <div class="today-panel">
@@ -417,7 +423,7 @@ window.FLEET_CFG = {
     </div>
     <input type="range" id="chart-scrub" min="0" max="100" value="100" step="0.01"
       aria-label="Pick a day on the rainbow chart">
-    <p class="lab-hint" style="margin:0 2px 10px">Slide, or drag on the chart itself, to pick any day since 2010.</p>
+    <p class="lab-hint" style="margin:0 2px 10px">Pick a day since 2010. First, guess: above or below the line? Then slide, or drag on the chart, and see.</p>
     <div class="read-panel" id="scrub-panel">
       <h3 id="scrub-title">Touch the chart.</h3>
       <p id="scrub-body">Drag across the rainbow. Any day since 2010: its price, its band, and the year that came next.</p>
@@ -435,8 +441,46 @@ window.FLEET_CFG = {
       <p>What it can do: show what happened the other times the price sat where it sits now — the band panel above, the scrubber below.</p>
       <p>Want to talk it through in your own words? <a href="/ask">Ask: should I buy bitcoin now?</a> This is analysis and education, not financial advice.</p>
     </div>
-    <h3 class="lab-h3" id="lab">Every day, on one chart.</h3>
-    <p class="growth-note">Pick any day. See its price, its band, and the year that came next.</p>
+  </section>
+
+  <section class="block" id="case">
+    <h2>Why we think it climbs on. A belief, not a fact.</h2>
+    <p class="growth-note">Pick any start day: four years on, the price stood higher. Every time, so far. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.</p>
+  </section>
+
+  <section class="block" id="model">
+    <h2>What the model draws ahead.</h2>
+    <p class="growth-note">Drag the years. Pick a band. These are the model's lines, stretched forward — <strong>not a forecast</strong>.</p>
+    <div class="sim">
+      <span class="tag">The model explorer</span>
+      <p class="lab"><strong>1. How far out?</strong> <span id="fc-years-label">5 years out</span></p>
+      <input type="range" id="fc-slider" min="1" max="10" value="5" step="1" aria-label="Years into the future">
+      <div class="chips" id="fc-years">
+        <button type="button" class="chip" data-yrs="1">+1 year</button>
+        <button type="button" class="chip on" data-yrs="5">+5 years</button>
+        <button type="button" class="chip" data-yrs="10">+10 years</button>
+      </div>
+      <p class="lab"><strong>2. Which line does the price follow?</strong></p>
+      <div class="chips" id="fc-scen">
+        <button type="button" class="chip" data-scen="bottom">Bottom band</button>
+        <button type="button" class="chip on" data-scen="line">The growth line</button>
+        <button type="button" class="chip" data-scen="top">Top band</button>
+      </div>
+      <div class="result" id="fc-out"><p>Reading the model&hellip;</p></div>
+      <div class="result" id="fc-record"></div>
+      <p class="note">The model draws lines. It does not know the future.</p>
+    </div>
+  </section>
+
+  <section class="block chapter-head" id="ch2">
+    <p class="kicker">Chapter 2 &middot; Days like today</p>
+    <h2>What happened the other times it sat here?</h2>
+    <p class="growth-note">Today is one day. Thousands of past days sat where it sits. This chapter checks what they did next.</p>
+  </section>
+
+  <section class="block" id="times">
+    <h3 class="lab-h3" id="lab" style="margin-top:0">Every day, on one chart.</h3>
+    <p class="growth-note">Guess a day's band before you look. Then scrub to it, and see its price, its band, and the year that came next.</p>
     <div class="lab-card">
       <div class="lab-togs" role="group" aria-label="Chart layers">
         <button type="button" class="chip on" data-tog="bands">Bands</button>
@@ -457,27 +501,9 @@ window.FLEET_CFG = {
       </div>
       <div class="lab-dd" id="r-dd"></div>
     </div>
-    <h3 class="lab-h3" id="crashes">Tap a crash.</h3>
-    <p class="growth-note">Every big fall, measured from the daily prices. Tap one to see its shape, and what happened.</p>
-    <div class="chips" id="crash-chips"></div>
-    <div class="crash-wrap">
-      <svg id="crash-chart" viewBox="0 0 1000 300" role="img" aria-label="The picked fall, drawn from daily prices"></svg>
-      <div id="crash-out" aria-live="polite"><p>Reading the falls&hellip;</p></div>
-    </div>
-    <h3 class="lab-h3" id="crash-table-h">Every big fall, in one table.</h3>
-    <p class="growth-note">The same seven falls, measured from the same daily closes. Tap a row to see that fall drawn above.</p>
-    <div class="lab-tablewrap">
-      <table class="ctable" id="crash-table">
-        <thead><tr>
-          <th scope="col">Fall</th><th scope="col">Top</th><th scope="col">Bottom</th>
-          <th scope="col">Fall</th><th scope="col">Days down</th><th scope="col">Back to the top</th>
-        </tr></thead>
-        <tbody id="crash-tbody"><tr><td colspan="6">Reading the falls&hellip;</td></tr></tbody>
-      </table>
-    </div>
-    <p class="source" id="crash-method">How each fall is measured: the top is a daily close. The fall runs to the lowest daily close after it. Days back to the top counts from the top to the first close at or above it again. Daily closes can miss a swing inside one day, so a fall here can read smaller than the worst hour of it.</p>
+
     <h3 class="lab-h3" id="bought">What if you'd bought?</h3>
-    <p class="growth-note">Pick a day and a sum. See what that buy is worth at the last close.</p>
+    <p class="growth-note">Pick a day and a sum. Guess first: up, or down? Then see what that buy is worth at the last close.</p>
     <div class="sim">
       <span class="tag">One buy, one day</span>
       <div class="wif-inputs">
@@ -548,9 +574,7 @@ window.FLEET_CFG = {
     </div>
   </section>
 
-
   <section class="block" id="gauges">
-    <p class="kicker">Step 3</p>
     <h2>The gauges.</h2>
     <p class="growth-note">The readings traders watch, computed from the same daily prices.</p>
     <div class="glist">
@@ -564,64 +588,7 @@ window.FLEET_CFG = {
     <p class="asofline" id="snap-asof">Reading the gauges&hellip;</p>
   </section>
 
-  <section class="block" id="network">
-    <p class="kicker">Step 4</p>
-    <h2>The network itself.</h2>
-    <p class="growth-note">Bitcoin's health, in numbers the network itself reports.</p>
-    <div class="halvbar">
-      <div class="track"><div class="fill" id="halv-fill"></div></div>
-      <p id="halv-text">Reading the blocks&hellip;</p>
-    </div>
-    <div class="cards">
-      <div class="gcard"><h3>Coins already out</h3><p class="big" id="n-supply">&hellip;</p><p>Of the 21 million that will ever exist.</p><p id="n-supply-note"></p></div>
-      <div class="gcard"><h3>Computing power (hashrate)</h3><p class="big" id="n-hash">&hellip;</p><p>Quintillions of guesses per second, spent guarding the ledger.</p><p id="n-hash-note"></p></div>
-      <div class="gcard"><h3>Fees right now</h3><p class="big" id="n-fees">&hellip;</p><p>What one payment pays to jump the line.</p><p id="n-fees-note"></p></div>
-      <div class="gcard"><h3>Fear &amp; Greed</h3><p class="big" id="n-fg">&hellip;</p><p>A 0-to-100 mood score for the whole market.</p><p id="n-fg-note"></p><p class="fgsrc">Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/">Alternative.me</a></p></div>
-      <div class="gcard"><h3>Bitcoin's share</h3><p class="big" id="n-dom">&hellip;</p><p id="n-dom-note"></p></div>
-    </div>
-  </section>
-
-  <section class="block" id="model">
-    <p class="kicker">Step 5</p>
-    <h2>What the model draws ahead.</h2>
-    <p class="growth-note">Drag the years. Pick a band. These are the model's lines, stretched forward — <strong>not a forecast</strong>.</p>
-    <div class="sim">
-      <span class="tag">The model explorer</span>
-      <p class="lab"><strong>1. How far out?</strong> <span id="fc-years-label">5 years out</span></p>
-      <input type="range" id="fc-slider" min="1" max="10" value="5" step="1" aria-label="Years into the future">
-      <div class="chips" id="fc-years">
-        <button type="button" class="chip" data-yrs="1">+1 year</button>
-        <button type="button" class="chip on" data-yrs="5">+5 years</button>
-        <button type="button" class="chip" data-yrs="10">+10 years</button>
-      </div>
-      <p class="lab"><strong>2. Which line does the price follow?</strong></p>
-      <div class="chips" id="fc-scen">
-        <button type="button" class="chip" data-scen="bottom">Bottom band</button>
-        <button type="button" class="chip on" data-scen="line">The growth line</button>
-        <button type="button" class="chip" data-scen="top">Top band</button>
-      </div>
-      <div class="result" id="fc-out"><p>Reading the model&hellip;</p></div>
-      <div class="result" id="fc-record"></div>
-      <p class="note">The model draws lines. It does not know the future.</p>
-    </div>
-  </section>
-
-  <section class="block" id="read">
-    <p class="kicker">Step 6</p>
-    <h2>Today's read.</h2>
-    <p class="growth-note" id="read-date">The day's analysis, written from the numbers on this page — and from nothing else.</p>
-    <div class="notebox" id="read-note"><p>Reading today&hellip;</p></div>
-    <p class="source">Past reads are kept. <a href="/analysis">Read the archive</a>. This is analysis and education, not financial advice.</p>
-  </section>
-
-  <section class="block" id="case">
-    <p class="kicker">Step 7</p>
-    <h2>Why we think it climbs on. A belief, not a fact.</h2>
-    <p class="growth-note">Pick any start day: four years on, the price stood higher. Every time, so far. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.</p>
-  </section>
-
   <section class="block" id="how">
-    <p class="kicker">Step 8</p>
     <h2>A little, every week.</h2>
     <p class="dca-line">Like an allowance, in reverse.</p>
     <div class="sim">
@@ -649,16 +616,107 @@ window.FLEET_CFG = {
     <p class="source">Past prices: blockchain.info. Live price: Coinbase.</p>
   </section>
 
+  <section class="block" id="read">
+    <h2>Today's read.</h2>
+    <p class="growth-note" id="read-date">The day's analysis, written from the numbers on this page — and from nothing else.</p>
+    <div class="notebox" id="read-note"><p>Reading today&hellip;</p></div>
+    <p class="source">Past reads are kept. <a href="/analysis">Read the archive</a>. This is analysis and education, not financial advice.</p>
+  </section>
+
+  <section class="block chapter-head" id="ch3">
+    <p class="kicker">Chapter 3 &middot; The network itself</p>
+    <h2>Is Bitcoin itself healthy?</h2>
+    <p class="growth-note">Price and health are two different things. This chapter reads the numbers the network itself reports.</p>
+  </section>
+
+  <section class="block" id="network">
+    <h2>The network itself.</h2>
+    <div class="halvbar">
+      <div class="track"><div class="fill" id="halv-fill"></div></div>
+      <p id="halv-text">Reading the blocks&hellip;</p>
+    </div>
+    <div class="cards">
+      <div class="gcard"><h3>Coins already out</h3><p class="big" id="n-supply">&hellip;</p><p>Of the 21 million that will ever exist.</p><p id="n-supply-note"></p></div>
+      <div class="gcard"><h3>Computing power (hashrate)</h3><p class="big" id="n-hash">&hellip;</p><p>Quintillions of guesses per second, spent guarding the ledger.</p><p id="n-hash-note"></p></div>
+      <div class="gcard"><h3>Fees right now</h3><p class="big" id="n-fees">&hellip;</p><p>What one payment pays to jump the line.</p><p id="n-fees-note"></p></div>
+      <div class="gcard"><h3>Fear &amp; Greed</h3><p class="big" id="n-fg">&hellip;</p><p>A 0-to-100 mood score for the whole market.</p><p id="n-fg-note"></p><p class="fgsrc">Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/">Alternative.me</a></p></div>
+      <div class="gcard"><h3>Bitcoin's share</h3><p class="big" id="n-dom">&hellip;</p><p id="n-dom-note"></p></div>
+    </div>
+  </section>
+
+
+
+  <section class="block chapter-head" id="ch4">
+    <p class="kicker">Chapter 4 &middot; The big falls</p>
+    <h2>Why did it crash those times?</h2>
+    <p class="growth-note">The falls look alike on a chart. Each one had its own cause. This chapter tells all seven.</p>
+  </section>
+
+  <section class="block" id="falls">
+    <h3 class="lab-h3" id="crashes" style="margin-top:0">Tap a crash.</h3>
+    <p class="growth-note">Every big fall, measured from the daily prices. Tap one to see its shape, and what happened.</p>
+    <div class="chips" id="crash-chips"></div>
+    <div class="crash-wrap">
+      <svg id="crash-chart" viewBox="0 0 1000 300" role="img" aria-label="The picked fall, drawn from daily prices"></svg>
+      <div id="crash-out" aria-live="polite"><p>Reading the falls&hellip;</p></div>
+    </div>
+    <h3 class="lab-h3" id="crash-table-h">Every big fall, in one table.</h3>
+    <p class="growth-note">The same seven falls, measured from the same daily closes. Tap a row to see that fall drawn above.</p>
+    <div class="lab-tablewrap">
+      <table class="ctable" id="crash-table">
+        <thead><tr>
+          <th scope="col">Fall</th><th scope="col">Top</th><th scope="col">Bottom</th>
+          <th scope="col">Fall</th><th scope="col">Days down</th><th scope="col">Back to the top</th>
+        </tr></thead>
+        <tbody id="crash-tbody"><tr><td colspan="6">Reading the falls&hellip;</td></tr></tbody>
+      </table>
+    </div>
+    <p class="source" id="crash-method">How each fall is measured: the top is a daily close. The fall runs to the lowest daily close after it. Days back to the top counts from the top to the first close at or above it again. Daily closes can miss a swing inside one day, so a fall here can read smaller than the worst hour of it.</p>
+  </section>
+
   <section class="block" id="risk">
-    <p class="kicker">Step 9</p>
     <h2>It swings hard. We could be wrong.</h2>
     <p class="growth-note">It has fallen by half or more seven times since 2011. It could fall and stay down. The climb is a pattern, not a law.</p>
     <p><a class="btn" href="#crashes">Tap a crash and see for yourself</a></p>
     <p class="growth-note">Only money you will not need for years. A total loss should sting, not sink you.</p>
   </section>
 
+  <section class="block chapter-head" id="ch5">
+    <p class="kicker">Chapter 5 &middot; Sources &amp; method</p>
+    <h2>How do we know any of this?</h2>
+    <p class="growth-note">Every number above came from somewhere. This chapter shows the sources, the math, and the limits.</p>
+  </section>
+
+  <section class="block" id="method">
+    <h2>Sources &amp; method.</h2>
+    <div class="mrow">
+      <h3>The model</h3>
+      <p>Rainbow model, our own fit, version 1. One line fit to every daily close on record:</p>
+      <p><code id="m-equation">ln(price) = a + b &times; ln(days since Jan 3, 2009)</code></p>
+      <p id="m-fitline">Reading the fit&hellip;</p>
+      <p>Nine bands stack on the line. Each band is the same step wide: 0.3 in log terms, about 1.35 times the price below it. The ladder runs from 0.47 times the line to 7.03 times it.</p>
+      <p class="fine">The first rainbow was drawn by azop in 2014, on a growth line by trolololo. Blockchain Center made it famous. The fit here is our own, on the same public prices. A fit describes the past. It is not a law, and it is not a forecast.</p>
+    </div>
+    <div class="mrow">
+      <h3>Where each part comes from</h3>
+      <div id="m-sources"><p>Reading the sources&hellip;</p></div>
+      <p class="fine" id="m-computed"></p>
+    </div>
+    <div class="mrow">
+      <h3>What to watch for</h3>
+      <p>Prices here are daily closes. A swing inside one day can be bigger than the day shows. In June 2011, one exchange flashed to one cent for a few minutes. The daily closes say that fall was 93%. Both are true, of different things.</p>
+      <p>The fit score (R&#178;) grades how well the line hugs the past. It says nothing about next year.</p>
+      <p>Bitcoin's share of all crypto depends on who counts the coins. Sites disagree by a point or two. Ours comes from CoinGecko, named on the card.</p>
+      <p>The Fear &amp; Greed score is one outside index, made by Alternative.me. We show it with its maker's name next to it, and we do not fold it into any other number here.</p>
+      <p>The model explorer stretches the model's own lines forward. Those lines are labelled as the model's, never as a forecast.</p>
+    </div>
+    <div class="mrow">
+      <h3>The standing line</h3>
+      <p>This is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe. When a source is quiet, its card says so instead of showing an old number as new.</p>
+    </div>
+  </section>
+
   <section class="block" id="where">
-    <p class="kicker">Step 10</p>
     <h2>The two ways people hold it.</h2>
     <div class="wrow">
       <h3>IBIT (a stock fund)</h3>
@@ -675,7 +733,6 @@ window.FLEET_CFG = {
   </section>
 
   <section class="block" id="learn">
-    <p class="kicker">Step 11</p>
     <h2>Learn the words.</h2>
     <div class="strip">
       <div class="scard">
@@ -706,40 +763,10 @@ window.FLEET_CFG = {
     </div>
   </section>
 
-  <section class="block" id="method">
-    <p class="kicker">Step 12</p>
-    <h2>Sources &amp; method.</h2>
-    <p class="growth-note">How do we know? Every number on this page, where it came from, and what it cannot do.</p>
-    <div class="mrow">
-      <h3>The model</h3>
-      <p>Rainbow model, our own fit, version 1. One line fit to every daily close on record:</p>
-      <p><code id="m-equation">ln(price) = a + b &times; ln(days since Jan 3, 2009)</code></p>
-      <p id="m-fitline">Reading the fit&hellip;</p>
-      <p>Nine bands stack on the line. Each band is the same step wide: 0.3 in log terms, about 1.35 times the price below it. The ladder runs from 0.47 times the line to 7.03 times it.</p>
-      <p class="fine">The first rainbow was drawn by azop in 2014, on a growth line by trolololo. Blockchain Center made it famous. The fit here is our own, on the same public prices. A fit describes the past. It is not a law, and it is not a forecast.</p>
-    </div>
-    <div class="mrow">
-      <h3>Where each part comes from</h3>
-      <div id="m-sources"><p>Reading the sources&hellip;</p></div>
-      <p class="fine" id="m-computed"></p>
-    </div>
-    <div class="mrow">
-      <h3>What to watch for</h3>
-      <p>Prices here are daily closes. A swing inside one day can be bigger than the day shows. In June 2011, one exchange flashed to one cent for a few minutes. The daily closes say that fall was 93%. Both are true, of different things.</p>
-      <p>The fit score (R&#178;) grades how well the line hugs the past. It says nothing about next year.</p>
-      <p>Bitcoin's share of all crypto depends on who counts the coins. Sites disagree by a point or two. Ours comes from CoinGecko, named on the card.</p>
-      <p>The Fear &amp; Greed score is one outside index, made by Alternative.me. We show it with its maker's name next to it, and we do not fold it into any other number here.</p>
-      <p>The model explorer stretches the model's own lines forward. Those lines are labelled as the model's, never as a forecast.</p>
-    </div>
-    <div class="mrow">
-      <h3>The standing line</h3>
-      <p>This is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe. When a source is quiet, its card says so instead of showing an old number as new.</p>
-    </div>
-  </section>
-
   <footer>
     <p>This is analysis and education, not financial advice.</p>
-    <p><a href="/analysis">Today's read — the archive</a> &middot; <a href="#gauges">The gauges</a> &middot; <a href="#network">The network</a> &middot; <a href="#method">Sources &amp; method</a></p>
+    <p><a href="/analysis">Today's read — the archive</a></p>
+    <p><a href="#ch1">The long story</a> &middot; <a href="#ch2">Days like today</a> &middot; <a href="#ch3">Network health</a> &middot; <a href="#ch4">The big falls</a> &middot; <a href="#ch5">Sources &amp; method</a></p>
     <p><a href="/bitcoin-rainbow-chart-explained">Rainbow chart</a> &middot; <a href="/what-is-bitcoin-in-plain-english">What is bitcoin</a> &middot; <a href="/bitcoin-dca-calculator">DCA</a> &middot; <a href="/bitcoin-halving-in-plain-english">Halving</a> &middot; <a href="/ask">Ask</a></p>
     <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
     <p>The rainbow chart: first drawn by azop in 2014. The growth line is by trolololo. Blockchain Center made the chart famous.</p>
