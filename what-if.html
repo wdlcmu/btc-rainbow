@@ -519,7 +519,36 @@ window.FLEET_CFG = {
         <p class="note">That is the past. Not a promise.</p>
       </div>
     </div>
-    <p class="source">Past prices: blockchain.info. Live price: Coinbase.</p>
+    <p class="source" id="dca-source">Past prices: blockchain.info. Live price: Coinbase.</p>
+  </section>
+
+  <section class="block" id="model">
+    <h2>What the model draws ahead.</h2>
+    <p class="growth-note">Drag the years. Pick a band. These are the model's lines stretched forward. <strong>Not a forecast</strong>.</p>
+    <div class="sim">
+      <span class="tag">The model explorer</span>
+      <p class="lab"><strong>1. How far out?</strong> <span id="fc-years-label">5 years out</span></p>
+      <input type="range" id="fc-slider" min="1" max="10" value="5" step="1" aria-label="Years into the future">
+      <div class="chips" id="fc-years">
+        <button type="button" class="chip" data-yrs="1">+1 year</button>
+        <button type="button" class="chip on" data-yrs="5">+5 years</button>
+        <button type="button" class="chip" data-yrs="10">+10 years</button>
+      </div>
+      <p class="lab"><strong>2. Which line does the price follow?</strong></p>
+      <div class="chips" id="fc-scen">
+        <button type="button" class="chip" data-scen="bottom">Bottom band</button>
+        <button type="button" class="chip on" data-scen="line">The growth line</button>
+        <button type="button" class="chip" data-scen="top">Top band</button>
+      </div>
+      <div class="result" id="fc-out"><p>The explorer needs JavaScript. The four-year count below is printed in full.</p></div>
+      <div class="result" id="fc-record"></div>
+      <p class="note">The model draws lines. It does not know the future.</p>
+    </div>
+  </section>
+
+  <section class="block" id="case">
+    <h2>Why we think it climbs on. A belief, not a fact.</h2>
+    <p class="growth-note" id="case-note">Pick any start day: four years on, the price stood higher. Every time, so far. Counted from the daily closes through Nov 2, 2026: 4,460 start days checked, no exceptions. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.</p>
   </section>
 
   <section class="block" id="next">
@@ -1057,6 +1086,19 @@ load();
 <script>
 (function(){
   "use strict";
+  // Gate fix loop 5 (Nov 3, 2026): the record's tail now comes from
+  // Coinbase — blockchain.info's feed stopped Oct 29, 2026. When
+  // the shipped snapshot carries the backfill source, the history
+  // notes on this page name the mix.
+  var SN0 = window.BTC_SNAPSHOT;
+  var bfSrc = SN0 && (SN0.sources || []).filter(function(s){ return /backfill/i.test(s.name); })[0];
+  window.BTC_HIST_MIX = !!bfSrc;
+  if (bfSrc) {
+    var hs = document.getElementById("h-source");
+    if (hs) hs.innerHTML += " The last days of the record, after blockchain.info's feed stopped on Oct 29, 2026, are Coinbase daily candles, the same start-of-day price.";
+    var ds = document.getElementById("dca-source");
+    if (ds) ds.textContent = "Past prices: blockchain.info through Oct 29, 2026, then Coinbase. Live price: Coinbase.";
+  }
   // ===== Wave 1: "What if you'd bought?" + Sources & method fill =====
   var raw = window.BTC_DAILY || [];
   var rows = raw.map(function(r){
@@ -1109,7 +1151,10 @@ load();
       }
       document.getElementById("wif-asof").textContent =
         "Last close: " + fmt$(last.p) + " on " + fmtD(last.iso) +
-        ". Daily closes from blockchain.info. No fees or taxes counted. A real buy would have paid both.";
+        (window.BTC_HIST_MIX
+          ? ". Daily closes: blockchain.info through Oct 29, 2026, then Coinbase (its feed stopped)."
+          : ". Daily closes from blockchain.info.") +
+        " No fees or taxes counted. A real buy would have paid both.";
       document.querySelectorAll("#wif-chips .chip").forEach(function(c){
         c.classList.toggle("on", Number(c.getAttribute("data-wamt")) === amt);
       });
@@ -1165,6 +1210,131 @@ load();
       });
     }
   }, 8000);
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  // Gate fix loop 5 (Nov 3, 2026): the model explorer and the
+  // four-year record moved here from /method — projections belong
+  // with the what-if tools, and /method stays pure method. evo.js
+  // (which drove the explorer there) is not loaded on this page,
+  // so this compact driver reads the same shipped data — the
+  // BTC_LAB fit, the BTC_DAILY closes, the BTC_SNAPSHOT spot —
+  // and computes everything live, the four-year claim included.
+  var L = window.BTC_LAB, SN = window.BTC_SNAPSHOT;
+  var out = document.getElementById("fc-out");
+  if (!L || !L.fit || !out) return;
+  var raw = window.BTC_DAILY || [];
+  var rows = raw.map(function(r){
+    var s = String(r[0]);
+    return { ts: Date.UTC(+s.slice(0,4), +s.slice(4,6)-1, +s.slice(6,8)) / 1000,
+             iso: s.slice(0,4) + "-" + s.slice(4,6) + "-" + s.slice(6,8), p: r[1] };
+  });
+  if (!rows.length) return;
+  var GEN = L.genesisTs, fa = L.fit.a, fb = L.fit.b;
+  var lastRow = rows[rows.length - 1];
+  function trendAt(ts){ return Math.exp(fa + fb * Math.log((ts - GEN) / 86400)); }
+  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+  function fmtD(iso){
+    return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US",
+      { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+  }
+  function closeOnOrBefore(ts){
+    var lo = 0, hi = rows.length - 1, ans = 0;
+    while (lo <= hi) { var m = (lo + hi) >> 1; if (rows[m].ts <= ts) { ans = m; lo = m + 1; } else hi = m - 1; }
+    return rows[ans];
+  }
+  var spot = SN && SN.spot && SN.spot.price ? SN.spot.price : lastRow.p;
+  var spotTs = SN && SN.generated_at ? Date.parse(SN.generated_at) / 1000 : lastRow.ts;
+  if (!isFinite(spotTs)) spotTs = lastRow.ts;
+
+  // The four-year record, counted from the closes themselves:
+  // every start day with four full years after it, the close then
+  // against the close four years on.
+  var rec = { total: 0, higher: 0, worst: null };
+  for (var i = 0; i < rows.length; i++) {
+    var endTs = rows[i].ts + 4 * 365.25 * 86400;
+    if (endTs > lastRow.ts) break;
+    var endP = closeOnOrBefore(endTs).p;
+    rec.total++;
+    if (endP > rows[i].p) rec.higher++;
+    else {
+      var chg = endP / rows[i].p - 1;
+      if (!rec.worst || chg < rec.worst.chg) rec.worst = { iso: rows[i].iso, chg: chg };
+    }
+  }
+  var cn = document.getElementById("case-note");
+  if (cn) {
+    var claim = rec.higher === rec.total
+      ? "Pick any start day: four years on, the price stood higher. Every time, so far."
+      : "Pick a start day: four years on, the price stood higher " +
+        rec.higher.toLocaleString("en-US") + " of " + rec.total.toLocaleString("en-US") + " times.";
+    cn.textContent = claim +
+      " Counted live from the daily closes, " + fmtD(rows[0].iso) + " to " + fmtD(lastRow.iso) + ": " +
+      rec.total.toLocaleString("en-US") + " start days checked" +
+      (rec.worst
+        ? "; the worst start (" + fmtD(rec.worst.iso) + ") ended " +
+          Math.abs(Math.round(rec.worst.chg * 100)) + "% down four years on"
+        : ", no exceptions") +
+      ". Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.";
+  }
+
+  var yrs = 5, scen = "line";
+  var slider = document.getElementById("fc-slider");
+  var label = document.getElementById("fc-years-label");
+  var recEl = document.getElementById("fc-record");
+  function barRow(name, val, color, maxLog){
+    var pct = Math.max(2, Math.round(Math.log10(Math.max(val, 1)) / maxLog * 100));
+    return "<div class='fc-bar-row'><span class='fc-bar-name'>" + name +
+      "</span><span class='fc-bar'><i style='width:" + pct + "%;background:" + color +
+      "'></i></span><span class='fc-bar-val'>" + fmt$(val) + "</span></div>";
+  }
+  function render(){
+    var targetTs = spotTs + yrs * 365.25 * 86400;
+    var line = trendAt(targetTs);
+    var lo = line * Math.exp(L.bandBottom);
+    var hi = line * Math.exp(L.bandBottom + L.bandWidth * 9);
+    var scenPrice = scen === "bottom" ? lo : scen === "top" ? hi : line;
+    var scenName = scen === "bottom" ? "the bottom band" : scen === "top" ? "the top band" : "the growth line";
+    var mult = scenPrice / spot;
+    var multTxt = mult >= 100 ? String(Math.round(mult))
+      : mult >= 10 ? (Math.round(mult * 10) / 10).toFixed(1)
+      : (Math.round(mult * 100) / 100).toFixed(2);
+    var chg = Math.round((mult - 1) * 100);
+    var maxLog = Math.log10(hi);
+    out.innerHTML =
+      "<p>If the price followed <strong>" + scenName + "</strong>, in " + yrs +
+      (yrs === 1 ? " year" : " years") + " it would sit at <strong>" + fmt$(scenPrice) +
+      "</strong>: about " + multTxt + " times today's price (" +
+      (chg >= 0 ? "+" + chg : "" + chg) + "%).</p>" +
+      barRow("Today", spot, "#ffd94d", maxLog) +
+      barRow("Bottom band", lo, L.bands[0].color, maxLog) +
+      barRow("Growth line", line, "#ffffff", maxLog) +
+      barRow("Top band", hi, L.bands[8].color, maxLog);
+    if (recEl) recEl.innerHTML =
+      "<p><span class='fc-k'>The model's own past, as a check.</span> From any start day " +
+      "so far with four full years after it (" + rec.total.toLocaleString("en-US") +
+      " start days, counted from the daily closes through " + fmtD(lastRow.iso) +
+      "), the price four years on stood higher " +
+      (rec.higher === rec.total ? "every time." : rec.higher.toLocaleString("en-US") + " times.") + "</p>";
+    if (label) label.textContent = yrs + (yrs === 1 ? " year out" : " years out");
+    if (slider) slider.value = yrs;
+    document.querySelectorAll("#fc-years .chip").forEach(function(c){
+      c.classList.toggle("on", Number(c.getAttribute("data-yrs")) === yrs);
+    });
+    document.querySelectorAll("#fc-scen .chip").forEach(function(c){
+      c.classList.toggle("on", c.getAttribute("data-scen") === scen);
+    });
+  }
+  if (slider) slider.addEventListener("input", function(){ yrs = Number(slider.value); render(); });
+  document.querySelectorAll("#fc-years .chip").forEach(function(c){
+    c.addEventListener("click", function(){ yrs = Number(c.getAttribute("data-yrs")); render(); });
+  });
+  document.querySelectorAll("#fc-scen .chip").forEach(function(c){
+    c.addEventListener("click", function(){ scen = c.getAttribute("data-scen"); render(); });
+  });
+  render();
 })();
 </script>
 </body>

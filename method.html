@@ -269,7 +269,6 @@ window.FLEET_CFG = {
     { sel: "#lab-scrub", on: "input", surface: "history-explorer" },
     { sel: "#plain-scrub", on: "input", surface: "plain-chart" },
     { sel: "#crash-chips .chip", surface: "crash-explorer" },
-    { sel: "#fc-years .chip", surface: "model-explorer" },
     { sel: "#hero-scrub", on: "input", surface: "rainbow-explorer" }
   ],
   completes: [
@@ -436,16 +435,23 @@ window.FLEET_CFG = {
     <div class="mrow">
       <h3>The model</h3>
       <p>Rainbow model, our own fit, version 1. One line fit to every daily close on record:</p>
-      <p><code id="m-equation">ln(price) = a + b &times; ln(days since Jan 3, 2009)</code></p>
-      <p id="m-fitline">Reading the fit&hellip;</p>
+      <p><code id="m-equation">ln(price) = &minus;37.28 + 5.60 &times; ln(days since Jan 3, 2009)</code></p>
+      <p id="m-fitline">Fit window: Aug 18, 2010 to Nov 2, 2026. 5,921 daily closes in all. Fit score (R&#178;): 0.96, in log terms. That score grades the fit to the past. It is not a promise about the future.</p>
+      <p id="m-precise">Exact fit, full precision: a = &minus;37.27685094738432, b = 5.5958560618226985.</p>
       <p>Nine bands stack on the line. Each is the same step wide: about 1.35 times the price below it. The ladder runs from 0.47 to 7.03 times the line.</p>
+      <p>Band edges, as multiples of the line: 0.47&ndash;0.64, 0.64&ndash;0.86, 0.86&ndash;1.16, 1.16&ndash;1.57, 1.57&ndash;2.12, 2.12&ndash;2.86, 2.86&ndash;3.86, 3.86&ndash;5.21, 5.21&ndash;7.03.</p>
       <p class="fine">First drawn by azop in 2014, on trolololo's growth line. Blockchain Center made it famous. This fit is our own, on the same public prices. A fit describes the past. It is not a forecast.</p>
     </div>
     <details class="more">
       <summary>Where each part comes from</summary>
       <div class="more-body">
-        <div id="m-sources"><p>Reading the sources&hellip;</p></div>
-        <p class="fine" id="m-computed"></p>
+        <div id="m-sources">
+          <p><strong>The chart, the gauges, and the falls.</strong> Daily closes from blockchain.info through Oct 29, 2026, then Coinbase daily candles: blockchain.info's feed stopped, and Coinbase's start-of-day price samples the same moment blockchain.info's daily value does. The live price is from Coinbase.</p>
+          <p><strong>The network.</strong> Block height, hashrate, and fees from mempool.space. Supply is checked against blockchain.info.</p>
+          <p><strong>Fear &amp; Greed.</strong> The Fear &amp; Greed Index by Alternative.me, shown with its maker's name next to the number.</p>
+          <p><strong>Bitcoin's share.</strong> CoinGecko's count of the whole crypto market.</p>
+        </div>
+        <p class="fine" id="m-computed">Computed from the snapshot shipped with this page: daily closes through Nov 2, 2026.</p>
       </div>
     </details>
     <details class="more">
@@ -455,7 +461,7 @@ window.FLEET_CFG = {
       <p>The fit score (R&#178;) grades how well the line hugs the past. It says nothing about next year.</p>
       <p>Bitcoin's share of all crypto depends on who counts the coins. Sites disagree by a point or two. Ours comes from CoinGecko, named on the card.</p>
       <p>The Fear &amp; Greed score is one outside index, made by Alternative.me. We show it with its maker's name next to it, and we do not fold it into any other number here.</p>
-      <p>The model explorer stretches the model's own lines forward. Those lines are labelled as the model's, never as a forecast.</p>
+      <p>The model explorer on the <a href="/what-if">What-if page</a> stretches the model's own lines forward. Those lines are labelled as the model's, never as a forecast.</p>
       </div>
     </details>
     <details class="more">
@@ -464,35 +470,6 @@ window.FLEET_CFG = {
         <p>This is analysis and education, not financial advice. Numbers here are computed from real data and stamped with the day they describe. When a source is quiet, its card says so instead of showing an old number as new.</p>
       </div>
     </details>
-  </section>
-
-  <section class="block" id="model">
-    <h2>What the model draws ahead.</h2>
-    <p class="growth-note">Drag the years. Pick a band. These are the model's lines stretched forward. <strong>Not a forecast</strong>.</p>
-    <div class="sim">
-      <span class="tag">The model explorer</span>
-      <p class="lab"><strong>1. How far out?</strong> <span id="fc-years-label">5 years out</span></p>
-      <input type="range" id="fc-slider" min="1" max="10" value="5" step="1" aria-label="Years into the future">
-      <div class="chips" id="fc-years">
-        <button type="button" class="chip" data-yrs="1">+1 year</button>
-        <button type="button" class="chip on" data-yrs="5">+5 years</button>
-        <button type="button" class="chip" data-yrs="10">+10 years</button>
-      </div>
-      <p class="lab"><strong>2. Which line does the price follow?</strong></p>
-      <div class="chips" id="fc-scen">
-        <button type="button" class="chip" data-scen="bottom">Bottom band</button>
-        <button type="button" class="chip on" data-scen="line">The growth line</button>
-        <button type="button" class="chip" data-scen="top">Top band</button>
-      </div>
-      <div class="result" id="fc-out"><p>Reading the model&hellip;</p></div>
-      <div class="result" id="fc-record"></div>
-      <p class="note">The model draws lines. It does not know the future.</p>
-    </div>
-  </section>
-
-  <section class="block" id="case">
-    <h2>Why we think it climbs on. A belief, not a fact.</h2>
-    <p class="growth-note">Pick any start day: four years on, the price stood higher. Every time, so far. Why might it go on? Only 21 million will ever exist, and new coins come slower every four years.</p>
   </section>
 
 <details class="more" id="buy">
@@ -619,13 +596,18 @@ window.FLEET_CFG = {
       L.fit.n.toLocaleString("en-US") + " daily closes in all. " +
       "Fit score (R\u00b2): " + r2.toFixed(2) + ", in log terms. " +
       "That score grades the fit to the past. It is not a promise about the future.";
+    // Gate fix loop 5 (Nov 3, 2026): the full-precision line is
+    // server-rendered for no-JS readers; refresh it from the same
+    // shipped fit so the two never drift apart.
+    var pr = document.getElementById("m-precise");
+    if (pr) pr.textContent = "Exact fit, full precision: a = \u2212" + Math.abs(a) + ", b = " + b + ".";
   }
   // If the snapshot never arrives, still name the sources (without as-of).
   setTimeout(function(){
     var ms = document.getElementById("m-sources");
     if (ms && !ms.getAttribute("data-done")) {
       ms.innerHTML = "";
-      [["The chart, the gauges, and the falls", "Daily closes from blockchain.info, the full record since 2010. The live price is from Coinbase."],
+      [["The chart, the gauges, and the falls", "Daily closes from blockchain.info through Oct 29, 2026, then Coinbase daily candles (blockchain.info's feed stopped). The live price is from Coinbase."],
        ["The network", "Block height, hashrate, and fees from mempool.space. Supply is checked against blockchain.info."],
        ["Fear & Greed", "The Fear & Greed Index by Alternative.me, shown with its maker's name next to the number."],
        ["Bitcoin's share", "CoinGecko's count of the whole crypto market."]]
