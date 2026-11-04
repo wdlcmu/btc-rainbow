@@ -502,6 +502,12 @@ function fmtShort(v){
 function fmtDate(ts){
   return new Date(ts*1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
 }
+// Readability fix pass (Nov 3, 2026): the price carries its as-of time,
+// not just its date, so a snapshot price never reads as the same
+// moment as another page's differently-timed figure.
+function fmtAsOf(ts){
+  return new Date(ts*1000).toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit",timeZone:"UTC"}) + " UTC";
+}
 
 let chartData = null;
 let simAmt = 25, simYrs = 3;
@@ -736,7 +742,7 @@ function fill(data, savedCopy){
   if (fcEl && t.band) fcEl.style.background = t.band.color;
   const fvEl = $("fact-vs"); if (fvEl) fvEl.textContent = midTxt + ".";
   const faEl = $("fact-asof");
-  if (faEl) faEl.textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtDate(data.spot.ts) + ".";
+  if (faEl) faEl.textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtAsOf(data.spot.ts) + ".";
   const pbEl = $("price-big"); if (pbEl) pbEl.textContent = fmtUSD(data.spot.price);
   const ptEl = $("price-text"); if (ptEl) ptEl.textContent = data.strip.price;
   const ttEl = $("technical-text"); if (ttEl) ttEl.textContent = data.strip.technical;

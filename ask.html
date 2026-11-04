@@ -305,6 +305,12 @@ const V2_INTENTS = ["rsi","mayer","movingavg","drawdown","volatility","halving",
 function fmtDate(ts){
   return new Date(ts*1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"});
 }
+// Readability fix pass (Nov 3, 2026): the price carries its as-of time,
+// not just its date, so a snapshot price never reads as the same
+// moment as another page's differently-timed figure.
+function fmtAsOf(ts){
+  return new Date(ts*1000).toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit",timeZone:"UTC"}) + " UTC";
+}
 
 function pingCount(intent){
   // Counts only: one intent word leaves the page. The question text
@@ -328,7 +334,7 @@ function showAnswer(ans, savedCopy){
       d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}) + ".";
   } else {
     $("answer-asof").textContent = chartData
-      ? (savedCopy ? "Saved copy, " : "As of ") + fmtDate(chartData.spot.ts) + "."
+      ? (savedCopy ? "Saved copy, " : "As of ") + fmtAsOf(chartData.spot.ts) + "."
       : "";
   }
   $("answer").classList.add("show");
