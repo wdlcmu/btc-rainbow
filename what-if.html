@@ -466,7 +466,7 @@ window.FLEET_CFG = {
         </div>
         <div class="wif-field">
           <label for="wif-amt">2. The sum, in dollars</label>
-          <input type="number" id="wif-amt" min="1" step="any" value="1000" inputmode="decimal">
+          <input type="text" id="wif-amt" value="1,000" inputmode="numeric" autocomplete="off">
         </div>
       </div>
       <div class="chips" id="wif-chips" style="margin-top:6px">
@@ -1125,7 +1125,7 @@ load();
     var defRow = closeOnOrBefore(last.ts - 5 * 365.25 * 86400);
     dateEl.value = defRow.iso;
     function render(){
-      var amt = parseFloat(amtEl.value);
+      var amt = parseFloat(String(amtEl.value).replace(/[^0-9.]/g, ""));
       if (!(amt > 0)) { out.innerHTML = "<p>Put in a sum above zero to see the past.</p>"; return; }
       var pts = dateEl.value ? Date.parse(dateEl.value + "T00:00:00Z") / 1000 : NaN;
       if (!isFinite(pts)) { out.innerHTML = "<p>Pick a day to see the past.</p>"; return; }
@@ -1160,9 +1160,13 @@ load();
       });
     }
     dateEl.addEventListener("change", render);
-    amtEl.addEventListener("input", render);
+    amtEl.addEventListener("input", function(){
+      var digits = amtEl.value.replace(/[^0-9]/g, "");
+      amtEl.value = digits ? Number(digits).toLocaleString("en-US") : "";
+      render();
+    });
     document.querySelectorAll("#wif-chips .chip").forEach(function(c){
-      c.addEventListener("click", function(){ amtEl.value = c.getAttribute("data-wamt"); render(); });
+      c.addEventListener("click", function(){ amtEl.value = Number(c.getAttribute("data-wamt")).toLocaleString("en-US"); render(); });
     });
     render();
   } else if (out) {
