@@ -505,7 +505,7 @@ window.FLEET_CFG = {
 
 </section>
 <script>
-(function(){var b=document.querySelector('.wai-copy');if(!b)return;b.addEventListener('click',function(){var el=document.getElementById(b.getAttribute('data-copy-target'));var t=el?el.textContent.trim():'';function done(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},2000);}function fallback(){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);done();}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fallback);}else{fallback();}});})();
+(function(){var b=document.querySelector('.wai-copy');if(!b)return;b.addEventListener('click',function(){var el=document.getElementById(b.getAttribute('data-copy-target'));var t=el?el.textContent.trim():'';function done(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},2000);}function failed(){if(el){try{var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}catch(e){}}b.textContent='Select + copy manually';setTimeout(function(){b.textContent='Copy';},4000);}function fallback(){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){ok=false;}document.body.removeChild(ta);if(ok){done();}else{failed();}}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fallback);}else{fallback();}});})();
 </script>
   <footer>
     <p>This is analysis and education, not financial advice.</p>
