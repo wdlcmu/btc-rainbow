@@ -476,6 +476,37 @@ window.FLEET_CFG = {
     </div>
   </section>
 
+<!-- Works with your AI (fleet AI section, 2026-11-04) -->
+<section class="works-with-ai" aria-label="Works with your AI" style="max-width:44rem;margin:2.5rem auto;padding:1.25rem 1rem;border:1px solid rgba(127,127,127,.45);border-radius:14px;font-family:inherit;line-height:1.55">
+<h2 style="margin:.1rem 0 .5rem;font-size:1.35rem">Works with your AI</h2>
+<p style="margin:.4rem 0">Your AI can read today's rainbow for you: the live price against the long trend line, and what the chart did after past moves like this one.</p>
+<p style="margin:.4rem 0">Connect this site to Claude, Cursor, or any other MCP client. It is free, and it takes about a minute.</p>
+<p style="margin:.8rem 0 .3rem"><strong>1. Copy the server address</strong></p>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:stretch">
+<code id="wai-url" style="flex:1 1 16rem;display:flex;align-items:center;padding:.6rem .7rem;border:1px solid rgba(127,127,127,.45);border-radius:10px;word-break:break-all">https://mcp.thebitcoinrainbow.com/mcp</code>
+<button type="button" class="wai-copy" data-copy-target="wai-url" style="min-height:44px;min-width:44px;padding:.6rem 1.1rem;border-radius:10px;border:1px solid rgba(127,127,127,.55);background:transparent;color:inherit;font:inherit;cursor:pointer">Copy</button>
+</div>
+<p style="margin:.9rem 0 .3rem"><strong>2. Add it to your AI</strong></p>
+<details>
+<summary style="min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600">Claude Code — one command</summary>
+<pre style="overflow-x:auto;padding:.7rem;border:1px solid rgba(127,127,127,.35);border-radius:10px"><code>claude mcp add --transport http bitcoin-rainbow https://mcp.thebitcoinrainbow.com/mcp</code></pre>
+</details>
+<details>
+<summary style="min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:600">Claude Desktop or Cursor — paste into the MCP settings</summary>
+<pre style="overflow-x:auto;padding:.7rem;border:1px solid rgba(127,127,127,.35);border-radius:10px"><code>{
+  "mcpServers": {
+    "bitcoin-rainbow": {
+      "url": "https://mcp.thebitcoinrainbow.com/mcp"
+    }
+  }
+}</code></pre>
+</details>
+<p style="margin:.8rem 0 .2rem"><strong>3. Ask your AI:</strong> &ldquo;Where does bitcoin sit on the rainbow today?&rdquo;</p>
+
+</section>
+<script>
+(function(){var b=document.querySelector('.wai-copy');if(!b)return;b.addEventListener('click',function(){var el=document.getElementById(b.getAttribute('data-copy-target'));var t=el?el.textContent.trim():'';function done(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},2000);}function fallback(){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);done();}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fallback);}else{fallback();}});})();
+</script>
   <footer>
     <p>This is analysis and education, not financial advice.</p>
     <p><a href="/today">Today's read</a> &middot; <a href="/analysis">The archive</a></p>
