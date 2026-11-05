@@ -248,6 +248,34 @@
   .hero-scrub-label{display:block;font-size:16.5px;font-weight:700;margin:0 2px 2px}
   #hero-scrub{width:100%;margin:6px 0 2px;accent-color:var(--gold);min-height:44px}
   .hero-read{font-size:18px;margin:4px 2px 0;min-height:27px}
+  /* Interactive context (Nov 5, 2026): price context strip under the
+     hero price, the five band buckets, and the trivia cards. Start-here
+     reuses .strip/.scard; the home gauges reuse .glist/.grow. */
+  .ctxstrip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 0;text-align:left}
+  @media (min-width:760px){.ctxstrip{grid-template-columns:repeat(4,1fr)}}
+  .ctxcell{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:12px;padding:9px 11px}
+  .ctxcell .k{font-size:12.5px;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+  .ctxcell .v{font-size:21px;font-weight:800;margin-top:2px}
+  .ctxcell .n{font-size:13.5px;color:var(--soft);margin-top:1px}
+  .ctxbasis{color:var(--soft);font-size:14.5px;margin:10px 0 0;text-align:left}
+  .bucket{margin:0 0 2px}
+  .bucket-row{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;min-height:52px;-webkit-tap-highlight-color:transparent}
+  .bucket-row .btop{display:flex;align-items:center;gap:8px}
+  .bucket-row .bsw{display:inline-flex;gap:3px}
+  .bucket-row .bsw i{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .bucket-row .bname{font-size:18px;font-weight:700;flex:1}
+  .bucket-row .bchev{color:var(--soft);font-size:18px}
+  .bucket-row .bmeta{display:block;color:var(--soft);font-size:15px;margin-top:3px}
+  .bucket-members{display:none;flex-direction:column;gap:6px;padding:8px 0 6px 14px}
+  .bucket-members.open{display:flex}
+  .tq{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px}
+  .tq-q{font-size:19px;font-weight:700;margin:0 0 10px}
+  .tq .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .tq button.chip{font:inherit}
+  .tq .chip.miss{opacity:.45}
+  .tq .chip.right{background:var(--gold);color:#221a00;border-color:var(--gold)}
+  .tq-reveal{margin:12px 0 0;border-top:1px solid var(--line);padding-top:10px;font-size:17px;line-height:1.5}
+  .tq-score{font-size:18px;font-weight:700;margin:12px 2px 0}
   footer{text-align:center;color:var(--soft);padding:22px 0 30px;font-size:17px}
   footer p{margin:4px 0}
   footer a{color:var(--soft)}
@@ -270,7 +298,8 @@ window.FLEET_CFG = {
     { sel: "#plain-scrub", on: "input", surface: "plain-chart" },
     { sel: "#crash-chips .chip", surface: "crash-explorer" },
     { sel: "#fc-years .chip", surface: "model-explorer" },
-    { sel: "#hero-scrub", on: "input", surface: "rainbow-explorer" }
+    { sel: "#hero-scrub", on: "input", surface: "rainbow-explorer" },
+    { sel: "#hero-chart", on: "pointerdown", surface: "rainbow-explorer" }
   ],
   completes: [
     { sel: "#read-note", surface: "todays-read", minText: 60 }
@@ -429,6 +458,13 @@ window.FLEET_CFG = {
       <p class="fact-bandline"><span class="bandchip" id="fact-chip" style="width:16px;height:16px;border-radius:5px"></span><span id="fact-band">Reading the chart&hellip;</span></p>
       <p class="fact-vs" id="fact-vs"></p>
       <p class="fact-asof" id="fact-asof"></p>
+      <div class="ctxstrip" id="ctx-strip">
+        <div class="ctxcell"><div class="k">Since yesterday&rsquo;s close</div><div class="v" id="ctx-d1">&hellip;</div><div class="n" id="ctx-d1-n"></div></div>
+        <div class="ctxcell"><div class="k">In 30 days</div><div class="v" id="ctx-d30">&hellip;</div><div class="n" id="ctx-d30-n"></div></div>
+        <div class="ctxcell"><div class="k">In one year</div><div class="v" id="ctx-y1">&hellip;</div><div class="n" id="ctx-y1-n"></div></div>
+        <div class="ctxcell"><div class="k">From the top</div><div class="v" id="ctx-ath">&hellip;</div><div class="n" id="ctx-ath-n"></div></div>
+      </div>
+      <p class="ctxbasis" id="ctx-basis"></p>
     </div>
     <div class="chartbox herochart">
       <svg id="hero-chart" viewBox="0 0 1000 400" role="img"
@@ -443,6 +479,17 @@ window.FLEET_CFG = {
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
+  <section class="block" id="start">
+    <p class="kicker">Start here</p>
+    <h2>New to this chart? Start here.</h2>
+    <p class="growth-note">Other rainbow charts are built for traders, with buy and sell labels. This one is in plain words, made to tap and explore. It also tells you what the chart cannot do.</p>
+    <div class="strip">
+      <div class="scard"><h3>1. What this chart is</h3><p>One line is bitcoin&rsquo;s long-run growth, fit to every daily price since 2010. Colored bands stack around it. Low bands: the price sits far under its own past growth. High bands: far over it.</p></div>
+      <div class="scard"><h3>2. How to read it</h3><p>Find today. Then drag on the chart. Every day since 2010 has a price, a band, and a year that came next. The colors say where a day sat. They do not say what comes next.</p></div>
+      <div class="scard"><h3>3. What it cannot do</h3><p>The line is fit to the past. It cannot see what comes next. Blockchain Center made this chart famous, and its keeper has said in writing that it was never a serious model. We keep that warning on the chart, not under it.</p></div>
+    </div>
+  </section>
+
   <section class="block chapter-head" id="ch1">
     <p class="kicker">Chapter 1 &middot; The long-run model</p>
     <h2>Where does the price sit in its long story?</h2>
@@ -451,12 +498,66 @@ window.FLEET_CFG = {
   <section class="block" id="now">
     <h2>What the colors mean.</h2>
     <p class="growth-note" id="rainbow-note">Nine colored bands stack around one line: bitcoin's long-run growth, fit to every daily price on record. Low bands: far under its own past growth. High bands: far over it.</p>
-    <p class="bands-cap">Nine bands, low to high. Prices are today&rsquo;s.</p>
+    <p class="bands-cap">Five buckets, low to high. The chart keeps all nine colors. Prices are today&rsquo;s. Tap a bucket to see its colors.</p>
     <div class="bands" id="bands"></div>
     <div class="read-panel" id="band-panel" aria-live="polite">
       <h3 id="band-title">What the colors mean.</h3>
       <p id="band-body">Tap a color on the chart, or a band in the list. Each band tells you how far from the line it sits, how many days the price has lived there, and what the next year did.</p>
     </div>
+  </section>
+
+  <section class="block" id="gauges-home">
+    <p class="kicker">The gauges, in plain words</p>
+    <h2>Three gauges, read plain.</h2>
+    <div class="glist">
+      <div class="grow"><span class="gname">Price vs its long-run line</span><span class="gval" id="hg-line">&hellip;</span><span class="gverd" id="hg-line-note"></span></div>
+      <div class="grow"><span class="gname">Price vs its 200-week average</span><span class="gval" id="hg-200w">&hellip;</span><span class="gverd" id="hg-200w-note"></span></div>
+      <div class="grow"><span class="gname">Fear &amp; Greed</span><span class="gval" id="hg-fg">&hellip;</span><span class="gverd" id="hg-fg-note"></span></div>
+    </div>
+    <p class="asofline" id="hg-asof">Reading the gauges&hellip;</p>
+    <p class="fgsrc">Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/">Alternative.me</a>. These three are a read on the past and the present. None of them is a signal. The full set of gauges lives on <a href="/today#gauges">today&rsquo;s page</a>.</p>
+  </section>
+
+  <section class="block" id="trivia">
+    <p class="kicker">Trivia</p>
+    <h2>Guess first: seven questions from the record.</h2>
+    <p class="growth-note">Each answer is counted from the same daily record the chart is drawn from, through Nov 2, 2026. Tap a guess. The record answers back.</p>
+    <div class="tq" data-right="0">
+      <p class="tq-q">1. Our record starts on Aug 18, 2010. What did one bitcoin cost that day?</p>
+      <div class="chips"><button type="button" class="chip">7 cents</button><button type="button" class="chip">70 cents</button><button type="button" class="chip">$7</button></div>
+      <p class="tq-reveal" hidden><span class="tq-verdict"></span>Seven cents. The whole climb on the chart starts there.</p>
+    </div>
+    <div class="tq" data-right="0">
+      <p class="tq-q">2. How many bitcoins will ever exist?</p>
+      <div class="chips"><button type="button" class="chip">21 million</button><button type="button" class="chip">100 million</button><button type="button" class="chip">No limit</button></div>
+      <p class="tq-reveal" hidden><span class="tq-verdict"></span>21 million, ever. The cap is set in the code. New coins still arrive, but the pace halves about each four years.</p>
+    </div>
+    <div class="tq" data-right="2">
+      <p class="tq-q">3. What is the worst fall in the record, from a top to the low that came after it?</p>
+      <div class="chips"><button type="button" class="chip">About half</button><button type="button" class="chip">About three quarters</button><button type="button" class="chip">More than 90%</button></div>
+      <p class="tq-reveal" hidden><span class="tq-verdict"></span>In 2011 the price fell 93%: from about $34 to about $2. Hackers had broken into Mt. Gox, the one big exchange, and faith in the young market drained away. The climb back to the top took 630 days.</p>
+    </div>
+    <div class="tq" data-right="1">
+      <p class="tq-q">4. About each four years, the pay for making new blocks is cut in half. When was the last cut?</p>
+      <div class="chips"><button type="button" class="chip">2020</button><button type="button" class="chip">2024</button><button type="button" class="chip">It has not happened yet</button></div>
+      <p class="tq-reveal" hidden><span class="tq-verdict"></span>Apr 19, 2024. The pay fell to 3.125 new coins per block. The next cut lands about 2028.</p>
+    </div>
+    <div class="tq" data-right="2">
+      <p class="tq-q">5. The price has come into the Deep Blue band 92 times. When a full year had passed after a visit began, how often did that year end higher?</p>
+      <div class="chips"><button type="button" class="chip">About half the time</button><button type="button" class="chip">Most times</button><button type="button" class="chip">Every time so far</button></div>
+      <p class="tq-reveal" hidden><span class="tq-verdict"></span>Every time so far: 84 of 84 visits. Those years ended up 29% to 4,715%. But the line was drawn with hindsight, through prices that were already known. That is the past. It is not a promise.</p>
+    </div>
+    <div class="tq" data-right="2">
+      <p class="tq-q">6. What is the highest daily close in the whole record?</p>
+      <div class="chips"><button type="button" class="chip">$69,000</button><button type="button" class="chip">About $100,000</button><button type="button" class="chip">About $125,000</button></div>
+      <p class="tq-reveal" hidden><span class="tq-verdict"></span>$124,777, on Oct 7, 2025. The last close in the record, Nov 2, 2026, sat 37% under that top.</p>
+    </div>
+    <div class="tq" data-right="1">
+      <p class="tq-q">7. Of every 100 days since 2010, about how many has the price spent in the Deep Blue band?</p>
+      <div class="chips"><button type="button" class="chip">2 days</button><button type="button" class="chip">23 days</button><button type="button" class="chip">50 days</button></div>
+      <p class="tq-reveal" hidden><span class="tq-verdict"></span>About 23 of every 100 days: 1,379 days in all. No band holds more days. Deep Blue is less a rare alarm than a place this price knows well.</p>
+    </div>
+    <p class="tq-score" id="tq-score" aria-live="polite"></p>
   </section>
 
   <section class="block" id="read-door">
@@ -707,7 +808,12 @@ function drawHero(data){
   const anchor = dx > W-R-130 ? "end" : "start";
   const lx = anchor==="end" ? dx-13 : dx+13;
   s+=`<text x="${lx}" y="${dy-13}" fill="#ffd94d" font-size="19" font-weight="700" text-anchor="${anchor}" style="paint-order:stroke;stroke:#0d1330;stroke-width:3.5px">Today</text>`;
+  // Unified explorer marker (Nov 5, 2026): a gold ring + line on the day
+  // the explorer below is reading. Painted here, moved by the control
+  // script; pointer-events none so a drag lands on the chart stage.
+  s+=`<g id="hero-marker" pointer-events="none"><line x1="${dx}" y1="${T}" x2="${dx}" y2="${H-B}" stroke="#ffd94d" stroke-width="1.6" opacity="0.95"/><circle cx="${dx}" cy="${dy}" r="11" fill="none" stroke="#ffd94d" stroke-width="2.5"/></g>`;
   svg.innerHTML=s;
+  window.RB_HERO_MAP = { t0, t1, L, R, W, H, T, B, yMin, yMax };
   if (data.today && data.today.band) {
     svg.setAttribute("aria-label",
       "Bitcoin rainbow chart. Nine colored bands around bitcoin's long-run growth line, and the price line of every week since 2010. Today the price sits in the " +
@@ -716,21 +822,35 @@ function drawHero(data){
   }
 }
 
-// One measure for every band, in one format: the band's edges as
-// multiples of the line itself. Computed from the pipeline's own
-// ladder constants (bandBottom / bandWidth, the same numbers
-// rainbow-core.mjs fits with), so the list can never drift from the
-// chart: band k runs from exp(bandBottom + bandWidth*k) to
-// exp(bandBottom + bandWidth*(k+1)) times the line.
-function buildRows(data){
+// Buckets (Nov 5, 2026): the nine bands grouped into five plain-word
+// buckets a person can hold in their head. The chart keeps all nine
+// colors — the bucketing is the reading layer. A bucket header carries
+// the member swatches, the combined range and the summed share of
+// days; one tap opens the member bands, whose rows keep the per-band
+// measure (today's range + the edges as multiples of the line, from
+// the pipeline's own ladder constants) and the panel read below.
+// Definitions, in multiples of the long-run line:
+//   Well below the line   Deep Blue + Blue     0.47x–0.86x
+//   Around the line       Sky                  0.86x–1.16x
+//   Above the line        Green + Lime         1.16x–2.12x
+//   Well above the line   Yellow + Orange      2.12x–3.86x
+//   Way above the line    Dark Orange + Red    3.86x–7.03x
+const BUCKETS = [
+  { name: "Well below the line", bands: [0, 1] },
+  { name: "Around the line", bands: [2] },
+  { name: "Above the line", bands: [3, 4] },
+  { name: "Well above the line", bands: [5, 6] },
+  { name: "Way above the line", bands: [7, 8] },
+];
+function buildBuckets(data){
   const box = $("bands");
   if (!box) return;
   const todayK = data.today.bandIndex;
   const bw = data.bandWidth || 0.3, bb = data.bandBottom || -0.75;
   const edgeX = (k) => Math.exp(bb + bw * k);
   const fmtX = (v) => (Math.round(v * 100) / 100).toFixed(2) + "×";
-  box.innerHTML = data.bands.map((b, k) => {
-    const st = data.bandStats[k];
+  const bandRow = (k) => {
+    const b = data.bands[k], st = data.bandStats[k];
     const per100 = Math.round(st.pct);
     const aria = `${b.name} band. ${fmtShort(st.lo)} to ${fmtShort(st.hi)} today. ` +
       `${fmtX(edgeX(k))} to ${fmtX(edgeX(k + 1))} the line. ` +
@@ -742,7 +862,38 @@ function buildRows(data){
       `${k === todayK ? '<span class="bnow">TODAY</span>' : ""}</span>` +
       `<span class="brange">${fmtShort(st.lo)}-${fmtShort(st.hi)}</span>` +
       `<span class="bmult">${fmtX(edgeX(k))}–${fmtX(edgeX(k + 1))}</span></div>`;
+  };
+  box.innerHTML = BUCKETS.map((bk, bi) => {
+    const first = bk.bands[0], lastB = bk.bands[bk.bands.length - 1];
+    const lo = data.bandStats[first].lo, hi = data.bandStats[lastB].hi;
+    const share = Math.round(bk.bands.reduce((a, k) => a + data.bandStats[k].pct, 0));
+    const hasToday = bk.bands.indexOf(todayK) >= 0;
+    const swatches = bk.bands.map((k) => `<i style="background:${data.bands[k].color}"></i>`).join("");
+    const ariaB = `${bk.name} bucket: ${bk.bands.map((k) => data.bands[k].name).join(" and ")}. ` +
+      `${fmtShort(lo)} to ${fmtShort(hi)} today. About ${share} of 100 days sat here.` +
+      (hasToday ? " The price sits in this bucket today." : "");
+    return `<div class="bucket" data-bucket="${bi}">` +
+      `<div class="bucket-row" tabindex="0" role="button" aria-expanded="${hasToday}" aria-label="${ariaB}">` +
+      `<span class="btop"><span class="bsw">${swatches}</span>` +
+      `<span class="bname">${bk.name}${hasToday ? '<span class="bnow">TODAY</span>' : ""}</span>` +
+      `<span class="bchev">${hasToday ? "▾" : "▸"}</span></span>` +
+      `<span class="bmeta">${fmtShort(lo)}–${fmtShort(hi)} today · About ${share} of 100 days</span></div>` +
+      `<div class="bucket-members${hasToday ? " open" : ""}">` +
+      bk.bands.map(bandRow).join("") + `</div></div>`;
   }).join("");
+  box.querySelectorAll(".bucket-row").forEach((row) => {
+    const members = row.parentElement.querySelector(".bucket-members");
+    const chev = row.querySelector(".bchev");
+    const toggle = () => {
+      const open = members.classList.toggle("open");
+      row.setAttribute("aria-expanded", open ? "true" : "false");
+      if (chev) chev.textContent = open ? "▾" : "▸";
+    };
+    row.addEventListener("click", toggle);
+    row.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
   box.querySelectorAll(".band-row").forEach((row) => {
     const k = Number(row.getAttribute("data-band"));
     row.addEventListener("click", () => { if (window.pingChart) window.pingChart(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); });
@@ -757,7 +908,7 @@ function fill(data, savedCopy){
   chartData = data;
   draw(data);
   drawHero(data);
-  buildRows(data);
+  buildBuckets(data);
   renderSim();
   // Hero fact card (simplify pass, Nov 2, 2026): the one big fact on
   // screen one, composed from the engine's own fields. Price, band,
@@ -957,6 +1108,189 @@ load();
   }
 })();
 </script>
+<script src="snapshot-data.js"></script>
+<script>
+/* Interactive context (Nov 5, 2026): price context strip, home gauges,
+   trivia. Every figure is computed here from BTC_LAB — the same daily
+   record the chart is drawn from (blockchain.info closes). Fear & Greed
+   comes from the live snapshot feed, falling back to the saved copy,
+   labeled as such. No figure is typed in by hand. */
+(function(){
+  "use strict";
+  function $(id){ return document.getElementById(id); }
+  var D = window.BTC_LAB;
+  function fmtUSD(v){ return "$" + Math.round(v).toLocaleString("en-US"); }
+  function fmtDate(ts){
+    return new Date(ts*1000).toLocaleDateString("en-US",
+      {month:"short", day:"numeric", year:"numeric", timeZone:"UTC"});
+  }
+
+  /* ---------- Trivia (works even if the data feed failed) ---------- */
+  var answered = 0, rightCount = 0;
+  var cards = document.querySelectorAll(".tq");
+  var total = cards.length;
+  Array.prototype.forEach.call(cards, function(card){
+    var rightIdx = parseInt(card.getAttribute("data-right"), 10);
+    var chips = card.querySelectorAll(".chip");
+    var reveal = card.querySelector(".tq-reveal");
+    var verdict = card.querySelector(".tq-verdict");
+    Array.prototype.forEach.call(chips, function(chip, ci){
+      chip.addEventListener("click", function(){
+        if (card.classList.contains("done")) return;
+        card.classList.add("done");
+        chips[rightIdx].classList.add("right");
+        var ok = (ci === rightIdx);
+        if (!ok) chip.classList.add("miss");
+        if (verdict) verdict.textContent = ok ? "You got it. " : "Not that one. ";
+        if (reveal) reveal.hidden = false;
+        answered++; if (ok) rightCount++;
+        var sc = $("tq-score");
+        if (sc) sc.textContent = "Score: " + rightCount + " right of " + answered +
+          " answered." + (answered === total ?
+            " Every answer above can be checked in the record on this page." : "");
+      });
+    });
+  });
+
+  if (!D || !D.points || D.points.length < 1500) return;
+  var pts = D.points, n = pts.length;
+  var last = pts[n-1], prev = pts[n-2];
+  var GEN = D.genesisTs;
+  function trendAt(ts){ return Math.exp(D.fit.a + D.fit.b * Math.log((ts - GEN) / 86400)); }
+  function bandIdxAt(p, ts){
+    return Math.floor((Math.log(p) - Math.log(trendAt(ts)) - D.bandBottom) / D.bandWidth);
+  }
+  function closeOnOrBefore(ts){
+    var lo = 0, hi = n - 1;
+    while (hi - lo > 1){ var m = (lo + hi) >> 1; if (pts[m][0] <= ts) lo = m; else hi = m; }
+    return pts[lo];
+  }
+  function pctChange(a, b){ return (a / b - 1) * 100; }
+  function upDown(v){ return (v >= 0 ? "Up " : "Down ") + Math.abs(v).toFixed(1) + "%"; }
+
+  /* ---------- Context strip ---------- */
+  var d30 = closeOnOrBefore(last[0] - 30 * 86400);
+  var y1  = closeOnOrBefore(last[0] - 365 * 86400);
+  var athP = pts[0], i;
+  for (i = 1; i < n; i++) if (pts[i][1] > athP[1]) athP = pts[i];
+  function setCtx(id, val, noteId, note){
+    var v = $(id); if (v) v.textContent = val;
+    var nt = $(noteId); if (nt) nt.textContent = note;
+  }
+  setCtx("ctx-d1",  upDown(pctChange(last[1], prev[1])), "ctx-d1-n",  "From " + fmtUSD(prev[1]));
+  setCtx("ctx-d30", upDown(pctChange(last[1], d30[1])),  "ctx-d30-n", "From " + fmtUSD(d30[1]) + " on " + fmtDate(d30[0]));
+  setCtx("ctx-y1",  upDown(pctChange(last[1], y1[1])),   "ctx-y1-n",  "From " + fmtUSD(y1[1]) + " on " + fmtDate(y1[0]));
+  setCtx("ctx-ath", upDown(pctChange(last[1], athP[1])), "ctx-ath-n", fmtUSD(athP[1]) + " \u00B7 " + fmtDate(athP[0]));
+  var basis = $("ctx-basis");
+  if (basis) basis.textContent = "Counted from daily closes \u2014 the same record " +
+    "the chart is drawn from. Last close: " + fmtUSD(last[1]) + " on " + fmtDate(last[0]) + ".";
+
+  /* ---------- Gauge 1: price vs the long-run line ---------- */
+  var trendLast = trendAt(last[0]);
+  var vsLine = pctChange(last[1], trendLast);
+  var bi = bandIdxAt(last[1], last[0]);
+  var bandName = (D.bands && D.bands[bi]) ? D.bands[bi].name : "";
+  var daysInBand = 0;
+  for (i = 0; i < n; i++) if (bandIdxAt(pts[i][1], pts[i][0]) === bi) daysInBand++;
+  var share = Math.round(daysInBand / n * 100);
+  var hgLine = $("hg-line"), hgLineNote = $("hg-line-note");
+  if (hgLine) hgLine.textContent = Math.abs(Math.round(vsLine)) + "% " +
+    (vsLine >= 0 ? "above" : "below") + " the line";
+  if (hgLineNote) hgLineNote.textContent = "The line reads " + fmtUSD(trendLast) +
+    " at the last close" + (bandName ? ", and the price sits in the " + bandName + " band" : "") +
+    ". About " + share + " of every 100 days have sat in this band.";
+
+  /* ---------- Gauge 2: the 200-week average ---------- */
+  var W = 1400; /* 200 weeks of daily closes */
+  var sum = 0, belowDays = 0, totalDays = 0, yearSet = {};
+  var maNow = null, belowYears = [];
+  for (i = 0; i < n; i++){
+    sum += pts[i][1];
+    if (i >= W) sum -= pts[i - W][1];
+    if (i >= W - 1){
+      var ma = sum / W;
+      totalDays++;
+      if (i === n - 1) maNow = ma;
+      if (pts[i][1] < ma){
+        belowDays++;
+        var yr = new Date(pts[i][0] * 1000).getUTCFullYear();
+        if (!yearSet[yr]){ yearSet[yr] = true; belowYears.push(yr); }
+      }
+    }
+  }
+  var lastYear = new Date(last[0] * 1000).getUTCFullYear();
+  function yearsText(years){
+    var runs = [], j;
+    for (j = 0; j < years.length; j++){
+      var y = years[j];
+      if (runs.length && y === runs[runs.length - 1][1] + 1) runs[runs.length - 1][1] = y;
+      else runs.push([y, y]);
+    }
+    var parts = runs.map(function(r){
+      if (r[0] === r[1]) return (r[0] === lastYear) ? "this year" : String(r[0]);
+      if (r[1] === lastYear) return String(r[0]) + "\u2013this year";
+      return String(r[0]) + "\u2013" + String(r[1]).slice(2);
+    });
+    if (!parts.length) return "";
+    if (parts.length === 1) return parts[0];
+    return parts.slice(0, -1).join(", ") + " and " + parts[parts.length - 1];
+  }
+  var hg200 = $("hg-200w"), hg200Note = $("hg-200w-note");
+  if (maNow !== null){
+    var vsMa = pctChange(last[1], maNow);
+    if (hg200) hg200.textContent = fmtUSD(maNow);
+    if (hg200Note) hg200Note.textContent = "The last close sits " +
+      Math.abs(vsMa).toFixed(0) + "% " + (vsMa >= 0 ? "above" : "below") + " it. " +
+      "About " + Math.round(belowDays / totalDays * 100) +
+      " of 100 closes have ended under it. Those days came in deep falls: " +
+      yearsText(belowYears) + ". Under it is past, not a promise.";
+  }
+
+  /* ---------- Gauge 3: Fear & Greed (live feed, saved-copy fallback) ---------- */
+  function fillFG(fg, saved, genISO){
+    var v = $("hg-fg"), note = $("hg-fg-note");
+    if (!fg || typeof fg.value !== "number"){
+      if (v) v.textContent = "\u2014";
+      if (note) note.textContent = "Not reading right now. The score lives at Alternative.me.";
+      return;
+    }
+    if (v) v.textContent = fg.value + " \u00B7 " + (fg.label || "");
+    if (note) note.textContent = "A 0-to-100 mood score for the whole market. " +
+      "Mood is not value: it can sit at one end for weeks while the price keeps " +
+      "going the same way." + (saved ? " Shown from the last saved copy." : "");
+    var asof = $("hg-asof");
+    if (asof){
+      var t = "Counted from daily closes through " + fmtDate(last[0]) + ".";
+      if (saved && genISO){
+        var gd = new Date(genISO);
+        if (!isNaN(gd.getTime())) t += " Fear & Greed is from the saved copy of " +
+          gd.toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric", timeZone:"UTC"}) + ".";
+      }
+      asof.textContent = t;
+    }
+  }
+  var fallbackSnap = window.BTC_SNAPSHOT;
+  var fbFG = fallbackSnap && fallbackSnap.fundamentals ?
+    fallbackSnap.fundamentals.fear_greed : null;
+  fillFG(fbFG, true, fallbackSnap ? fallbackSnap.generated_at : null);
+  try {
+    var ctrl = ("AbortController" in window) ? new AbortController() : null;
+    var to = ctrl ? setTimeout(function(){ ctrl.abort(); }, 6000) : null;
+    fetch("https://btc-rainbow-ask-staging.wdlcmu.workers.dev/api/snapshot",
+      ctrl ? {signal: ctrl.signal} : {})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if (to) clearTimeout(to);
+        if (j && j.fundamentals && j.fundamentals.fear_greed){
+          fillFG(j.fundamentals.fear_greed, false, j.generated_at);
+        }
+      })
+      .catch(function(){ /* saved copy stays on screen, labeled */ });
+  } catch (e) { /* saved copy stays on screen, labeled */ }
+  var asof0 = $("hg-asof");
+  if (asof0 && !fbFG) asof0.textContent = "Counted from daily closes through " + fmtDate(last[0]) + ".";
+})();
+</script>
 <script>
 (function(){
   var map = {"#what":"/what-is-bitcoin-in-plain-english","#now":"/","#ch1":"/",
@@ -977,10 +1311,12 @@ load();
 <script>
 (function(){
   "use strict";
-  // Simplify pass (Nov 2, 2026): the hero day slider. Same daily series
-  // and same fit math as the main chart's scrubber below, so the two
-  // readouts can never disagree. Readout only: nothing computed here
-  // feeds any other part of the page.
+  // Unified explorer (Nov 5, 2026): the hero chart IS the day explorer.
+  // Dragging or tapping the chart moves the same day the slider below
+  // drives; the slider stays as the same control, two-way synced. The
+  // marker is painted by drawHero and moved here. Readout math is the
+  // same daily series and fit as the main chart's scrubber, so the two
+  // readouts can never disagree.
   var D = window.BTC_LAB;
   if (!D || !D.points || !D.points.length) return;
   var pts = D.points, fit = D.fit, GEN = D.genesisTs;
@@ -997,10 +1333,30 @@ load();
     { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }); }
   var slider = document.getElementById("hero-scrub");
   var out = document.getElementById("hero-read");
+  var svg = document.getElementById("hero-chart");
   if (!slider || !out) return;
   var started = false;
+  var cur = pts.length - 1;
+  function trackStart(){
+    if (started) return; started = true;
+    try { if (window.FA && FA.track) FA.track("tool_start", { surface: "rainbow-explorer" }); } catch(e){}
+    if (window.pingChart) window.pingChart();
+  }
+  function positionMarker(){
+    var map = window.RB_HERO_MAP;
+    if (!map || !svg) return;
+    var g = svg.querySelector("#hero-marker");
+    if (!g) return;
+    var dts = pts[cur][0], p = pts[cur][1];
+    var x = map.L + (dts - map.t0) / (map.t1 - map.t0) * (map.W - map.L - map.R);
+    var y = map.T + (map.yMax - Math.log(p)) / (map.yMax - map.yMin) * (map.H - map.T - map.B);
+    var line = g.querySelector("line"), dot = g.querySelector("circle");
+    if (line){ line.setAttribute("x1", x.toFixed(1)); line.setAttribute("x2", x.toFixed(1)); }
+    if (dot){ dot.setAttribute("cx", x.toFixed(1)); dot.setAttribute("cy", y.toFixed(1)); }
+  }
   function show(i){
-    var dts = pts[i][0], p = pts[i][1];
+    cur = Math.max(0, Math.min(pts.length - 1, i));
+    var dts = pts[cur][0], p = pts[cur][1];
     var bi = bandIdxAt(p, dts);
     var pct = Math.round((p / trendAt(dts) - 1) * 100);
     var where = bi < 0 ? "below every band" : bi > 8 ? "above every band" : "in the " + D.bands[bi].name + " band";
@@ -1015,12 +1371,31 @@ load();
         Math.abs(chg).toFixed(1) + "% in that year.";
     }
     out.textContent = txt;
+    positionMarker();
   }
   slider.addEventListener("input", function(){
-    if (!started) { started = true; try { if (window.FA && FA.track) FA.track("tool_start", { surface: "rainbow-explorer" }); } catch(e){} }
-    var i = Math.round(Number(slider.value) / 100 * (pts.length - 1));
-    show(Math.max(0, Math.min(pts.length - 1, i)));
+    trackStart();
+    show(Math.round(Number(slider.value) / 100 * (pts.length - 1)));
   });
+  if (svg){
+    // fill() redraws the hero chart with live data; when it does, put
+    // the marker back on the day the reader picked.
+    if (window.MutationObserver) new MutationObserver(positionMarker).observe(svg, { childList: true });
+    var fromEvent = function(e){
+      var map = window.RB_HERO_MAP;
+      if (!map) return;
+      trackStart();
+      var r = svg.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width * map.W;
+      var ts = map.t0 + (x - map.L) / (map.W - map.L - map.R) * (map.t1 - map.t0);
+      var i = nearestIdx(Math.max(pts[0][0], Math.min(lastTs, ts)));
+      slider.value = (i / (pts.length - 1) * 100).toFixed(2);
+      show(i);
+    };
+    svg.addEventListener("pointerdown", fromEvent);
+    svg.addEventListener("pointermove", function(e){ if (e.pointerType === "mouse" || e.buttons) fromEvent(e); });
+    positionMarker();
+  }
 })();
 </script>
 </body>
