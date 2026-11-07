@@ -55,6 +55,14 @@
     background:var(--gold);color:#221a00;font-weight:800;font-size:20px;
     border-radius:999px;text-decoration:none;padding:12px 22px}
   .claude-cta .cap{font-size:16px;color:var(--soft);margin:6px auto 0}
+  .claude-connect{max-width:780px;margin:26px auto 0;background:var(--panel);
+    border:1px solid var(--line);border-radius:18px;padding:22px 20px;text-align:center}
+  .claude-connect h2{margin:0 0 8px;font-size:26px;line-height:1.15}
+  .claude-connect p{margin:0 auto 16px;max-width:560px;color:var(--soft);
+    font-size:17.5px;line-height:1.5}
+  .claude-connect-btn{display:flex;align-items:center;justify-content:center;
+    min-height:52px;background:var(--gold);color:#221a00;font-weight:800;
+    font-size:20px;border-radius:999px;text-decoration:none;padding:12px 22px}
   section.block{margin:30px 0 0}
   .kicker{color:var(--gold);font-weight:800;letter-spacing:2px;font-size:14px;
     text-transform:uppercase;margin:0 0 6px}
@@ -308,6 +316,10 @@ window.FLEET_CFG = {
   ],
   completes: [
     { sel: "#read-note", surface: "todays-read", minText: 60 }
+  ],
+  specials: [
+    { sel: ".claude-connect-btn", on: "click", name: "connect_click", props: { surface: "home-below-chart" } },
+    { sel: ".claude-cta a", on: "click", name: "connect_click", props: { surface: "home-fact-card" } }
   ]
 };
 </script>
@@ -487,6 +499,12 @@ window.FLEET_CFG = {
     </div>
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
+
+  <section class="claude-connect" aria-label="Use Bitcoin Rainbow in Claude">
+    <h2>Ask Claude about the chart</h2>
+    <p>Add the free Bitcoin Rainbow connector in Claude and ask about today&rsquo;s band, your DCA, or past cycles &mdash; it answers with live data.</p>
+    <a class="claude-connect-btn" href="https://claude.ai/directory/connectors/btc-rainbow">Add it in Claude</a>
+  </section>
 
   <section class="block" id="start">
     <p class="kicker">Start here</p>
