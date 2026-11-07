@@ -39,6 +39,11 @@
 ## Start here
 
 - [Home and chart](https://thebitcoinrainbow.com/): see the chart, tap a band, and run the weekly buy tool.
+- [Connect to Claude](https://claude.ai/directory/btc-rainbow): this site's own connector for Claude. Ask Claude about bitcoin and it reads this chart's live data: today's band, the DCA replay, and a plain-words explainer.
+- [Bitcoin rainbow chart today](https://thebitcoinrainbow.com/bitcoin-rainbow-chart-today): today's live reading — the price, the band it sits in, the band's range, and how far the price sits from the growth line.
+- [Is bitcoin cheap or expensive right now?](https://thebitcoinrainbow.com/is-bitcoin-cheap-or-expensive): the counted answer — on how many of all past days the price sat at or below where it sits today against the line.
+- [What is the bitcoin rainbow chart?](https://thebitcoinrainbow.com/what-is-the-bitcoin-rainbow-chart): one line, nine bands, plain words, with today's live reading as the worked example.
+- [How does bitcoin perform after a halving?](https://thebitcoinrainbow.com/bitcoin-after-a-halving): all four cycles counted from daily closes — price on the day, one year on, cycle high — with the small-sample warning.
 - [Ask in your own words](https://thebitcoinrainbow.com/ask): plain facts from the chart. No advice. Nothing you type is saved.
 - [The rainbow chart, in plain words](https://thebitcoinrainbow.com/bitcoin-rainbow-chart-explained): one line, nine bands, and where the price sits.
 - [What is bitcoin, in plain words](https://thebitcoinrainbow.com/what-is-bitcoin-in-plain-english): cash for the web, a hard cap, a shared list.

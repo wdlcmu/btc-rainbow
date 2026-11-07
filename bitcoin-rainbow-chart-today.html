@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitcoin Rainbow Chart Today — Live Price, Band, and the Line</title>
+<meta name="description" content="The bitcoin rainbow chart today, live: the price now, the band it sits in, and how far it sits from its long-run growth line. In plain words.">
+<link rel="canonical" href="https://thebitcoinrainbow.com/bitcoin-rainbow-chart-today">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bitcoin Rainbow Chart Today">
+<meta property="og:description" content="Today's live reading: the price, its band, and its place against the line.">
+<meta property="og:url" content="https://thebitcoinrainbow.com/bitcoin-rainbow-chart-today">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0d1330">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What does the bitcoin rainbow chart say today?","acceptedAnswer":{"@type":"Answer","text":"This page reads the chart live: today's price, the band the price sits in, and how far the price sits from the chart's long-run growth line. The reading changes every day. This is learning, not financial advice."}},
+{"@type":"Question","name":"What are the bands on the rainbow chart?","acceptedAnswer":{"@type":"Answer","text":"Nine colored bands stack around one line. The line is bitcoin's long-run growth, fit to every daily price since 2010. Low bands mean the price sits far under its own past growth. High bands mean far over it. Band names here are colors only."}}]}
+</script>
+<style>
+body{margin:0;background:#0d1330;color:#f4f6ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:19px;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px}
+h1{font-size:32px;line-height:1.15} h2{font-size:24px;margin-top:28px}
+a{color:#ffd94d} .note{color:#b9c2e8}
+.btn{display:inline-block;background:#ffd94d;color:#221a00;font-weight:700;padding:13px 22px;border-radius:999px;text-decoration:none;min-height:48px}
+.navrow{margin:10px 0}
+.navrow a{display:flex;align-items:center;min-height:44px;padding:8px 14px;background:#16204a;border:1px solid #2c3a75;border-radius:12px;font-weight:700;text-decoration:none}
+.footnav a{display:inline-flex;align-items:center;min-height:44px;padding:4px 10px}
+.livecard{background:#16204a;border:1px solid #2c3a75;border-radius:14px;padding:18px;margin:18px 0}
+.livecard .k{font-size:15px;color:#b9c2e8;margin:0}
+.livecard .big{font-size:34px;font-weight:800;margin:2px 0 6px}
+.bandchip{display:inline-block;width:16px;height:16px;border-radius:5px;vertical-align:-2px;margin-right:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Bitcoin rainbow chart today</h1>
+<p>Bitcoin Rainbow is a free site in plain words. It shows where bitcoin's price sits in its own past.</p>
+<div class="livecard">
+<p class="k">One bitcoin right now</p>
+<p class="big" id="t-price">Reading the chart&hellip;</p>
+<p><span class="bandchip" id="t-chip"></span><span id="t-band"></span></p>
+<p id="t-range"></p>
+<p id="t-line"></p>
+<p id="t-year"></p>
+<p class="note" id="t-asof"></p>
+</div>
+<h2>What today's reading means</h2>
+<p>The chart stacks nine colored bands around one line. The line is bitcoin's long-run growth. It is fit to every daily price since 2010.</p>
+<p>Low bands mean the price sits far under its own past growth. High bands mean far over it.</p>
+<p>The bands take no side. They say where the price sits. They do not say what comes next.</p>
+<h2>Now what</h2>
+<p><a class="btn" href="/">See the full chart</a></p>
+<p><a class="btn" href="https://claude.ai/directory/btc-rainbow">Connect to Claude</a></p>
+<p class="navrow"><a href="/is-bitcoin-cheap-or-expensive">Is bitcoin cheap or expensive right now?</a></p>
+<p class="navrow"><a href="/what-is-the-bitcoin-rainbow-chart">What is the bitcoin rainbow chart?</a></p>
+<p class="navrow"><a href="/today">Read today's read</a></p>
+<p class="note" id="t-src">Live price from Coinbase, read by this site's own chart engine. Past prices from blockchain.info and Coinbase. This is learning, not financial advice.</p>
+<p class="footnav"><a href="/">Home</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+<p>Built with Muse.</p>
+</div>
+<script src="fallback-data.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+  function fill(d, saved){
+    if (!d || !d.today) return;
+    var t = d.today, st = (d.bandStats || [])[t.bandIndex];
+    $("t-price").textContent = fmt$(d.spot.price);
+    if (t.band) {
+      $("t-chip").style.background = t.band.color;
+      $("t-band").textContent = "It sits in the " + t.band.name + " band, " + t.band.plain + ".";
+    } else {
+      $("t-band").textContent = t.bandIndex < 0 ? "It sits below the lowest band." : "It sits above the highest band.";
+    }
+    if (st) $("t-range").textContent = "That band runs from " + fmt$(st.lo) + " to " + fmt$(st.hi) + " today.";
+    $("t-line").textContent = "The growth line says " + fmt$(t.trend) + ". The price is " + Math.abs(t.pct) + "% " + (t.pct < 0 ? "below" : "above") + " the line.";
+    if (d.yearAgo) $("t-year").textContent = "One year ago, one bitcoin cost " + fmt$(d.yearAgo.price) + ". That is " + Math.abs(d.yearAgo.changePct) + "% " + (d.yearAgo.changePct < 0 ? "down" : "up") + " in a year.";
+    $("t-asof").textContent = saved
+      ? "Saved copy from " + new Date(d.spot.ts * 1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}) + ". The live price did not load."
+      : "Live now. Read at " + new Date(d.spot.ts * 1000).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"UTC"}) + " UTC.";
+  }
+  if (window.FALLBACK_CHART) { try { fill(window.FALLBACK_CHART, true); } catch(e){} }
+  fetch("https://mcp.thebitcoinrainbow.com/api/chart")
+    .then(function(r){ if (!r.ok) throw new Error("bad"); return r.json(); })
+    .then(function(d){ fill(d, false); })
+    .catch(function(){});
+})();
+</script>
+</body>
+</html>

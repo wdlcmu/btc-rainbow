@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is Bitcoin Cheap or Expensive Right Now? The Counted Answer</title>
+<meta name="description" content="Cheap or expensive? This page counts every day since 2010: on how many days did the price sit at or below where it sits today, against its own growth line? Live, in plain words.">
+<link rel="canonical" href="https://thebitcoinrainbow.com/is-bitcoin-cheap-or-expensive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Is Bitcoin Cheap or Expensive Right Now?">
+<meta property="og:description" content="The counted answer: how many past days sat at or below today's place against the line.">
+<meta property="og:url" content="https://thebitcoinrainbow.com/is-bitcoin-cheap-or-expensive">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0d1330">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is bitcoin cheap or expensive right now?","acceptedAnswer":{"@type":"Answer","text":"This page answers with a count, not a call. It places today's price against the rainbow chart's growth line, then counts how many of all past days sat at or below that same place. Low against its own past is not the same as cheap. The line is fit to the past and can be wrong. This is learning, not financial advice."}},
+{"@type":"Question","name":"What does the rainbow chart measure?","acceptedAnswer":{"@type":"Answer","text":"One line is fit to every daily bitcoin price since 2010. The chart measures how far today's price sits from that line. It measures position against the past, not value."}}]}
+</script>
+<style>
+body{margin:0;background:#0d1330;color:#f4f6ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:19px;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px}
+h1{font-size:32px;line-height:1.15} h2{font-size:24px;margin-top:28px}
+a{color:#ffd94d} .note{color:#b9c2e8}
+.btn{display:inline-block;background:#ffd94d;color:#221a00;font-weight:700;padding:13px 22px;border-radius:999px;text-decoration:none;min-height:48px}
+.navrow{margin:10px 0}
+.navrow a{display:flex;align-items:center;min-height:44px;padding:8px 14px;background:#16204a;border:1px solid #2c3a75;border-radius:12px;font-weight:700;text-decoration:none}
+.footnav a{display:inline-flex;align-items:center;min-height:44px;padding:4px 10px}
+.livecard{background:#16204a;border:1px solid #2c3a75;border-radius:14px;padding:18px;margin:18px 0}
+.livecard .k{font-size:15px;color:#b9c2e8;margin:0}
+.livecard .big{font-size:30px;font-weight:800;margin:2px 0 6px;line-height:1.25}
+.bandchip{display:inline-block;width:16px;height:16px;border-radius:5px;vertical-align:-2px;margin-right:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Is bitcoin cheap or expensive right now?</h1>
+<p>Bitcoin Rainbow is a free site in plain words. It shows where bitcoin's price sits in its own past.</p>
+<div class="livecard">
+<p class="k">The counted answer, live</p>
+<p class="big" id="c-count">Counting the days&hellip;</p>
+<p><span class="bandchip" id="c-chip"></span><span id="c-band"></span></p>
+<p id="c-rest"></p>
+<p class="note" id="c-asof"></p>
+</div>
+<h2>How the count works</h2>
+<p>One line is fit to every daily price since 2010. The line is bitcoin's long-run growth.</p>
+<p>Each past day gets one mark: how far its price sat from the line that day.</p>
+<p>Then we count. On how many days did the price sit at or below today's mark?</p>
+<h2>What the count cannot say</h2>
+<p>Low against its own past is not the same as cheap. A thing can sit low and fall more.</p>
+<p>The line is fit to the past, with hindsight. It can be wrong about what comes next.</p>
+<p>This page counts. It does not call. The buy call is yours, made calmly.</p>
+<h2>Now what</h2>
+<p><a class="btn" href="/">See the full chart</a></p>
+<p><a class="btn" href="https://claude.ai/directory/btc-rainbow">Connect to Claude</a></p>
+<p class="navrow"><a href="/bitcoin-rainbow-chart-today">Bitcoin rainbow chart today</a></p>
+<p class="navrow"><a href="/should-i-buy-bitcoin">Should I buy bitcoin?</a></p>
+<p class="navrow"><a href="/what-the-rainbow-chart-gets-wrong">What the rainbow chart gets wrong</a></p>
+<p class="note">Counted from this site's own daily record: every daily close since Aug 18, 2010, plus today's live price from Coinbase. This is learning, not financial advice.</p>
+<p class="footnav"><a href="/">Home</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+<p>Built with Muse.</p>
+</div>
+<script src="fallback-data.js"></script>
+<script src="data-daily.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+  function fill(d, saved){
+    if (!d || !d.today) return;
+    var t = d.today;
+    if (t.band) {
+      $("c-chip").style.background = t.band.color;
+      $("c-band").textContent = "Today: " + fmt$(d.spot.price) + ", in the " + t.band.name + " band, " + Math.abs(t.pct) + "% " + (t.pct < 0 ? "below" : "above") + " the line.";
+    }
+    var D = window.BTC_LAB;
+    if (D && D.points && D.fit) {
+      var trendNow = Math.exp(D.fit.a + D.fit.b * Math.log((d.spot.ts - D.genesisTs) / 86400));
+      var offNow = Math.log(d.spot.price) - Math.log(trendNow);
+      var n = 0, total = D.points.length;
+      for (var i = 0; i < total; i++) {
+        var ts = D.points[i][0], p = D.points[i][1];
+        var tr = Math.exp(D.fit.a + D.fit.b * Math.log((ts - D.genesisTs) / 86400));
+        if (Math.log(p) - Math.log(tr) <= offNow) n++;
+      }
+      var pct = Math.round(100 * n / total);
+      $("c-count").textContent = "On " + n.toLocaleString("en-US") + " of " + total.toLocaleString("en-US") + " days (" + pct + "%), the price sat at or below where it sits today.";
+      $("c-rest").textContent = "On the other " + (100 - pct) + "% of days, it sat higher against the line.";
+    } else {
+      $("c-count").textContent = "The count did not load. The full chart has it.";
+    }
+    $("c-asof").textContent = saved
+      ? "Saved copy from " + new Date(d.spot.ts * 1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}) + ". The live price did not load."
+      : "Live now. Read at " + new Date(d.spot.ts * 1000).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"UTC"}) + " UTC.";
+  }
+  if (window.FALLBACK_CHART) { try { fill(window.FALLBACK_CHART, true); } catch(e){} }
+  fetch("https://mcp.thebitcoinrainbow.com/api/chart")
+    .then(function(r){ if (!r.ok) throw new Error("bad"); return r.json(); })
+    .then(function(d){ fill(d, false); })
+    .catch(function(){});
+})();
+</script>
+</body>
+</html>

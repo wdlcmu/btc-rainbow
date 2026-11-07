@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is the Bitcoin Rainbow Chart? Plain Words, Live Example</title>
+<meta name="description" content="What is the bitcoin rainbow chart? One line fit to every price since 2010, nine colored bands, and today's live reading as the example. In plain words.">
+<link rel="canonical" href="https://thebitcoinrainbow.com/what-is-the-bitcoin-rainbow-chart">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What Is the Bitcoin Rainbow Chart?">
+<meta property="og:description" content="One line, nine bands, plain words — with today's live reading as the example.">
+<meta property="og:url" content="https://thebitcoinrainbow.com/what-is-the-bitcoin-rainbow-chart">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0d1330">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the bitcoin rainbow chart?","acceptedAnswer":{"@type":"Answer","text":"It is a growth chart for bitcoin's price. One line is fit to every daily price since 2010: bitcoin's long-run growth. Nine colored bands stack around the line. Low bands mean the price sits far under its own past growth. High bands mean far over it. A Reddit user, azop, drew the first one in 2014, on a growth line by trolololo. Blockchain Center made it famous."}},
+{"@type":"Question","name":"Does the rainbow chart predict the price?","acceptedAnswer":{"@type":"Answer","text":"No. The line is fit to the past. It cannot see what comes next. Even the chart's famous keeper has said in writing that it was never a serious model. This is learning, not financial advice."}}]}
+</script>
+<style>
+body{margin:0;background:#0d1330;color:#f4f6ff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:19px;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px}
+h1{font-size:32px;line-height:1.15} h2{font-size:24px;margin-top:28px}
+a{color:#ffd94d} .note{color:#b9c2e8}
+.btn{display:inline-block;background:#ffd94d;color:#221a00;font-weight:700;padding:13px 22px;border-radius:999px;text-decoration:none;min-height:48px}
+.navrow{margin:10px 0}
+.navrow a{display:flex;align-items:center;min-height:44px;padding:8px 14px;background:#16204a;border:1px solid #2c3a75;border-radius:12px;font-weight:700;text-decoration:none}
+.footnav a{display:inline-flex;align-items:center;min-height:44px;padding:4px 10px}
+.livecard{background:#16204a;border:1px solid #2c3a75;border-radius:14px;padding:18px;margin:18px 0}
+.livecard .k{font-size:15px;color:#b9c2e8;margin:0}
+.livecard .big{font-size:30px;font-weight:800;margin:2px 0 6px;line-height:1.25}
+.bandchip{display:inline-block;width:16px;height:16px;border-radius:5px;vertical-align:-2px;margin-right:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>What is the bitcoin rainbow chart?</h1>
+<p>Bitcoin Rainbow is a free site in plain words. It shows where bitcoin's price sits in its own past.</p>
+<p>The rainbow chart is a growth chart for bitcoin's price. It answers one question: where does today's price sit in the whole story?</p>
+<div class="livecard">
+<p class="k">The chart, in one live example</p>
+<p class="big" id="w-line">Reading the chart&hellip;</p>
+<p><span class="bandchip" id="w-chip"></span><span id="w-band"></span></p>
+<p class="note" id="w-asof"></p>
+</div>
+<h2>One line, nine bands</h2>
+<p>Through the middle runs one line. It is fit to every daily price since 2010.</p>
+<p>The line is bitcoin's long-run growth, in one stroke.</p>
+<p>Around the line stack nine colored bands. Deep Blue sits at the bottom. Red sits at the top.</p>
+<p>Low bands: the price sits far under its own past growth. High bands: far over it.</p>
+<p>Here, band names are colors only. No band says buy. No band says sell.</p>
+<h2>Where the chart came from</h2>
+<p>A Reddit user, azop, drew the first rainbow in 2014.</p>
+<p>He drew it on a growth line by trolololo, a forum user.</p>
+<p>Blockchain Center made the chart famous. This site's line is its own fit, on the same public prices.</p>
+<h2>What the chart cannot do</h2>
+<p>The line is fit to the past. It cannot see what comes next.</p>
+<p>The chart's famous keeper has said so in writing. It was never a serious model.</p>
+<p>Read it as a map of the past. Not as a promise.</p>
+<h2>Now what</h2>
+<p><a class="btn" href="/">See the full chart</a></p>
+<p><a class="btn" href="https://claude.ai/directory/btc-rainbow">Connect to Claude</a></p>
+<p class="navrow"><a href="/bitcoin-rainbow-chart-today">Bitcoin rainbow chart today</a></p>
+<p class="navrow"><a href="/bitcoin-rainbow-chart-explained">The rainbow chart, in plain words (longer read)</a></p>
+<p class="navrow"><a href="/method">How the line is fit: sources and method</a></p>
+<p class="note">Live price from Coinbase, read by this site's own chart engine. This is learning, not financial advice.</p>
+<p class="footnav"><a href="/">Home</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+<p>Built with Muse.</p>
+</div>
+<script src="fallback-data.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  function fmt$(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+  function fill(d, saved){
+    if (!d || !d.today) return;
+    var t = d.today;
+    $("w-line").textContent = "Today, one bitcoin costs " + fmt$(d.spot.price) + ". The line says " + fmt$(t.trend) + ".";
+    if (t.band) {
+      $("w-chip").style.background = t.band.color;
+      $("w-band").textContent = "So the price sits in the " + t.band.name + " band: " + Math.abs(t.pct) + "% " + (t.pct < 0 ? "below" : "above") + " the line, " + t.band.plain + ".";
+    } else {
+      $("w-band").textContent = t.bandIndex < 0 ? "So the price sits below the lowest band." : "So the price sits above the highest band.";
+    }
+    $("w-asof").textContent = saved
+      ? "Saved copy from " + new Date(d.spot.ts * 1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}) + ". The live price did not load."
+      : "Live now. Read at " + new Date(d.spot.ts * 1000).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"UTC"}) + " UTC.";
+  }
+  if (window.FALLBACK_CHART) { try { fill(window.FALLBACK_CHART, true); } catch(e){} }
+  fetch("https://mcp.thebitcoinrainbow.com/api/chart")
+    .then(function(r){ if (!r.ok) throw new Error("bad"); return r.json(); })
+    .then(function(d){ fill(d, false); })
+    .catch(function(){});
+})();
+</script>
+</body>
+</html>
