@@ -30,6 +30,13 @@ a{color:#ffd94d} .note{color:#b9c2e8}
 .livecard .k{font-size:15px;color:#b9c2e8;margin:0}
 .livecard .big{font-size:30px;font-weight:800;margin:2px 0 6px;line-height:1.25}
 .bandchip{display:inline-block;width:16px;height:16px;border-radius:5px;vertical-align:-2px;margin-right:8px}
+.bandstrip{position:relative;margin:14px 0 6px;border:1px solid #2c3a75;border-radius:10px;overflow:hidden}
+.bandseg{display:flex;justify-content:space-between;align-items:center;height:27px;padding:0 10px;font-size:14px;color:#fff}
+.bandseg .bn{font-weight:700}
+.bandseg .bp{opacity:.88;font-size:13px}
+.bandseg.today{outline:3px solid #ffd94d;outline-offset:-3px}
+.bandmark{position:absolute;left:0;right:0;border-top:3px solid #ffd94d;transform:translateY(-50%);display:none;z-index:2}
+.bandmark i{position:absolute;right:0;top:-7px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:11px solid #ffd94d}
 </style>
 </head>
 <body>
@@ -41,6 +48,19 @@ a{color:#ffd94d} .note{color:#b9c2e8}
 <p class="big" id="c-count">Counting the days&hellip;</p>
 <p><span class="bandchip" id="c-chip"></span><span id="c-band"></span></p>
 <p id="c-rest"></p>
+<div class="bandstrip" id="bandstrip">
+<div class="bandseg" id="bandseg-8" style="background:#d92b2b;"><span class="bn">Red</span><span class="bp">at the very top</span></div>
+<div class="bandseg" id="bandseg-7" style="background:#e85d1f;"><span class="bn">Dark Orange</span><span class="bp">near the top</span></div>
+<div class="bandseg" id="bandseg-6" style="background:#ef8f2c;"><span class="bn">Orange</span><span class="bp">way above the line</span></div>
+<div class="bandseg" id="bandseg-5" style="background:#f2c230;color:#191919;"><span class="bn">Yellow</span><span class="bp">far above the line</span></div>
+<div class="bandseg" id="bandseg-4" style="background:#a8c93f;color:#191919;"><span class="bn">Lime</span><span class="bp">above the line</span></div>
+<div class="bandseg" id="bandseg-3" style="background:#3fae5a;"><span class="bn">Green</span><span class="bp">a bit above the line</span></div>
+<div class="bandseg" id="bandseg-2" style="background:#35b6c9;color:#191919;"><span class="bn">Sky</span><span class="bp">near the line</span></div>
+<div class="bandseg" id="bandseg-1" style="background:#2f6fd0;"><span class="bn">Blue</span><span class="bp">far below the line</span></div>
+<div class="bandseg" id="bandseg-0" style="background:#2e3a9e;"><span class="bn">Deep Blue</span><span class="bp">way below the line</span></div>
+<div class="bandmark" id="bandmark"><i></i></div>
+</div>
+<p class="note">The nine bands, top to bottom. The gold line is today's exact spot. The outlined band is the one it sits in.</p>
 <p class="note" id="c-asof"></p>
 </div>
 <h2>How the count works</h2>
@@ -74,10 +94,12 @@ a{color:#ffd94d} .note{color:#b9c2e8}
       $("c-chip").style.background = t.band.color;
       $("c-band").textContent = "Today: " + fmt$(d.spot.price) + ", in the " + t.band.name + " band, " + Math.abs(t.pct) + "% " + (t.pct < 0 ? "below" : "above") + " the line.";
     }
+    var off = (typeof t.lnOff === "number") ? t.lnOff : null;
     var D = window.BTC_LAB;
     if (D && D.points && D.fit) {
       var trendNow = Math.exp(D.fit.a + D.fit.b * Math.log((d.spot.ts - D.genesisTs) / 86400));
       var offNow = Math.log(d.spot.price) - Math.log(trendNow);
+      off = offNow;
       var n = 0, total = D.points.length;
       for (var i = 0; i < total; i++) {
         var ts = D.points[i][0], p = D.points[i][1];
@@ -89,6 +111,17 @@ a{color:#ffd94d} .note{color:#b9c2e8}
       $("c-rest").textContent = "On the other " + (100 - pct) + "% of days, it sat higher against the line.";
     } else {
       $("c-count").textContent = "The count did not load. The full chart has it.";
+    }
+    var mk = $("bandmark");
+    if (mk && D && off !== null) {
+      var pos = (off - D.bandBottom) / (D.bandWidth * 9) * 100;
+      if (pos < 0) pos = 0; if (pos > 100) pos = 100;
+      mk.style.display = "block";
+      mk.style.top = (100 - pos) + "%";
+      if (typeof t.bandIndex === "number" && t.bandIndex >= 0 && t.bandIndex <= 8) {
+        var sg = $("bandseg-" + t.bandIndex);
+        if (sg) sg.className = "bandseg today";
+      }
     }
     $("c-asof").textContent = saved
       ? "Saved copy from " + new Date(d.spot.ts * 1000).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}) + ". The live price did not load."
