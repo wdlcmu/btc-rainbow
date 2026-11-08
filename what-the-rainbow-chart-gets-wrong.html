@@ -305,6 +305,38 @@ window.FLEET_CFG = { site: "bitcoin-rainbow", starts: [], completes: [] };
     } catch(e){}
   }
   window.FA = { track: track };
+  /* FLEET-ATTRIB-2026-11-07: first-touch attribution (pattern: SPEC-SS-ATTRIB-01).
+     On first pageview, persist the door as PostHog person properties via
+     people.set_once (a later visit never overwrites): entry_referrer (bare
+     origin only), entry_referring_domain, entry_url (origin+path, no query,
+     no fragment, no tokens), entry_at, entry_app (app kind classified from
+     the user-agent string - in-app browsers name themselves there even when
+     they strip the referrer). No raw UA stored, no PII. */
+  function fleetFirstTouch(){
+    try {
+      if (!window.posthog || !posthog.people || !posthog.people.set_once) return;
+      var ref = document.referrer || "";
+      var refOrigin = "", refDomain = "$direct";
+      if (ref) { try { var ru = new URL(ref); if (ru.origin && ru.origin !== "null") { refOrigin = ru.origin + "/"; refDomain = ru.hostname || "$direct"; } } catch (e) {} }
+      var ua = (navigator.userAgent || "").toLowerCase();
+      var app = "other";
+      if (ua.indexOf("kakaotalk") !== -1) app = "kakaotalk";
+      else if (ua.indexOf("whatsapp") !== -1) app = "whatsapp";
+      else if (ua.indexOf("instagram") !== -1) app = "instagram";
+      else if (ua.indexOf("telegram") !== -1) app = "telegram";
+      else if (ua.indexOf("teams") !== -1) app = "teams";
+      else if (ua.indexOf("fban") !== -1 || ua.indexOf("fbav") !== -1 || ua.indexOf("fb_iab") !== -1 || ua.indexOf("facebook") !== -1) app = "facebook";
+      else if (ua.indexOf("mozilla/") !== -1) app = "browser";
+      posthog.people.set_once({
+        entry_referrer: refOrigin,
+        entry_referring_domain: refDomain,
+        entry_url: window.location.origin + (window.location.pathname || "/"),
+        entry_at: new Date().toISOString(),
+        entry_app: app
+      });
+    } catch (e) {}
+  }
+
   var s = document.createElement("script");
   s.async = true;
   s.src = "https://us.i.posthog.com/static/array.js";
@@ -314,6 +346,7 @@ window.FLEET_CFG = { site: "bitcoin-rainbow", starts: [], completes: [] };
         posthog.init(KEY, {api_host: "https://us.i.posthog.com", autocapture: false, capture_pageview: true, disable_session_recording: true});
         try { posthog.register({site: SITE, internal: isInternal()}); } catch(e){}
         try { if (isInternal() && posthog.people && posthog.people.set) posthog.people.set({fleet_internal: true}); } catch(e){}
+        try { fleetFirstTouch(); } catch(e){}
         while (Q.length) { var e0 = Q.shift(); try { posthog.capture(e0[0], e0[1]); } catch(e){} }
       }
     } catch(e){}
