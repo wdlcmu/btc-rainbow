@@ -530,6 +530,7 @@ window.FLEET_CFG = {
         aria-label="Pick a day on the rainbow chart">
       <p class="hero-read" id="hero-read" aria-live="polite">Slide, and see that day's price, its band, and the year that came next.</p>
     </div>
+    <p class="asklink"><a href="#rainbow-note">What is the line?</a></p>
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
@@ -557,7 +558,7 @@ window.FLEET_CFG = {
 
   <section class="block" id="now">
     <h2>What the colors mean.</h2>
-    <p class="growth-note" id="rainbow-note">Nine colored bands stack around one line: bitcoin's long-run growth, fit to every daily price on record. Low bands: far under its own past growth. High bands: far over it.</p>
+    <p class="growth-note" id="rainbow-note">The line is bitcoin&rsquo;s long-run trend price: about <span id="line-value">&hellip;</span> today. It is where the price would sit if bitcoin had grown at its long-run pace, fit to every daily price since 2010. Above the line means ahead of its own history. Below it means behind it. Nine colored bands stack around the line. Low bands: far under its own past growth. High bands: far over it.</p>
     <p class="bands-cap">Five buckets, low to high. The chart keeps all nine colors. Prices are today&rsquo;s. Tap a bucket to see its colors.</p>
     <div class="bands" id="bands"></div>
     <div class="read-panel" id="band-panel" aria-live="polite">
@@ -576,6 +577,7 @@ window.FLEET_CFG = {
     </div>
     <p class="asofline" id="hg-asof">Reading the gauges&hellip;</p>
     <p class="fgsrc">Fear &amp; Greed Index by <a href="https://alternative.me/crypto/fear-and-greed-index/">Alternative.me</a>. These three are a read on the past and the present. None of them is a signal. The full set of gauges lives on <a href="/today#gauges">today&rsquo;s page</a>.</p>
+    <p class="fgsrc">New to the words? <a href="#rainbow-note">What is the line?</a></p>
   </section>
 
   <section class="block" id="trivia">
@@ -976,6 +978,14 @@ function fill(data, savedCopy){
   // distance from the line. The band-rarity line now lives one tap
   // down, in the band panel under the main chart.
   const t = data.today;
+  // Line definition (Nov 8, 2026, Billy dogfood): the "What the colors
+  // mean" note names the line's value for today. The number is the
+  // payload's own trend, the same center the band ranges were built
+  // from; the fit fallback recomputes it if a payload ever lacks it.
+  const lvEl = $("line-value");
+  if (lvEl) lvEl.textContent = fmtShort(
+    typeof t.trend === "number" ? t.trend
+    : Math.exp(data.fit.a + data.fit.b * Math.log((data.spot.ts - data.genesisTs) / 86400)));
   const midTxt = t.pct === 0 ? "Right on its long-run line"
     : `${Math.abs(t.pct)}% ${t.pct < 0 ? "below" : "above"} its long-run line`;
   const fpEl = $("fact-price"); if (fpEl) fpEl.textContent = fmtUSD(t.price);
