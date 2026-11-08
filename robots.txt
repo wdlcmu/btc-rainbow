@@ -1,3 +1,18 @@
 User-agent: *
 Allow: /
+
+# OpenAI search/browsing crawlers (ChatGPT answers, search index)
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+
+# OpenAI training crawler (explicit allow, same as pickmycostume.com)
+User-agent: GPTBot
+Allow: /
+
+# Microsoft/Bing (feeds ChatGPT search via the Bing index)
+User-agent: Bingbot
+Allow: /
+
 Sitemap: https://thebitcoinrainbow.com/sitemap.xml
