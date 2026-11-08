@@ -138,7 +138,8 @@
   .scard .big{font-size:24px;font-weight:800;color:var(--gold);margin:0 0 2px}
 
   .asklink{font-size:18px;color:var(--soft);margin:14px 0 0}
-  .asklink a{color:var(--gold);font-weight:700}
+  .asklink a{color:var(--gold);font-weight:700;display:inline-block;
+    padding:11px 8px;margin:-11px -8px}
   .lab-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0 0}
   #lab-chart{width:100%;height:auto;display:block;touch-action:pan-y;cursor:crosshair}
   .lab-readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
@@ -272,12 +273,11 @@
   .ctxcell .n{font-size:13.5px;color:var(--soft);margin-top:1px}
   .ctxbasis{color:var(--soft);font-size:14.5px;margin:10px 0 0;text-align:left}
   .bucket{margin:0 0 2px}
-  .bucket-row{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;min-height:52px;-webkit-tap-highlight-color:transparent}
+  .bucket-row{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-height:52px}
   .bucket-row .btop{display:flex;align-items:center;gap:8px}
   .bucket-row .bsw{display:inline-flex;gap:3px}
   .bucket-row .bsw i{width:14px;height:14px;border-radius:4px;display:inline-block}
   .bucket-row .bname{font-size:18px;font-weight:700;flex:1}
-  .bucket-row .bchev{color:var(--soft);font-size:18px}
   .bucket-row .bmeta{display:block;color:var(--soft);font-size:15px;margin-top:3px}
   .bucket-members{display:none;flex-direction:column;gap:6px;padding:8px 0 6px 14px}
   .bucket-members.open{display:flex}
@@ -534,21 +534,11 @@ window.FLEET_CFG = {
     <p class="asklink">Rather ask in your own words? <a href="/ask">Ask here</a>.</p>
   </header>
 
-  <section class="claude-connect" aria-label="Use Bitcoin Rainbow in Claude">
-    <h2>Ask Claude about the chart</h2>
-    <p>Add the free Bitcoin Rainbow connector in Claude and ask about today&rsquo;s band, your DCA, or past cycles &mdash; it answers with live data.</p>
-    <a class="claude-connect-btn" href="https://claude.ai/directory/connectors/btc-rainbow">Add it in Claude</a>
-  </section>
-
   <section class="block" id="start">
     <p class="kicker">Start here</p>
     <h2>New to this chart? Start here.</h2>
     <p class="growth-note">Other rainbow charts are built for traders, with buy and sell labels. This one is in plain words, made to tap and explore. It also tells you what the chart cannot do.</p>
-    <div class="strip">
-      <div class="scard"><h3>1. What this chart is</h3><p>One line is bitcoin&rsquo;s long-run growth, fit to every daily price since 2010. Colored bands stack around it. Low bands: the price sits far under its own past growth. High bands: far over it.</p></div>
-      <div class="scard"><h3>2. How to read it</h3><p>Find today. Then drag on the chart. Every day since 2010 has a price, a band, and a year that came next. The colors say where a day sat. They do not say what comes next.</p></div>
-      <div class="scard"><h3>3. What it cannot do</h3><p>The line is fit to the past. It cannot see what comes next. Blockchain Center made this chart famous, and its keeper has said in writing that it was never a serious model. We keep that warning on the chart, not under it.</p></div>
-    </div>
+    <div class="scard"><h3>What it cannot do</h3><p>The line is fit to the past. It cannot see what comes next. Blockchain Center made this chart famous, and its keeper has said in writing that it was never a serious model. We keep that warning on the chart, not under it.</p></div>
   </section>
 
   <section class="block chapter-head" id="ch1">
@@ -559,7 +549,7 @@ window.FLEET_CFG = {
   <section class="block" id="now">
     <h2>What the colors mean.</h2>
     <p class="growth-note" id="rainbow-note">The line is bitcoin&rsquo;s long-run trend price: about <span id="line-value">&hellip;</span> today. It is where the price would sit if bitcoin had grown at its long-run pace, fit to every daily price since 2010. Above the line means ahead of its own history. Below it means behind it. Nine colored bands stack around the line. Low bands: far under its own past growth. High bands: far over it.</p>
-    <p class="bands-cap">Five buckets, low to high. The chart keeps all nine colors. Prices are today&rsquo;s. Tap a bucket to see its colors.</p>
+    <p class="bands-cap">Nine colors, grouped five ways, low to high. Prices are today&rsquo;s. Tap a color to read its story.</p>
     <div class="bands" id="bands"></div>
     <div class="read-panel" id="band-panel" aria-live="polite">
       <h3 id="band-title">What the colors mean.</h3>
@@ -640,6 +630,12 @@ window.FLEET_CFG = {
   </section>
 
 <!-- Works with your AI (fleet AI section, 2026-11-04) -->
+  <section class="claude-connect" aria-label="Use Bitcoin Rainbow in Claude">
+    <h2>Ask Claude about the chart</h2>
+    <p>Add the free Bitcoin Rainbow connector in Claude and ask about today&rsquo;s band, your DCA, or past cycles &mdash; it answers with live data.</p>
+    <a class="claude-connect-btn" href="https://claude.ai/directory/connectors/btc-rainbow">Add it in Claude</a>
+  </section>
+
 <section class="works-with-ai" aria-label="Works with your AI" style="max-width:44rem;margin:2.5rem auto;padding:1.25rem 1rem;border:1px solid rgba(127,127,127,.45);border-radius:14px;font-family:inherit;line-height:1.55">
 <h2 style="margin:.1rem 0 .5rem;font-size:1.35rem">Works with your AI</h2>
 <p style="margin:.4rem 0">Your AI can read today's rainbow for you. It shows the live price against the long trend line. It names today's band and its price range. It counts the past days that sat in this band.</p>
@@ -889,9 +885,11 @@ function drawHero(data){
 // buckets a person can hold in their head. The chart keeps all nine
 // colors — the bucketing is the reading layer. A bucket header carries
 // the member swatches, the combined range and the summed share of
-// days; one tap opens the member bands, whose rows keep the per-band
-// measure (today's range + the edges as multiples of the line, from
-// the pipeline's own ladder constants) and the panel read below.
+// days; the member bands are always open underneath (simplify pass,
+// Nov 8, 2026: no accordion — all nine colors read without a tap),
+// and their rows keep the per-band measure (today's range + the edges
+// as multiples of the line, from the pipeline's own ladder constants)
+// and the panel read below.
 // Definitions, in multiples of the long-run line:
 //   Well below the line   Deep Blue + Blue     0.47x–0.86x
 //   Around the line       Sky                  0.86x–1.16x
@@ -932,31 +930,14 @@ function buildBuckets(data){
     const share = Math.round(bk.bands.reduce((a, k) => a + data.bandStats[k].pct, 0));
     const hasToday = bk.bands.indexOf(todayK) >= 0;
     const swatches = bk.bands.map((k) => `<i style="background:${data.bands[k].color}"></i>`).join("");
-    const ariaB = `${bk.name} bucket: ${bk.bands.map((k) => data.bands[k].name).join(" and ")}. ` +
-      `${fmtShort(lo)} to ${fmtShort(hi)} today. About ${share} of 100 days sat here.` +
-      (hasToday ? " The price sits in this bucket today." : "");
     return `<div class="bucket" data-bucket="${bi}">` +
-      `<div class="bucket-row" tabindex="0" role="button" aria-expanded="${hasToday}" aria-label="${ariaB}">` +
+      `<div class="bucket-row">` +
       `<span class="btop"><span class="bsw">${swatches}</span>` +
-      `<span class="bname">${bk.name}${hasToday ? '<span class="bnow">TODAY</span>' : ""}</span>` +
-      `<span class="bchev">${hasToday ? "▾" : "▸"}</span></span>` +
+      `<span class="bname">${bk.name}${hasToday ? '<span class="bnow">TODAY</span>' : ""}</span></span>` +
       `<span class="bmeta">${fmtShort(lo)}–${fmtShort(hi)} today · About ${share} of 100 days</span></div>` +
-      `<div class="bucket-members${hasToday ? " open" : ""}">` +
+      `<div class="bucket-members open">` +
       bk.bands.map(bandRow).join("") + `</div></div>`;
   }).join("");
-  box.querySelectorAll(".bucket-row").forEach((row) => {
-    const members = row.parentElement.querySelector(".bucket-members");
-    const chev = row.querySelector(".bchev");
-    const toggle = () => {
-      const open = members.classList.toggle("open");
-      row.setAttribute("aria-expanded", open ? "true" : "false");
-      if (chev) chev.textContent = open ? "▾" : "▸";
-    };
-    row.addEventListener("click", toggle);
-    row.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
-    });
-  });
   box.querySelectorAll(".band-row").forEach((row) => {
     const k = Number(row.getAttribute("data-band"));
     row.addEventListener("click", () => { if (window.pingChart) window.pingChart(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); });
@@ -982,10 +963,10 @@ function fill(data, savedCopy){
   // mean" note names the line's value for today. The number is the
   // payload's own trend, the same center the band ranges were built
   // from; the fit fallback recomputes it if a payload ever lacks it.
+  const trendVal = typeof t.trend === "number" ? t.trend
+    : Math.exp(data.fit.a + data.fit.b * Math.log((data.spot.ts - data.genesisTs) / 86400));
   const lvEl = $("line-value");
-  if (lvEl) lvEl.textContent = fmtShort(
-    typeof t.trend === "number" ? t.trend
-    : Math.exp(data.fit.a + data.fit.b * Math.log((data.spot.ts - data.genesisTs) / 86400)));
+  if (lvEl) lvEl.textContent = fmtShort(trendVal);
   const midTxt = t.pct === 0 ? "Right on its long-run line"
     : `${Math.abs(t.pct)}% ${t.pct < 0 ? "below" : "above"} its long-run line`;
   const fpEl = $("fact-price"); if (fpEl) fpEl.textContent = fmtUSD(t.price);
@@ -993,7 +974,7 @@ function fill(data, savedCopy){
   if (fbEl) fbEl.textContent = t.band ? `${t.band.name} band` : "Outside every band";
   const fcEl = $("fact-chip");
   if (fcEl && t.band) fcEl.style.background = t.band.color;
-  const fvEl = $("fact-vs"); if (fvEl) fvEl.textContent = midTxt + ".";
+  const fvEl = $("fact-vs"); if (fvEl) fvEl.textContent = midTxt + ". The line sits at about " + fmtShort(trendVal) + " today.";
   const faEl = $("fact-asof");
   if (faEl) faEl.textContent = (savedCopy ? "Saved copy, " : "As of ") + fmtAsOf(data.spot.ts) + ".";
   const pbEl = $("price-big"); if (pbEl) pbEl.textContent = fmtUSD(data.spot.price);
