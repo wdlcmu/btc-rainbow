@@ -1,6 +1,30 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>
+/* FLEET-FT2-2026-11-08: first-touch capture at the door. The first page
+   this browser ever loads on this site stores its referrer, UTM tags and
+   landing address in localStorage (first write wins, never overwritten).
+   The PostHog first-touch writer reads this store, so a creator's
+   discovery channel survives the tool-page to homepage hop that used
+   to erase it (attribution trace, Nov 8, 2026, BP-5). The address is
+   cut to origin + path, /s/ and /g/ code segments are dropped, and no
+   query beyond utm_* and a whitelisted ?via= kind word is kept. */
+(function(){try{
+if(localStorage.getItem("fleet_ft2"))return;
+var q=new URLSearchParams(location.search);
+function utm(n){var v=q.get(n)||"";return v.slice(0,100);}
+var p=location.pathname||"/";
+if(/^\/(s|g)\/[^/]/.test(p))p=p.replace(/^\/(s|g)\/[^/]+.*$/,"/$1/");
+var via=q.get("via")||"";
+var ft={r:document.referrer||"",u:location.origin+p,
+via:["share","own","group"].indexOf(via)>=0?via:"",
+s:utm("utm_source"),m:utm("utm_medium"),c:utm("utm_campaign"),
+at:new Date().toISOString()};
+localStorage.setItem("fleet_ft2",JSON.stringify(ft));
+}catch(e){}})();
+</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What the Rainbow Chart Gets Wrong — The Bitcoin Rainbow</title>
@@ -315,25 +339,54 @@ window.FLEET_CFG = { site: "bitcoin-rainbow", starts: [], completes: [] };
   function fleetFirstTouch(){
     try {
       if (!window.posthog || !posthog.people || !posthog.people.set_once) return;
-      var ref = document.referrer || "";
+      var ft = null;
+      try { ft = JSON.parse(localStorage.getItem("fleet_ft2") || "null"); } catch (e) {}
+      var ref = (ft && typeof ft.r === "string") ? ft.r : (document.referrer || "");
       var refOrigin = "", refDomain = "$direct";
-      if (ref) { try { var ru = new URL(ref); if (ru.origin && ru.origin !== "null") { refOrigin = ru.origin + "/"; refDomain = ru.hostname || "$direct"; } } catch (e) {} }
-      var ua = (navigator.userAgent || "").toLowerCase();
+      if (ref) {
+        try {
+          var ru = new URL(ref);
+          if (ru.origin && ru.origin !== "null") { refOrigin = ru.origin + "/"; refDomain = ru.hostname || "$direct"; }
+        } catch (e) {}
+        if (!refOrigin) {
+          var m = /^[a-z][a-z0-9+.-]*:\/\/[^/?#]+/i.exec(ref);
+          if (m) { refOrigin = m[0] + "/"; refDomain = m[0].split("://")[1] || "$direct"; }
+        }
+      }
+      var entryUrl, entryAt;
+      if (ft && ft.u) {
+        entryUrl = ft.u + (ft.via ? "?via=" + ft.via : "");
+        entryAt = ft.at || new Date().toISOString();
+      } else {
+        var path = window.location.pathname || "/";
+        if (/^\/(s|g)\/[^/]/.test(path)) path = path.replace(/^\/(s|g)\/[^/]+.*$/, "/$1/");
+        var viaRaw = "";
+        try { viaRaw = new URLSearchParams(window.location.search).get("via") || ""; } catch (e) {}
+        var via = (viaRaw === "share" || viaRaw === "own" || viaRaw === "group") ? "?via=" + viaRaw : "";
+        entryUrl = window.location.origin + path + via;
+        entryAt = new Date().toISOString();
+      }
+      var ua = (navigator.userAgent || "").slice(0, 500);
+      var l = ua.toLowerCase();
       var app = "other";
-      if (ua.indexOf("kakaotalk") !== -1) app = "kakaotalk";
-      else if (ua.indexOf("whatsapp") !== -1) app = "whatsapp";
-      else if (ua.indexOf("instagram") !== -1) app = "instagram";
-      else if (ua.indexOf("telegram") !== -1) app = "telegram";
-      else if (ua.indexOf("teams") !== -1) app = "teams";
-      else if (ua.indexOf("fban") !== -1 || ua.indexOf("fbav") !== -1 || ua.indexOf("fb_iab") !== -1 || ua.indexOf("facebook") !== -1) app = "facebook";
-      else if (ua.indexOf("mozilla/") !== -1) app = "browser";
-      posthog.people.set_once({
+      if (l.indexOf("kakaotalk") !== -1) app = "kakaotalk";
+      else if (l.indexOf("whatsapp") !== -1) app = "whatsapp";
+      else if (l.indexOf("instagram") !== -1) app = "instagram";
+      else if (l.indexOf("telegram") !== -1) app = "telegram";
+      else if (l.indexOf("teams") !== -1) app = "teams";
+      else if (l.indexOf("fban") !== -1 || l.indexOf("fbav") !== -1 || l.indexOf("fb_iab") !== -1 || l.indexOf("facebook") !== -1) app = "facebook";
+      else if (l.indexOf("mozilla/") !== -1) app = "browser";
+      var props = {
         entry_referrer: refOrigin,
         entry_referring_domain: refDomain,
-        entry_url: window.location.origin + (window.location.pathname || "/"),
-        entry_at: new Date().toISOString(),
+        entry_url: entryUrl,
+        entry_at: entryAt,
         entry_app: app
-      });
+      };
+      if (ft && ft.s) props.entry_utm_source = ft.s;
+      if (ft && ft.m) props.entry_utm_medium = ft.m;
+      if (ft && ft.c) props.entry_utm_campaign = ft.c;
+      posthog.people.set_once(props);
     } catch (e) {}
   }
 
@@ -343,7 +396,7 @@ window.FLEET_CFG = { site: "bitcoin-rainbow", starts: [], completes: [] };
   s.onload = function(){
     try {
       if (window.posthog && posthog.init) {
-        posthog.init(KEY, {api_host: "https://us.i.posthog.com", autocapture: false, capture_pageview: true, disable_session_recording: true});
+        posthog.init(KEY, {api_host: "https://us.i.posthog.com", autocapture: false, capture_pageview: true, disable_session_recording: true, persistence: "localStorage"});
         try { posthog.register({site: SITE, internal: isInternal()}); } catch(e){}
         try { if (isInternal() && posthog.people && posthog.people.set) posthog.people.set({fleet_internal: true}); } catch(e){}
         try { fleetFirstTouch(); } catch(e){}
