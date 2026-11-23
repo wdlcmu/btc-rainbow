@@ -100,7 +100,7 @@ localStorage.setItem("fleet_ft2",JSON.stringify(ft));
   #chart polygon.band-poly{cursor:pointer}
   #chart{touch-action:pan-y;cursor:crosshair}
   .read-panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;
-    padding:14px 16px;margin:0 0 12px}
+    padding:14px 16px;margin:0 0 12px;scroll-margin-top:12px}
   .read-panel h3{margin:0 0 6px;font-size:20px;display:flex;align-items:center;gap:8px}
   .read-panel p{margin:0 0 6px;font-size:17.5px}
   .read-panel p:last-child{margin-bottom:0}
@@ -993,10 +993,26 @@ function buildBuckets(data){
   }).join("");
   box.querySelectorAll(".band-row").forEach((row) => {
     const k = Number(row.getAttribute("data-band"));
-    row.addEventListener("click", () => { if (window.pingChart) window.pingChart(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); });
+    // Offscreen-effect fix (fleet sweep, Nov 23, 2026): the band story
+    // renders in #band-panel below the whole band list, so a tap on an
+    // upper row updated a panel the reader could not see (no scroll, no
+    // focus move — only the row's highlight changed). Bring the panel
+    // into view on tap/Enter/Space; block:"nearest" leaves it alone
+    // when it is already on screen.
+    const showBand = () => {
+      if (window.pingChart) window.pingChart();
+      highlight(k, false);
+      if (window.RB_showBand) window.RB_showBand(k);
+      const panel = document.getElementById("band-panel");
+      if (panel) {
+        const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        panel.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" });
+      }
+    };
+    row.addEventListener("click", showBand);
     row.addEventListener("mouseenter", () => highlight(k, false));
     row.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (window.pingChart) window.pingChart(); highlight(k, false); if (window.RB_showBand) window.RB_showBand(k); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showBand(); }
     });
   });
 }
@@ -1287,7 +1303,7 @@ load();
   setCtx("ctx-y1",  upDown(pctChange(last[1], y1[1])),   "ctx-y1-n",  "From " + fmtUSD(y1[1]) + " on " + fmtDate(y1[0]));
   setCtx("ctx-ath", upDown(pctChange(last[1], athP[1])), "ctx-ath-n", fmtUSD(athP[1]) + " \u00B7 " + fmtDate(athP[0]));
   var basis = $("ctx-basis");
-  if (basis) basis.textContent = "Counted from daily closes \u2014 the same record " +
+  if (basis) basis.textContent = "Counted from daily closes — the same record " +
     "the chart is drawn from. Last close: " + fmtUSD(last[1]) + " on " + fmtDate(last[0]) + ".";
 
   /* ---------- Gauge 1: price vs the long-run line ---------- */
@@ -1355,7 +1371,7 @@ load();
   function fillFG(fg, saved, genISO){
     var v = $("hg-fg"), note = $("hg-fg-note");
     if (!fg || typeof fg.value !== "number"){
-      if (v) v.textContent = "\u2014";
+      if (v) v.textContent = "—";
       if (note) note.textContent = "Not reading right now. The score lives at Alternative.me.";
       return;
     }
